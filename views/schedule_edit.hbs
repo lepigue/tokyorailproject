@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Edit Schedule</title>
+  <link rel="stylesheet" href="../../../css/style.css">
+  <link rel="icon" href="../public/favicon.ico" type="image/x-icon">
+</head>
+
+<body>
+  <main>
+    <h1>Edit Schedule</h1>
+    <h4>(If editing existing schedule, only filled-in blanks will be updated)</h4>
+    <form>
+      <label for="scheduleId">Schedule ID (leave blank to create new schedule):</label><br>
+      <input type="text" id="scheduleId" name="scheduleId"><br>
+      <label for="arrivalTime">Arrival Time:</label><br>
+      <input type="time" id="arrivalTime" name="arrivalTime"><br>
+      <label for="departureTime">Arrival Time:</label><br>
+      <input type="time" id="departureTime" name="departureTime"><br>
+      <label for="stationName">Station Name:</label><br>
+      <select id="stationName" name="stationName">
+        <option value="station">&lt;Station 1 &gt;</option>
+        <option value="station">&lt;Station 2 &gt;</option>
+        <option value="station">&lt;Station 3 &gt;</option>
+        <option value="station">&lt;Station 4 &gt;</option>
+        <option value="station">&lt;Station 5 &gt;</option>
+        <option value="station">&lt;Station 6 &gt;</option>
+        <option value="station">&lt;Station 7 &gt;</option>
+        <option value="station">&lt;Station 8 &gt;</option>
+        <option value="station">&lt;Station 9 &gt;</option>
+        <option value="station">&lt;Station 10 &gt;</option>
+      </select><br>
+      <label for="trainId">Train Number:</label><br>
+      <select id="trainId" name="trainId">
+        <option value="train">&lt;Train 1 &gt;</option>
+        <option value="train">&lt;Train 2 &gt;</option>
+        <option value="train">&lt;Train 3 &gt;</option>
+        <option value="train">&lt;Train 4 &gt;</option>
+        <option value="train">&lt;Train 5 &gt;</option>
+        <option value="train">&lt;Train 6 &gt;</option>
+        <option value="train">&lt;Train 7 &gt;</option>
+        <option value="train">&lt;Train 8 &gt;</option>
+        <option value="train">&lt;Train 9 &gt;</option>
+        <option value="train">&lt;Train 10 &gt;</option>
+      </select><br><br>
+      <input class="editButton" type="submit">
+    </form>
+    <h1>Delete Schedule</h1>
+    <form>
+      <label for="scheduleId">Schedule ID:</label><br>
+      <input type="text" id="scheduleId" name="scheduleId"><br><br>
+      <input class="deleteButton" type="submit">
+    </form>
+  </main>
+  <footer>
+    <a href="/index" id="footer">Back to home</a>
+  </footer>
+  <script src="../../../js/index.js"></script>
+</body>
+
+</html>
