@@ -1,0 +1,25 @@
+{
+  "name": "tokyorailproject",
+  "version": "1.0.0",
+  "description": "Tokyo Rail Project",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lepigue/tokyorailproject.git"
+  },
+  "author": "Tyler Dennis & Lauren Pigue",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lepigue/tokyorailproject/issues"
+  },
+  "homepage": "https://github.com/lepigue/tokyorailproject#readme",
+  "dependencies": {
+    "express": "^4.18.2",
+    "express-handlebars": "^6.0.6",
+    "forever": "^4.0.3",
+    "mysql": "^2.18.1"
+  }
+}
