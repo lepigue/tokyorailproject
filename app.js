@@ -20,26 +20,29 @@ app.set('view engine', '.hbs');                 // Tell express to use the handl
     ROUTES
 */
 
-// app.js
-
 app.get('/', function(req, res)
     {
-        res.render('index');                    // Note the call to render() and not send(). Using render() ensures the templating engine
+        res.render('index');                   
     });               
 
 app.get('/stations', function(req, res)
     {
-        res.render('stations');                    // Note the call to render() and not send(). Using render() ensures the templating engine
+        res.render('stations');                    
     });               
 
 app.get('/lines', function(req, res)
     {
-        res.render('lines');                    // Note the call to render() and not send(). Using render() ensures the templating engine
+        res.render('lines');                   
     });  
        
 app.get('/operators', function(req, res)
     {
-        res.render('operators');                    // Note the call to render() and not send(). Using render() ensures the templating engine
+        res.render('operators');                    
+    }); 
+
+app.get('/trains', function(req, res)
+    {
+        res.render('trains');                    
     }); 
 
 /*

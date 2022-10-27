@@ -1,4 +1,4 @@
-<!-- index.hbs -->
+<!-- lines.hbs -->
 <html lang="en">
   <head>
     <meta charset="UTF-8">
@@ -7,12 +7,101 @@
     <title>Tokyo Rail Database Project</title>
     <link rel="stylesheet" href="style.css">
   </head>
+  
   <nav>
-  <a href="/stations">Stations</a> |
-  <a href="/lines">Lines</a> |
-  <a href="/operators">Operators</a>
-</nav>
-  <body>
-	Lines
+    <a href="/stations">Stations</a> |
+    <a href="/lines">Lines</a> |
+    <a href="/operators">Operators</a>
+    </nav>
+  
+<body>
+  <h1>Lines</h1>
+<div id="browse" style="display: block">
+<table border="3" cellpadding="6">
+  <tr>
+    <th>Line ID</th>
+    <th>Line Name</th>
+    <th>Start Station</th>
+    <th>End Station</th>
+  </tr>
+  <tr>
+    <td align="center">1</td>
+    <td align="center">Hibiya</td>
+    <td align="center">100</td>
+    <td align="center">104</td>
+    <b><td><a href="#">EDIT</a></td></b>
+    <b><td><a href="#">DELETE</a></td></b>
+  </tr>
+  <tr>
+    <td align="center">2</td>
+    <td align="center">Tozai</td>
+    <td align="center">101</td>
+    <td align="center">105</td>
+    <b><td><a href="#">EDIT</a></td></b>
+    <b><td><a href="#">DELETE</a></td></b>
+  </tr>
+  <tr>
+    <td align="center">3</td>
+    <td align="center">Chiyoda</td>
+    <td align="center">102</td>
+    <td align="center">103</td>
+    <b><td><a href="#">EDIT</a></td></b>
+    <b><td><a href="#">DELETE</a></td></b>
+  </tr>
+  <tr>
+    <td align="center">3</td>
+    <td align="center">Fukutoshin</td>
+    <td align="center">102</td>
+    <td align="center">103</td>
+    <b><td><a href="#">EDIT</a></td></b>
+    <b><td><a href="#">DELETE</a></td></b>
+  </tr>
+</table>
+<p>&nbsp;</p>
+
+</div>
+<div id="insert" style="display: block">
+    <form id="addPlanet">
+        <legend><strong>Add Train Line</strong></legend>
+          <fieldset class="fields">
+            <label> Name </label> <input type="text" name="name">
+            <label> Start Station </label> <input type="text" name="start">
+            <label> End Station </label> <input type="text" name="end">
+          </fieldset>
+          <input class="btn" type="submit" id="addLine" value="Add">
+	</form>
+</div>
+<p>&nbsp;</p>
+<div id="update" style="display: block">
+  <form id="updateLine">
+      <legend><strong>Update Train Line</strong></legend>
+          <fieldset class="fields">
+          <label>ID:</label> 
+            <label> Name </label> <input type="text" name="name">
+            <label> Start Station </label> <input type="text"  name="start">
+            <label> End Station </label> <input type="text" name="end">
+    </fieldset>
+    <input class="btn" type="submit" id="UpdateTrainLine" value="Update">
+  </form> 
+</div>
+<p>&nbsp;</p>
+<div id="delete" style="display: block">
+  <form id="deleteLine">
+      <legend><strong>Delete Train Line</strong></legend>
+          <fieldset class="fields">
+          <label for="cars">Choose a Line to Delete:</label>
+              <select name="lines" id="lines">
+                <option value="hibiya">Hibiya</option>
+                <option value="tozai">Tozai</option>
+                <option value="chiyoda">Chiyoda</option>
+                <option value="audi">Fukutoshin</option>
+</select>
+            
+    </fieldset>
+    <input class="btn" type="submit" id="DeletePlanet" value="Delete Planet">
+          <input class="btn" type="button" value="cancel" >
+  </form> 
+</div>
+	
   </body>
 </html>
