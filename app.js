@@ -19,6 +19,7 @@ app.set('view engine', '.hbs');                 // Tell express to use the handl
 /*
     ROUTES
 */
+app.use(express.static('public'));
 
 app.get('/', function(req, res)
     {
