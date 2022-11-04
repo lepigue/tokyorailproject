@@ -96,6 +96,17 @@ app.get('/train_view', function(req, res)
         res.render('train_view');                    
     }); 
 
+app.get('/lines_has_station', function(req, res)
+    {
+        res.render('lines_has_station');                    
+    }); 
+
+app.get('/relationship_template', function(req, res)
+    {
+        res.render('relationship_template');                    
+    }); 
+
+
 
 /*
     LISTENER
