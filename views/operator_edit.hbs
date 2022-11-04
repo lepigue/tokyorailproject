@@ -12,10 +12,30 @@
 
 <body>
   <main>
-    <h1>Edit Operator</h1>
-    <h4>(If editing existing operator, only filled-in blanks will be updated)</h4>
+    <h1>Create Operator</h1>
     <form>
-      <label for="operatorId">Operator ID (leave blank to create new operator):</label><br>
+      <label for="firstName">First Name:</label><br>
+      <input type="text" id="firstName" name="firstName"><br>
+      <label for="lastName">Last Name:</label><br>
+      <input type="text" id="lastName" name="lastName"><br>
+      <label for="phoneNumber">Phone Number:</label><br>
+      <input type="text" id="phoneNumber" name="phoneNumber"><br>
+      <label for="email">E-mail Address:</label><br>
+      <input type="text" id="email" name="email"><br>
+      <label for="train">Train:</label><br>
+      <select id="train" name="train">
+        <option value="1">500 Series No. 1</option>
+        <option value="2">E2 Series No. 2</option>
+        <option value="3">E2 Series No. 3</option>
+        <option value="4">E2 Series No. 4</option>
+      </select><br><br>
+      <input class="editButton" type="submit">
+    </form>
+    <br>
+    <hr>
+    <h1>Edit Operator</h1>
+    <form>
+      <label for="operatorId">Operator ID:</label><br>
       <input type="text" id="operatorId" name="operatorId"><br>
       <label for="firstName">First Name:</label><br>
       <input type="text" id="firstName" name="firstName"><br>
@@ -24,9 +44,18 @@
       <label for="phoneNumber">Phone Number:</label><br>
       <input type="text" id="phoneNumber" name="phoneNumber"><br>
       <label for="email">E-mail Address:</label><br>
-      <input type="text" id="email" name="email"><br><br>
+      <input type="text" id="email" name="email"><br>
+      <label for="train">Train:</label><br>
+      <select id="train" name="train">
+        <option value="1">500 Series No. 1</option>
+        <option value="2">E2 Series No. 2</option>
+        <option value="3">E2 Series No. 3</option>
+        <option value="4">E2 Series No. 4</option>
+      </select><br><br>
       <input class="editButton" type="submit">
     </form>
+    <br>
+    <hr>
     <h1>Delete Operator</h1>
     <form>
       <label for="operatorId">Operator ID:</label><br>
@@ -35,7 +64,7 @@
     </form>
   </main>
   <footer>
-    <a href="/index" id="footer">Back to home</a>
+    <a href="../../index.html" id="footer">Back to home</a>
   </footer>
   <script src="../../../js/index.js"></script>
 </body>

@@ -12,10 +12,30 @@
 
 <body>
   <main>
-    <h1>Edit Train</h1>
-    <h4>(If editing existing train, only filled-in blanks will be updated)</h4>
+    <h1>Create Train</h1>
     <form>
-      <label for="trainId">Train ID (leave blank to create new train):</label><br>
+      <label for="model">Model:</label><br>
+      <input type="text" id="model" name="model"><br>
+      <label for="serviceDate">Last Service Date:</label><br>
+      <input type="date" id="serviceDate" name="serviceDate"><br>
+      <label for="lineName">Line Name:</label><br>
+      <select id="lineName" name="lineName">
+        <option value="line">Ginza</option>
+        <option value="line">Marunouchi</option>
+        <option value="line">Hibiya</option>
+        <option value="line">Tozai</option>
+        <option value="line">Chiyoda</option>
+        <option value="line">Yurakucho</option>
+        <option value="line">Hanzomon</option>
+        <option value="line">Namboku</option>
+        <option value="line">Fukutoshin</option>
+      </select><br><br>
+      <input class="editButton" type="submit">
+    </form>
+    <br>
+    <hr><h1>Edit Train</h1>
+    <form>
+      <label for="trainId">Train ID:</label><br>
       <input type="text" id="trainId" name="trainId"><br>
       <label for="model">Model:</label><br>
       <input type="text" id="model" name="model"><br>
@@ -35,6 +55,8 @@
       </select><br><br>
       <input class="editButton" type="submit">
     </form>
+    <br>
+    <hr>
     <h1>Delete Train</h1>
     <form>
       <label for="trainId">Train ID:</label><br>
@@ -43,7 +65,7 @@
     </form>
   </main>
   <footer>
-    <a href="/index" id="footer">Back to home</a>
+    <a href="../../index.html" id="footer">Back to home</a>
   </footer>
   <script src="../../../js/index.js"></script>
 </body>
