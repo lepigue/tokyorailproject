@@ -11,28 +11,92 @@
 
 <body>
   <main>
-    <h1>Edit Operator</h1>
-    <h4>(If editing existing operator, only filled-in blanks will be updated)</h4>
-    <form>
-      <label for="operatorId">Operator ID (leave blank to create new operator):</label><br>
-      <input type="text" id="operatorId" name="operatorId"><br>
+    <h1>Create Operator</h1>
+    <form id="addOperatorForm" method="POST" action="/addOperatorForm">
       <label for="firstName">First Name:</label><br>
       <input type="text" id="firstName" name="firstName"><br>
+      
       <label for="lastName">Last Name:</label><br>
       <input type="text" id="lastName" name="lastName"><br>
+      
       <label for="phoneNumber">Phone Number:</label><br>
       <input type="text" id="phoneNumber" name="phoneNumber"><br>
+      
       <label for="email">E-mail Address:</label><br>
-      <input type="text" id="email" name="email"><br><br>
+      <input type="text" id="email" name="email"><br>
+      <br>
+      
       <input class="editButton" type="submit">
     </form>
-    <h1>Delete Operator</h1>
+    <br>
+    <hr>
+    <h1>Edit Operator</h1>
     <form>
       <label for="operatorId">Operator ID:</label><br>
-      <input type="text" id="operatorId" name="operatorId"><br><br>
-      <input class="deleteButton" type="submit">
+      <input type="text" id="operatorId" name="operatorId"><br>
+      
+      <label for="firstName">First Name:</label><br>
+      <input type="text" id="firstName" name="firstName"><br>
+      
+      <label for="lastName">Last Name:</label><br>
+      <input type="text" id="lastName" name="lastName"><br>
+      
+      <label for="phoneNumber">Phone Number:</label><br>
+      <input type="text" id="phoneNumber" name="phoneNumber"><br>
+      
+      <label for="email">E-mail Address:</label><br>
+      <input type="text" id="email" name="email"><br>
+      <br>
+      
+      <input class="editButton" type="submit">
     </form>
+    <br>
+    <hr>
+    <h1>Delete Operator</h1>
+    <form>
+      <label for="operatorID">Operator ID:</label><br>
+      <input type="text" id="operatorID" name="operatorID"><br><br>
+      <button onclick="deleteOperator(this.OperatorID)">Delete</button>
+    </form>
+    <br>
+
+{{!-- The Data from our Database --}}
+<h2> Operator Table Data: </h2>
+{{!-- Create a table --}}
+<table id="operator_table" class="table-style" >
+
+    {{!-- Header section --}}
+    <thead>
+
+        {{!-- For just the first row, we print each key of the row object as a header cell so we
+        know what each column means when the page renders --}}
+        <tr>
+            {{#each data.[0]}}
+            <th>
+                {{@key}}
+            </th>
+            {{/each}}
+        </tr>
+    </thead>
+
+    {{!-- Body section --}}
+    <tbody>
+        {{!-- For each row, print the operator_ID, first_name, last_name, phone_number, email, train_code in order --}}
+        {{#each data}}
+        <tr data-value={{this.operator_ID}}>
+            <td>{{this.operator_ID}}</td>
+            <td>{{this.first_name}}</td>
+            <td>{{this.last_name}}</td>
+            <td>{{this.phone_number}}</td>
+            <td>{{this.email}}</td>
+            <td><button onclick="deleteOperator({{this.operator_ID}})">Delete</button></td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+<script src="./js/delete_operator.js"></script>
   </main>
+  <br>
   <footer>
     <a href="/index" id="footer">Back to home</a>
   </footer>

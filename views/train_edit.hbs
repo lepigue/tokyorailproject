@@ -41,6 +41,45 @@
       <input type="text" id="trainId" name="trainId"><br><br>
       <input class="deleteButton" type="submit">
     </form>
+
+
+
+      {{!-- Just some plain text --}}
+{{!-- The Data from our Database --}}
+{{!-- Create a table --}}
+<table class = "table-style">
+
+    {{!-- Header section --}}
+    <thead>
+
+        {{!-- For just the first row, we print each key of the row object as a header cell so we
+        know what each column means when the page renders --}}
+        <tr>
+            {{#each data.[0]}}
+            <th>
+                {{@key}}
+            </th>
+            {{/each}}
+        </tr>
+    </thead>
+
+    {{!-- Body section --}}
+    <tbody>
+
+        {{!-- For each row, print the train_ID, model, last_service_date, line_code, in order --}}
+        {{#each data}}
+        <tr>
+            <td>{{this.train_ID}}</td>
+            <td>{{this.model}}</td>
+            <td>{{this.last_service_date}}</td>
+            <td>{{this.line_code}}</td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+
+
+
   </main>
   <footer>
     <a href="/index" id="footer">Back to home</a>
