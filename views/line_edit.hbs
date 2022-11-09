@@ -11,10 +11,21 @@
 
 <body>
   <main>
-    <h1>Edit Line</h1>
-    <h4>(If editing existing line, only filled-in blanks will be updated)</h4>
+    <h1>Create Line</h1>
     <form>
-      <label for="lineId">Line ID (leave blank to create new line):</label><br>
+      <label for="lineName">Line Name:</label><br>
+      <input type="text" id="lineName" name="lineName"><br>
+      <label for="startStation">Start Station:</label><br>
+      <input type="text" id="startStation" name="startStation"><br>
+      <label for="endStation">End Station:</label><br>
+      <input type="text" id="endStation" name="endStation"><br><br>
+      <input class="editButton" type="submit">
+    </form>
+    <br>
+    <hr>
+    <h1>Edit Line</h1>
+    <form>
+      <label for="lineId">Line ID:</label><br>
       <input type="text" id="lineId" name="lineId"><br>
       <label for="lineName">Line Name:</label><br>
       <input type="text" id="lineName" name="lineName"><br>
@@ -24,6 +35,8 @@
       <input type="text" id="endStation" name="endStation"><br><br>
       <input class="editButton" type="submit">
     </form>
+    <br>
+    <hr>
     <h1>Delete Line</h1>
     <form>
       <label for="lineId">Line ID:</label><br>

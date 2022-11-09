@@ -1,5 +1,8 @@
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 664815e9f44186bf06eec4e16e074c81d570bcfc
 ul {
   white-space: pre-line;
   padding: 0px;
@@ -57,6 +60,7 @@ p {
 body {
   border: 0px;
 }
+<<<<<<< HEAD
 
 .table-style {
   border-collapse: collapse;
@@ -97,4 +101,12 @@ footer {
   width: 100%;
   height: 2.5rem;
   background: whitesmoke;          
+=======
+footer {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 2.5rem;
+>>>>>>> 664815e9f44186bf06eec4e16e074c81d570bcfc
 }

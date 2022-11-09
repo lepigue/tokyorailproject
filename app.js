@@ -21,6 +21,7 @@ app.set('view engine', '.hbs');                 // Tell express to use the handl
 /*
     ROUTES
 */
+app.use(express.static('public'));
 
 //Static Files
 app.use(express.static('public'));
@@ -123,6 +124,7 @@ app.get('/relationship_template', function(req, res)
         res.render('relationship_template');                    
     }); 
 
+<<<<<<< HEAD
 app.post('/addOperatorForm', function(req, res){
     // Capture the incoming data and parse it back to a JS object
     let data = req.body;
@@ -169,6 +171,8 @@ app.delete('/delete_operator/', function(req,res,next){
               
                   })
               })
+=======
+>>>>>>> 664815e9f44186bf06eec4e16e074c81d570bcfc
 
 
 /*
