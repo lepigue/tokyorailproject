@@ -5,11 +5,12 @@
 */
 var express = require('express');   // We are using the express library for the web server
 var app     = express();            // We need to instantiate an express object to interact with the server in our code
+var methodOverride = require('method-override')
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
 PORT        = 8451;                 // Set a port number at the top so it's easy to change in the future
 
-// Database
+// DATABASE
 var db = require('./database/db-connector')
 
 // HANDLEBARS
@@ -27,6 +28,7 @@ app.use(express.static('public'));
 app.use(express.static('public'));
 //app.use(express.static('views'));
 
+// GET ROUTES
 app.get('/', function(req, res)
     {
         res.render('index')
@@ -124,7 +126,7 @@ app.get('/relationship_template', function(req, res)
         res.render('relationship_template');                    
     }); 
 
-<<<<<<< HEAD
+// POST ROUTES
 app.post('/addOperatorForm', function(req, res){
     // Capture the incoming data and parse it back to a JS object
     let data = req.body;
@@ -144,18 +146,16 @@ app.post('/addOperatorForm', function(req, res){
         // presents it on the screen
         else
         {
-            res.redirect('/');
+            res.redirect('/operator_edit');
         }
     })
 })
 
-
-app.delete('/delete_operator/', function(req,res,next){
+// DELETE ROUTES
+app.delete('/delete_operator', function(req,res,next){
     let data = req.body;
     let operatorID = parseInt(data.id);
     let deleteOp = `DELETE FROM Operators WHERE operator_ID  = ?`;
-
-  
           // Run query
           db.pool.query(deleteOp, [operatorID], function(error, rows, fields){
               if (error) {
@@ -169,10 +169,47 @@ app.delete('/delete_operator/', function(req,res,next){
                 res.sendStatus(204);
               }
               
+        })
+    })
+
+// PUT ROUTES
+app.put('/put_operator', function(req,res,next){                                   
+    let data = req.body;
+  
+    let operator_ID = parseInt(data.operator_ID);
+    let first_name = data.first_name;
+    let last_name = data.last_name;
+    let phone_number = parseInt(data.phone_number);
+    let email = data.email;
+  
+    queryUpdateOp = `UPDATE Operators SET first_name=?, last_name=?, phone_number=?, email = ? WHERE Operators.operator_ID = ?`;
+    selectOp = `SELECT * FROM Operators WHERE operator_id = ?`
+  
+          // Run the 1st query
+          db.pool.query(queryUpdateOp, [first_name, last_name, phone_number, email, operator_ID], function(error, rows, fields){
+              if (error) {
+  
+              // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
+              console.log(error);
+              res.sendStatus(400);
+              }
+  
+              // If there was no error, we run our second query and return that data so we can use it to update the people's
+              // table on the front-end
+              else
+              {
+                  // Run the second query
+                  db.pool.query(selectOp, [operator_ID], function(error, rows, fields) {
+          
+                      if (error) {
+                          console.log(error);
+                          res.sendStatus(400);
+                      } else {
+                          res.send(rows);
+                      }
                   })
-              })
-=======
->>>>>>> 664815e9f44186bf06eec4e16e074c81d570bcfc
+              }
+  })});
 
 
 /*
@@ -181,3 +218,4 @@ app.delete('/delete_operator/', function(req,res,next){
 app.listen(PORT, function(){            // This is the basic syntax for what is called the 'listener' which receives incoming requests on the specified PORT.
     console.log('Express started on http://localhost:' + PORT + '; press Ctrl-C to terminate.')
 });
+

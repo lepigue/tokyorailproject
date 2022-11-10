@@ -11,8 +11,9 @@
 
 <body>
   <main>
+
+  {{!-- Create Operator Form --}}
     <h1>Create Operator</h1>
-<<<<<<< HEAD
     <form id="addOperatorForm" method="POST" action="/addOperatorForm">
       <label for="firstName">First Name:</label><br>
       <input type="text" id="firstName" name="firstName"><br>
@@ -27,70 +28,58 @@
       <input type="text" id="email" name="email"><br>
       <br>
       
-=======
-    <form>
-      <label for="firstName">First Name:</label><br>
-      <input type="text" id="firstName" name="firstName"><br>
-      <label for="lastName">Last Name:</label><br>
-      <input type="text" id="lastName" name="lastName"><br>
-      <label for="phoneNumber">Phone Number:</label><br>
-      <input type="text" id="phoneNumber" name="phoneNumber"><br>
-      <label for="email">E-mail Address:</label><br>
-      <input type="text" id="email" name="email"><br>
-      <label for="train">Train:</label><br>
-      <select id="train" name="train">
-        <option value="1">500 Series No. 1</option>
-        <option value="2">E2 Series No. 2</option>
-        <option value="3">E2 Series No. 3</option>
-        <option value="4">E2 Series No. 4</option>
-      </select><br><br>
->>>>>>> 664815e9f44186bf06eec4e16e074c81d570bcfc
       <input class="editButton" type="submit">
     </form>
     <br>
     <hr>
+
+  {{!-- Update Operator Form --}}
     <h1>Edit Operator</h1>
-    <form>
-      <label for="operatorId">Operator ID:</label><br>
-      <input type="text" id="operatorId" name="operatorId"><br>
-      
+    <form id="updateOpForm">
+      <label for="selectName"></label>
+        <select name="selectName" id="selectName">
+          <option value="test">Select Operator</option>
+          {{#each data}}
+          <option value="{{this.operator_ID}}" id="{{this.operator_ID}}">{{this.first_name}} {{this.last_name}}</option>
+          {{/each}}
+        </select>
+      <br>
+      <br>
       <label for="firstName">First Name:</label><br>
-      <input type="text" id="firstName" name="firstName"><br>
+      <input type="text" id="update-firstName" name="update-firstName"><br>
       
       <label for="lastName">Last Name:</label><br>
-      <input type="text" id="lastName" name="lastName"><br>
+      <input type="text" id="update-lastName" name="update-lastName"><br>
       
       <label for="phoneNumber">Phone Number:</label><br>
-      <input type="text" id="phoneNumber" name="phoneNumber"><br>
+      <input type="text" id="update-phoneNumber" name="update-phoneNumber"><br>
       
       <label for="email">E-mail Address:</label><br>
-      <input type="text" id="email" name="email"><br>
-<<<<<<< HEAD
+      <input type="text" id="update-email" name="update-email"><br>
       <br>
-      
-=======
-      <label for="train">Train:</label><br>
-      <select id="train" name="train">
-        <option value="1">500 Series No. 1</option>
-        <option value="2">E2 Series No. 2</option>
-        <option value="3">E2 Series No. 3</option>
-        <option value="4">E2 Series No. 4</option>
-      </select><br><br>
->>>>>>> 664815e9f44186bf06eec4e16e074c81d570bcfc
+
       <input class="editButton" type="submit">
     </form>
+    <script src="./js/update_operator.js"></script>
     <br>
     <hr>
+
+    {{!-- Delete Operator Form --}}
     <h1>Delete Operator</h1>
-    <form>
-      <label for="operatorID">Operator ID:</label><br>
-      <input type="text" id="operatorID" name="operatorID"><br><br>
-      <button onclick="deleteOperator(this.OperatorID)">Delete</button>
+    <form id="delete_form">
+       <select name="input_operator" id="input_operator">
+        <option data-value={{this.operator_ID}}>Select</option>
+        {{#each data}}
+        <option value={{this.operator_ID}}">{{this.first_name}} {{this.last_name}}</option>
+        {{/each}}
+    </select>
+    <input type="submit" value="submit">
     </form>
+    <script src="./js/delete_operator.js"></script>
     <br>
+    <hr>
 
 {{!-- The Data from our Database --}}
-<h2> Operator Table Data: </h2>
 {{!-- Create a table --}}
 <table id="operator_table" class="table-style" >
 
@@ -110,7 +99,7 @@
 
     {{!-- Body section --}}
     <tbody>
-        {{!-- For each row, print the operator_ID, first_name, last_name, phone_number, email, train_code in order --}}
+        {{!-- For each row, print the operator_ID, first_name, last_name, phone_number, email in order --}}
         {{#each data}}
         <tr data-value={{this.operator_ID}}>
             <td>{{this.operator_ID}}</td>
@@ -119,17 +108,17 @@
             <td>{{this.phone_number}}</td>
             <td>{{this.email}}</td>
             <td><button onclick="deleteOperator({{this.operator_ID}})">Delete</button></td>
+            <td><button onclick="updateOperator({{this.operator_ID}})">Update</button></td>
         </tr>
         {{/each}}
     </tbody>
+    <script src="./js/delete_operator.js"></script>
 </table>
-<script src="./js/delete_operator.js"></script>
   </main>
   <br>
+  <hr>
   <footer>
-    <a href="../../index.html" id="footer">Back to home</a>
+    <a href="/index" id="footer">Back to home</a>
   </footer>
-  <script src="../../../js/index.js"></script>
 </body>
-
 </html>

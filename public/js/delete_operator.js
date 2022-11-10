@@ -27,7 +27,6 @@ function deleteOperator(personID) {
 
 
 function deleteRow(personID){
-
     let table = document.getElementById("operator_table");
     for (let i = 0, row; row = table.rows[i]; i++) {
        //iterate through rows
