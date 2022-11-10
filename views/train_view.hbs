@@ -16,18 +16,24 @@
     <div class="dropdown">
       <button class="dropbtn">Train</button>
       <div class="dropdown-content">
-        <a href="./train_template.html?train_id=1">&lt;Train 1&gt;</a>
-        <a href="./train_template.html?train_id=2">&lt;Train 2&gt;</a>
-        <a href="./train_template.html?train_id=3">&lt;Train 3&gt;</a>
-        <a href="./train_template.html?train_id=4">&lt;Train 4&gt;</a>
-        <a href="./train_template.html?train_id=5">&lt;Train 5&gt;</a>
-        <a href="./train_template.html?train_id=6">&lt;Train 6&gt;</a>
-        <a href="./train_template.html?train_id=7">&lt;Train 7&gt;</a>
-        <a href="./train_template.html?train_id=8">&lt;Train 8&gt;</a>
-        <a href="./train_template.html?train_id=9">&lt;Train 9&gt;</a>
-        <a href="./train_template.html?train_id=10">&lt;Train 10&gt;</a>
+      {{#each trains}}
+        <a href="/train_view?trainID={{this.train_ID}}" class="dropdown-entry">Train {{this.train_ID}} - {{this.model}}</a>
+      {{/each}}
       </div>
     </div>
+
+    {{#if train}}
+    <br><br><br><br><hr><br>
+    <h1>Train Profile:</h1>
+    <div>
+      <h2 class="data-header">Model:</h2>
+      <p class="data-content">{{train.model}}</p>
+      <h2 class="data-header">Last Service Date:</h2>
+      <p class="data-content">{{train.last_service_date}}</p>
+      <h2 class="data-header">Line:</h2>
+      <p class="data-content">{{train.line_name}}</p>
+    </div>
+    {{/if}}
   </main>
   <footer>
     <a href="/index" id="footer">Back to home</a>

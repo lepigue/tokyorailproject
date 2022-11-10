@@ -52,41 +52,61 @@ app.get('/line_edit', function(req, res)
         })
     });
 
+app.get('/line_edit', function(req, res)
+    {
+        res.render('line_edit');                    
+    }); 
+
+
 app.get('/line_template', function(req, res)
     {
         res.render('line_template');                    
     }); 
 
-app.get('/operator_edit', function(req, res)
-    {
-        let query1 = "SELECT * FROM Operators;";
-        db.pool.query(query1, function(error, rows, fields){
-            res.render('operator_edit', {data: rows});
-        })
-    }); 
+app.get("/operator_edit", function (req, res) {
+  let query1 = "SELECT * FROM Operators;";
+  db.pool.query(query1, function (error, rows, fields) {
+    res.render("operator_edit", { data: rows });
+  });
+}); 
 
-app.get('/operator_template', function(req, res)
-    {
-        res.render('operator_template');                    
-    }); 
+app.get('/operator_view', function(req, res) {
+  let query_ops = `SELECT * FROM Operators`;
+  db.pool.query(query_ops, function (error, rows, fields) {
+    let operators = [];
+    let query_op = `SELECT * FROM Operators WHERE operator_ID = ${req.query.operatorID}`;
+    
+    for (const operator of rows) {
+      let new_operator = {};
+      for (const key in operator) {
+        new_operator[key] = operator[key]
+      }
+      operators.push(new_operator);
+    }
+    console.log(operators);
+    if (req.query.operatorID) {
+      db.pool.query(query_op, function (error, rows, fields) {
+          let operator = {};
+          for (const key in rows[0]) {
+            operator[key] = rows[0][key];
+          }
+          console.log(operator)
+      res.render("operator_view", { operator: operator, operators: operators });
+      });
+    } else { 
+      res.render("operator_view", { operator: null, operators: operators });
+    }
+  });
+});
 
-app.get('/operator_view', function(req, res)
-    {
-        res.render('operator_view');                    
-    }); 
 
-app.get('/schedule_edit', function(req, res)
-    {
-        res.render('schedule_edit');                    
-    }); 
+app.post("/schedule_edit", function (req, res) {
+  res.render("schedule_edit");
+}); 
 
-app.get('/station_edit', function(req, res)
-    {
-        let query1 = "SELECT * FROM Stations;";
-        db.pool.query(query1, function(error, rows, fields){
-            res.render('station_edit', {data: rows});
-        })
-    });
+app.post("/station_edit", function (req, res) {
+  res.render("station_edit");
+}); 
 
 app.get('/station_template', function(req, res)
     {
@@ -98,7 +118,7 @@ app.get('/station_view', function(req, res)
         res.render('station_view');                    
     }); 
 
-app.get('/train_edit', function(req, res)
+app.post('/train_edit', function(req, res)
     {
         let query1 = "SELECT * FROM Trains;";
         db.pool.query(query1, function(error, rows, fields){
@@ -106,15 +126,44 @@ app.get('/train_edit', function(req, res)
         })
     });
 
-app.get('/train_template', function(req, res)
-    {
-        res.render('train_template');                    
-    }); 
-
-app.get('/train_view', function(req, res)
-    {
-        res.render('train_view');                    
-    }); 
+app.get('/train_view', function(req, res) {
+  // Build map of line ID to line name for use in UI
+  let query_lines = `SELECT * FROM \`Lines\``;
+  db.pool.query(query_lines, function (error, rows, fields) {
+    const linesMap = {};
+    for (const line of rows) {
+      linesMap[line.line_ID] = line.line_name
+    }
+    // Build list of all trains for use in dropdown menu
+    let query_trains = `SELECT * FROM Trains`;
+    db.pool.query(query_trains, function (error, rows, fields) {
+      let trains = [];
+      for (const train of rows) {
+        let new_train = {};
+        for (const key in train) {
+          new_train[key] = train[key];
+        }
+        trains.push(new_train);
+      }
+      if (req.query.trainID) {
+        // Query individual train for display on view page
+        let query_train = `SELECT * FROM Trains WHERE train_ID = ${req.query.trainID}`;
+        db.pool.query(query_train, function (error, rows, fields) {
+          let train = {};
+          for (const key in rows[0]) {
+            train[key] = rows[0][key];
+          }
+          console.log(linesMap[train.line_code]);
+          train.line_name = linesMap[train.line_code]
+          console.log(train);
+          res.render("train_view", { train: train, trains: trains });
+        });
+      } else {
+        res.render("train_view", { train: null, trains: trains });
+      }
+    })
+  })
+})
 
 app.get('/lines_has_station', function(req, res)
     {
