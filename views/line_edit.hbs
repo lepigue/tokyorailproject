@@ -67,7 +67,7 @@
 
         {{!-- For each row, print the line_ID, line_name, start_station, end_station--}}
         {{#each data}}
-        <tr>
+        <tr data-value={{this.line_ID}}>
             <td>{{this.line_ID}}</td>
             <td>{{this.line_name}}</td>
             <td>{{this.start_station}}</td>

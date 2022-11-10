@@ -64,20 +64,20 @@
     <br>
     <hr>
 
-    {{!-- Delete Operator Form --}}
+    {{!-- Delete Operator Form 
     <h1>Delete Operator</h1>
     <form id="delete_form">
-       <select name="input_operator" id="input_operator">
+       <select name="delete_form" id="delete_form">
         <option data-value={{this.operator_ID}}>Select</option>
         {{#each data}}
-        <option value={{this.operator_ID}}">{{this.first_name}} {{this.last_name}}</option>
+        <option value={{this.operator_ID}}>{{this.first_name}} {{this.last_name}}</option>
         {{/each}}
     </select>
     <input type="submit" value="submit">
     </form>
     <script src="./js/delete_operator.js"></script>
     <br>
-    <hr>
+    <hr> --}}
 
 {{!-- The Data from our Database --}}
 {{!-- Create a table --}}
@@ -108,7 +108,6 @@
             <td>{{this.phone_number}}</td>
             <td>{{this.email}}</td>
             <td><button onclick="deleteOperator({{this.operator_ID}})">Delete</button></td>
-            <td><button onclick="updateOperator({{this.operator_ID}})">Update</button></td>
         </tr>
         {{/each}}
     </tbody>

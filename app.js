@@ -98,13 +98,25 @@ app.get('/operator_view', function(req, res) {
 });
 
 
+app.get("/schedule_edit", function (req, res) {
+  let query1 = "SELECT * FROM Schedules;";
+    db.pool.query(query1, function(error, rows, fields){
+        res.render('schedule_edit', {data: rows});
+    })
+  });
+
+// Do We need this?
 app.post("/schedule_edit", function (req, res) {
   res.render("schedule_edit");
 }); 
 
-app.post("/station_edit", function (req, res) {
-  res.render("station_edit");
-}); 
+app.get("/station_edit", function (req, res) {
+  
+    let query1 = "SELECT * FROM Stations;";
+    db.pool.query(query1, function(error, rows, fields){
+        res.render('station_edit', {data: rows});
+    })
+  });
 
 app.get('/station_template', function(req, res)
     {
@@ -114,9 +126,14 @@ app.get('/station_template', function(req, res)
 app.get('/station_view', function(req, res)
     {
         res.render('station_view');                    
-    }); 
+    });
+    
+//app.get('/train_edit', function(req,res)
+  //{
+    //res.render('train_edit')
+  //});
 
-app.post('/train_edit', function(req, res)
+app.get('/train_edit', function(req, res)
     {
         let query1 = "SELECT * FROM Trains;";
         db.pool.query(query1, function(error, rows, fields){

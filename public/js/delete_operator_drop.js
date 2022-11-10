@@ -1,3 +1,52 @@
+// Get the objects we need to delete
+let deleteOperatorForm = document.getElementById('delete_form');
+
+// Modify the objects we need
+updateOperatorForm.addEventListener("submit", function (e) {
+   
+    // Prevent the form from submitting
+    e.preventDefault();
+
+    // Get form fields we need to get data from
+    let operator_ID = document.getElementById("delete_form");
+
+    // Get the values from the form fields
+    let opIDValue = operator_ID.value;
+
+    if (isNaN(opIDValue)) 
+    {
+        return;
+    }
+
+    // Put our data we want to send in a javascript object
+    let data = {
+        operator_ID: opIDValue
+    }
+    console.log(data)
+    
+    // Setup our AJAX request
+    var xhttp = new XMLHttpRequest();
+    xhttp.open("PUT", "/delete_operator", true);
+    xhttp.setRequestHeader("Content-type", "application/json");
+
+    // Tell our AJAX request how to resolve
+    xhttp.onreadystatechange = () => {
+        if (xhttp.readyState == 4 && xhttp.status == 200) {
+
+            // Add the new data to the table
+            deleteOperator(opIDValue);
+
+        }
+        else if (xhttp.readyState == 4 && xhttp.status != 200) {
+            console.log("There was an error with the input.")
+        }
+    }
+
+    // Send the request and wait for the response
+    xhttp.send(JSON.stringify(data));
+
+})
+
 function deleteOperator(personID) {
     // Put our data we want to send in a javascript object
     let data = {
