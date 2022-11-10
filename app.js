@@ -83,14 +83,12 @@ app.get('/operator_view', function(req, res) {
       }
       operators.push(new_operator);
     }
-    console.log(operators);
     if (req.query.operatorID) {
       db.pool.query(query_op, function (error, rows, fields) {
           let operator = {};
           for (const key in rows[0]) {
             operator[key] = rows[0][key];
           }
-          console.log(operator)
       res.render("operator_view", { operator: operator, operators: operators });
       });
     } else { 
@@ -153,9 +151,7 @@ app.get('/train_view', function(req, res) {
           for (const key in rows[0]) {
             train[key] = rows[0][key];
           }
-          console.log(linesMap[train.line_code]);
           train.line_name = linesMap[train.line_code]
-          console.log(train);
           res.render("train_view", { train: train, trains: trains });
         });
       } else {
