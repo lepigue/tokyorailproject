@@ -123,10 +123,100 @@ app.get('/station_template', function(req, res)
         res.render('station_template');                    
     }); 
     
-app.get('/station_view', function(req, res)
-    {
-        res.render('station_view');                    
-    });
+app.get("/station_view", function (req, res) {
+  const stationID = req.query.stationID;
+  let query_stations = `SELECT * FROM Stations`;
+  db.pool.query(query_stations, function (error, rows, fields) {
+    let stations = {};
+
+    for (const station of rows) {
+      let new_station = {};
+      for (const key in station) {
+        new_station[key] = station[key];
+      }
+      stations[new_station.station_ID] = new_station;
+    }
+
+      if (stationID) {
+        // Build map of line ID to line name for use in UI
+        let query_lines = `SELECT * FROM \`Lines\``;
+        db.pool.query(query_lines, function (error, rows, fields) {
+          const linesMap = {};
+          for (const line of rows) {
+            linesMap[line.line_ID] = line.line_name;
+          }
+
+          // Build map of trains for Schedules
+          let query_trains = `SELECT * FROM Trains WHERE line_code = (SELECT line_code FROM Stations WHERE station_ID = ${stationID})`;
+          db.pool.query(query_trains, function (error, rows, fields) {
+            let trains = {};
+            for (const train of rows) {
+              let new_train = {};
+              for (const key in train) {
+                new_train[key] = train[key];
+              }
+              trains[new_train.train_ID] = new_train;
+            }
+
+            // Get Operator
+            let query_operators = `SELECT * FROM Operators;`; // TODO: add WHERE train_code = (SELECT * FROM )
+            db.pool.query(query_operators, function (error, rows, fields) {
+              let operators = {};    // Train_ID : Operator Display Name
+              for (const train_ID in trains) {
+                operators[train_ID] = [];
+              }
+              for (const operator of rows) {
+                if (operator.train_code in trains) {
+                  operators[operator.train_code] = operators[
+                    operator.train_code
+                  ].push(`${operator.last_name} ${operator.first_name}`);
+                }
+              }
+  
+              // Create list of all schedules that pass through this station
+              let query_schedules = `SELECT * FROM Schedules WHERE station_code = ${stationID} ORDER BY arrival_time;`;
+              db.pool.query(query_schedules, function (error, rows, fields) {
+                let schedules = [];
+                for (const schedule of rows) {
+                  let new_schedule = {};
+                  for (const key in schedule) {
+                    new_schedule[key] = schedule[key];
+                  }
+                  new_schedule.station_name =
+                    stations[new_schedule.station_code].location_name;
+                  new_schedule.train_name = `Train ${
+                    new_schedule.train_code
+                  } - ${trains[new_schedule.train_code].model}`;
+                  new_schedule.train_operator = `${
+                    operators[new_schedule.train_code]
+                  }`;
+                  schedules.push(new_schedule);
+                }
+
+                //
+                let query_station = `SELECT * FROM Stations WHERE station_ID = ${stationID}`;
+                db.pool.query(query_station, function (error, rows, fields) {
+                  let station = {};
+                  for (const key in rows[0]) {
+                    station[key] = rows[0][key];
+                  }
+                  station.line_name = linesMap[station.line_code];
+                  res.render("station_view", {
+                    station: station,
+                    stations: stations,
+                    schedules: schedules,
+                    operators: operators,
+                  });
+                });
+              });
+            });
+          });
+        });
+      } else {
+        res.render("station_view", { station: null, stations: stations });
+      }
+  });
+});
     
 //app.get('/train_edit', function(req,res)
   //{

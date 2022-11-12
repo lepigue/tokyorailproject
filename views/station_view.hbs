@@ -15,18 +15,31 @@
     <div class="dropdown">
       <button class="dropbtn">Stations</button>
       <div class="dropdown-content">
-        <a href="/station_template?station_id=1">&lt;Station 1&gt;</a>
-        <a href="/station_template?station_id=2">&lt;Station 2&gt;</a>
-        <a href="/station_template?station_id=3">&lt;Station 3&gt;</a>
-        <a href="/station_template?station_id=4">&lt;Station 4&gt;</a>
-        <a href="/station_template?station_id=5">&lt;Station 5&gt;</a>
-        <a href="/station_template?station_id=6">&lt;Station 6&gt;</a>
-        <a href="/station_template?station_id=7">&lt;Station 7&gt;</a>
-        <a href="/station_template?station_id=8">&lt;Station 8&gt;</a>
-        <a href="/station_template?station_id=9">&lt;Station 9&gt;</a>
-        <a href="/station_template?station_id=10">&lt;Station 10&gt;</a>
+      {{#each stations}}
+        <a href="/station_view?stationID={{this.station_ID}}" class="dropdown-entry">{{this.location_name}}</a>
+      {{/each}}
       </div>
     </div>
+
+    {{#if station}}
+      <br><br><br><br><hr><br>
+      <h1>{{station.location_name}} Station Information:</h1>
+      <h2>{{station.line_name}} Line</h2>
+      <h2>Schedule:</h2>
+      {{#if schedules}}
+        {{#each schedules}}
+          <b>{{this.train_name}}</b>
+            <p>Arrival: {{this.arrival_time}}</p>
+            <p>Departure: {{this.departure_time}}</p>
+            {{#if this.operator}}
+            <p>Operator: {{this.operator}}</p>
+            {{/if}}
+          <br><br>
+        {{/each}}
+      {{else}}
+      <p><h3>No schedule data is currently available</h3></p>
+      {{/if}}
+    {{/if}}
   </main>
   <footer>
     <a href="/index" id="footer">Back to home</a>
