@@ -39,10 +39,52 @@ app.get('/index', function(req, res)
         res.render('index');                   
     });      
     
-app.get('/line_view', function(req, res)
-    {
-        res.render('line_view');
-    });
+app.get('/line_view', function(req, res) {
+  let query_lines = 'SELECT * FROM \`Lines\` ORDER BY line_name';
+  db.pool.query(query_lines, function (error, rows, fields) {
+    let lineData = {};
+    let lines = [];
+    for (const line of rows) {
+      let new_line = {};
+      for (const key in line) {
+        new_line[key] = line[key];
+      }
+      lines.push(new_line);
+    }
+
+    if (req.query.lineId) {
+      let queryLine = `SELECT line_name FROM \`Lines\` WHERE line_ID = ${req.query.lineId}`;
+      db.pool.query(queryLine, function(error, rows, fields) {
+        let line_name = rows[0].line_name;
+
+        let query_stations = `SELECT location_name FROM Stations WHERE line_code = ${req.query.lineId} ORDER BY station_num`;
+        db.pool.query(query_stations, function (error, rows, fields) {
+          console.log(rows);
+          let nonTerminalStations = [];
+          for (const [idx, station] of rows.entries()) {
+            if (idx === 0) {
+              lineData.firstStation = station.location_name;
+            } else if (idx === rows.length - 1) {
+              lineData.lastStation = station.location_name;
+            } else {
+              let new_station = {};
+              for (const key in station) {
+                new_station[key] = station[key];
+                nonTerminalStations.push(new_station);
+              }
+            }
+          }
+          res.render("line_view", {
+            nonTerminalStations: nonTerminalStations,
+            lines: lines,
+            line_name: line_name,
+            lineData: lineData,
+          });
+        })
+      })
+    }
+  })
+});
 
 app.get('/line_edit', function(req, res)
     {
@@ -51,12 +93,6 @@ app.get('/line_edit', function(req, res)
             res.render('line_edit', {data: rows});
         })
     });
-
-app.get('/line_edit', function(req, res)
-    {
-        res.render('line_edit');                    
-    }); 
-
 
 app.get('/line_template', function(req, res)
     {
@@ -67,7 +103,7 @@ app.get("/operator_edit", function (req, res) {
   let query1 = "SELECT * FROM Operators;";
   db.pool.query(query1, function (error, rows, fields) {
     res.render("operator_edit", { data: rows });
-  });
+  })
 }); 
 
 app.get('/operator_view', function(req, res) {
