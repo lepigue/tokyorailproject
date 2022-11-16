@@ -34,6 +34,11 @@
       <p class="data-content">{{operator.phone_number}}</p>
       <h2 class="data-header">E-mail address:</h2>
       <p class="data-content">{{operator.email}};</p>
+      <h2 class="data-header">Current Train:</h2>
+      <p class="data-content">
+        <a href="train_view?trainID={{operator.train_code}}">
+          Train {{operator.train_code}} - {{operator.currTrain.model}}
+        </a>
     </div>
     {{/if}}
   </main>

@@ -6,7 +6,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>View Lines</title>
-  <link rel="icon" href="../../../public/favicon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="icon" href="../public/favicon.ico" type="image/x-icon">
 </head>
 
 <body>
@@ -21,20 +22,34 @@
       </div>
     </div>
 
-    {{#if nonTerminalStations}}
+    {{#if stations}}
       <br><br><br><br><hr><br>
         <h1>{{line_name}} Line</h1>
-      <p><b>{{lineData.firstStation}}</b></p>
-      {{#each nonTerminalStations}}
-        <div>
-          <p>{{this.location_name}}</p>
+      
+      
+       <! <img src="../imgs/{{line_code}}-{{firstStation.station_num}}.png" alt="{{firstStation.location_name}}" width="50" height="50">
+      
+      <div>
+      {{#each stations}}
+        {{#if @first}}
+          <p class="stationName"></p><a href='/station_view?stationID={{this.station_ID}}'></p>
+          <b>{{this.location_name}}</b></a>
+        {{else if @last}}
+          <p class="stationName"><a href='/station_view?stationID={{this.station_ID}}'>
+          <b>{{this.location_name}}</b></a>
+        {{else}}
+          <p class="stationName"><a href='/station_view?stationID={{this.station_ID}}'>
+          {{this.location_name}}</a></p>
+        {{/if}}
       {{/each}}
-      <p><b>{{lineData.lastStation}}</b></p>
+      </div>
+      
     {{/if}}
   </main>
   <footer>
     <a href="/index" id="footer">Back to home</a>
   </footer>
+  <script src="../js/index.js"></script>
 </body>
 
 </html>

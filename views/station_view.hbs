@@ -11,15 +11,51 @@
 
 <body>
   <main>
-    <h1>Select station to view schedule:</h1>
+    <h1>Select below to view schedule:</h1>
     <div class="dropdown">
-      <button class="dropbtn">Stations</button>
+        {{#if curr_line}}
+          <button class="dropbtn">
+            {{curr_line.line_name}} Line
+          </button>
+        {{else}}
+          <button class="dropbtn">
+            Select Line
+          </button>
+        {{/if}}
+      </button>
       <div class="dropdown-content">
-      {{#each stations}}
-        <a href="/station_view?stationID={{this.station_ID}}" class="dropdown-entry">{{this.location_name}}</a>
-      {{/each}}
+        {{#if curr_line}}
+          <a class="dropdown-entry">Select Line:</a>
+        {{/if}}
+        {{#each lines}}
+          <a href="/station_view?lineID={{this.line_ID}}" class="dropdown-entry">{{this.line_name}}</a>
+        {{/each}}
       </div>
     </div>
+
+    <div class="dropdown">
+      {{#if station}}
+        <button class="dropbtn">{{station.location_name}} Station</button>
+      {{else}}
+        <button class="dropbtn">Select Station</button>
+      {{/if}}
+      
+      <div class="dropdown-content">
+      
+      {{#if curr_line}}
+        {{#if station}}
+          <a class="dropdown-entry">Select Station:</a>
+        {{/if}}
+        {{#each lineStations}}
+            <a href="/station_view?lineID={{../curr_line.line_ID}}&stationID={{this.station_ID}}" class="dropdown-entry">{{this.location_name}}</a>
+        {{/each}}
+      {{else}}
+      <a class="dropdown-entry">Please select line</a>
+      {{/if}}
+      </div>
+    </div>
+
+    <h3>Or search for a station here:</h3>
 
     {{#if station}}
       <br><br><br><br><hr><br>
@@ -28,7 +64,7 @@
       <h2>Schedule:</h2>
       {{#if schedules}}
         {{#each schedules}}
-          <b>{{this.train_name}}</b>
+          <a href='/train_view?trainID={{this.train_code}}'><b>{{this.train_name}}</b></a>
             <p>Arrival: {{this.arrival_time}}</p>
             <p>Departure: {{this.departure_time}}</p>
             {{#if this.operator}}
