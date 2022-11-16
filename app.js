@@ -152,7 +152,7 @@ app.get('/operator_view', function(req, res) {
       trains[new_train.train_ID] = new_train;
     }
 
-    let query_ops = `SELECT * FROM Operators`;
+    let query_ops = `SELECT * FROM Operators ORDER BY last_name`;
     db.pool.query(query_ops, function (error, rows, fields) {
       let operators = [];
       for (const operator of rows) {
