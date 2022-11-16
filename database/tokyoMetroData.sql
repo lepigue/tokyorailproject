@@ -54,13 +54,6 @@ CREATE TABLE `Operators` (
     PRIMARY KEY (`operator_ID`)
 );
 
-DROP TABLE IF EXISTS `Lines_has_Stations`;
-CREATE TABLE `Lines_has_Stations` (
-    `lines_stations_id` int(8) NOT NULL UNIQUE AUTO_INCREMENT,
-    `lines_line_id` int,
-    `stations_station_id` int,
-    PRIMARY KEY (`lines_stations_id`)
-);
 
 -- UPDATE FOREIGN KEYS
 
@@ -81,9 +74,6 @@ ADD FOREIGN KEY (`train_code`) REFERENCES `Trains`(`train_ID`) ON DELETE CASCADE
 ALTER TABLE `Operators`
 ADD FOREIGN KEY (`train_code`) REFERENCES `Trains`(`train_ID`) ON DELETE CASCADE;
 
-ALTER TABLE `Lines_has_Stations`
-ADD FOREIGN KEY (`lines_line_id`) REFERENCES `Lines`(`line_ID`) ON DELETE CASCADE,
-ADD FOREIGN KEY (`stations_station_id`) REFERENCES `Stations`(`station_ID`) ON DELETE CASCADE;
 
 -- INSERT INTO TABLES
 
@@ -137,11 +127,6 @@ VALUES  ('Haruto', 'Tanaka', 499274029, 'tanakah@metro.tokyo.jp'),
         ('Chiyo', 'Fujita', 499207058, 'fujitac@metro.tokyo.jp'),
         ('Isamu', 'Sano', 499288428, 'noguchii@metro.tokyo.jp');
 
-INSERT INTO `Lines_Has_Stations` (`stations_station_id`, `lines_line_id`)
-VALUES  ('1', '1'),
-        ('2', '2'),
-        ('3', '3'),
-        ('4', '4');
 
 -- Add mock data into the db
 -- For this simple example, no sub-queries were used,

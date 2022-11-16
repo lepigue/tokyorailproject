@@ -3,15 +3,15 @@
 /*
     SETUP
 */
-var express = require('express');   // We are using the express library for the web server
-var app     = express();            // We need to instantiate an express object to interact with the server in our code
-var methodOverride = require('method-override')
+var express = require('express')   // We are using the express library for the web server
+var app     = express()           // We need to instantiate an express object to interact with the server in our code
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
+app.use(express.static('public'))
 PORT        = 8451;                 // Set a port number at the top so it's easy to change in the future
 
 // DATABASE
-var db = require('./database/db-connector')
+var db = require('./database/db-connector');
 
 // HANDLEBARS
 const { engine } = require('express-handlebars');
@@ -19,16 +19,12 @@ var exphbs = require('express-handlebars');     // Import express-handlebars
 app.engine('.hbs', engine({extname: ".hbs"}));  // Create an instance of the handlebars engine to process templates
 app.set('view engine', '.hbs');                 // Tell express to use the handlebars engine whenever it encounters a *.hbs file.
 
+
 /*
     ROUTES
 */
-app.use(express.static('public'));
-
-//Static Files
-app.use(express.static('public'));
-//app.use(express.static('views'));
-
 // GET ROUTES
+
 app.get('/', function(req, res)
     {
         res.render('index')
@@ -86,25 +82,61 @@ app.get('/line_view', function(req, res) {
   })
 });
 
-app.get('/line_edit', function(req, res)
+app.get('/line_template', function(req, res)
     {
-        let query1 = "SELECT * FROM Lines;";
+        res.render('line_template');
+    });
+
+
+
+// GETS ROUTES, RENDERS DATA IN TABLES AND PAGES
+
+app.get("/line_edit", function(req, res)
+    {
+        let query1 = "SELECT * FROM `Lines`;";
         db.pool.query(query1, function(error, rows, fields){
             res.render('line_edit', {data: rows});
         })
     });
 
-app.get('/line_template', function(req, res)
-    {
-        res.render('line_template');                    
-    }); 
+app.get("/operator_edit", function (req, res) 
+  {
+    let query1 = "SELECT * FROM `Operators`;";
+    db.pool.query(query1, function (error, rows, fields){
+        res.render('operator_edit', { data: rows });
+    })
+  }); 
 
-app.get("/operator_edit", function (req, res) {
-  let query1 = "SELECT * FROM Operators;";
-  db.pool.query(query1, function (error, rows, fields) {
-    res.render("operator_edit", { data: rows });
-  })
-}); 
+app.get("/station_edit", function (req, res) 
+  {
+    let query1 = "SELECT * FROM `Stations`;";
+    db.pool.query(query1, function(error, rows, fields){
+        res.render('station_edit', {data: rows});
+    })
+  });
+
+app.get('/train_edit', function(req, res)
+    {
+        let query1 = "SELECT * FROM `Trains`;";
+        let query2 = "SELECT * FROM `Lines`;";
+        db.pool.query(query1, function(error, rows, fields){
+          let trains = rows;
+          db.pool.query(query2, (error, rows, fields)=>{
+            let lines = rows;
+            return res.render('train_edit', {data: trains, lines: lines});
+          })
+        })
+    });
+
+app.get("/schedule_edit", function (req, res)
+    {
+        let query1 = "SELECT * FROM `Schedules`;";
+        db.pool.query(query1, function(error, rows, fields){
+            console.log(rows)
+            res.render('schedule_edit', {data: rows});
+        })
+    });
+
 
 app.get('/operator_view', function(req, res) {
   let query_ops = `SELECT * FROM Operators`;
@@ -130,29 +162,9 @@ app.get('/operator_view', function(req, res) {
     } else { 
       res.render("operator_view", { operator: null, operators: operators });
     }
-  });
+  })
 });
 
-
-app.get("/schedule_edit", function (req, res) {
-  let query1 = "SELECT * FROM Schedules;";
-    db.pool.query(query1, function(error, rows, fields){
-        res.render('schedule_edit', {data: rows});
-    })
-  });
-
-// Do We need this?
-app.post("/schedule_edit", function (req, res) {
-  res.render("schedule_edit");
-}); 
-
-app.get("/station_edit", function (req, res) {
-  
-    let query1 = "SELECT * FROM Stations;";
-    db.pool.query(query1, function(error, rows, fields){
-        res.render('station_edit', {data: rows});
-    })
-  });
 
 app.get('/station_template', function(req, res)
     {
@@ -242,30 +254,18 @@ app.get("/station_view", function (req, res) {
                     stations: stations,
                     schedules: schedules,
                     operators: operators,
-                  });
-                });
-              });
-            });
-          });
-        });
+                  })
+                })
+              })
+            })
+          })
+        })
       } else {
         res.render("station_view", { station: null, stations: stations });
       }
-  });
+  })
 });
-    
-//app.get('/train_edit', function(req,res)
-  //{
-    //res.render('train_edit')
-  //});
 
-app.get('/train_edit', function(req, res)
-    {
-        let query1 = "SELECT * FROM Trains;";
-        db.pool.query(query1, function(error, rows, fields){
-            res.render('train_edit', {data: rows});
-        })
-    });
 
 app.get('/train_view', function(req, res) {
   // Build map of line ID to line name for use in UI
@@ -302,19 +302,77 @@ app.get('/train_view', function(req, res) {
       }
     })
   })
-})
+});
 
-app.get('/lines_has_station', function(req, res)
-    {
-        res.render('lines_has_station');                    
-    }); 
 
-app.get('/relationship_template', function(req, res)
-    {
-        res.render('relationship_template');                    
-    }); 
 
 // POST ROUTES
+app.post('/add_train_ajax', function(req, res) 
+{
+    // Capture the incoming data and parse it back to a JS object
+    let data = req.body;
+
+    // Create the query and run it on the database
+    query1 = `INSERT INTO Trains (model, last_service_date, line_code) VALUES ('${data.model}', '${data.last_service_date}', '${data.line_code}');`;
+    db.pool.query(query1, function(error, rows, fields){
+
+        // Check to see if there was an error
+        if (error) {
+
+            // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
+            console.log(error)
+            res.sendStatus(400);
+        }
+        else
+        {
+            // If there was no error, perform a SELECT * on bsg_people
+            query2 = `SELECT * FROM Trains;`;
+            db.pool.query(query2, function(error, rows, fields){
+
+                // If there was an error on the second query, send a 400
+                if (error) {
+                    
+                    // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
+                    console.log(error);
+                    res.sendStatus(400);
+                }
+                // If all went well, send the results of the query back.
+                else
+                {
+                    res.send(rows);
+                }
+            })
+        }
+    })
+});
+
+
+app.post('/addLineForm', function(req, res){
+  // Capture the incoming data and parse it back to a JS object
+  let data = req.body;
+  console.log(data)
+  // Create the query and run it on the database
+  query1 = `INSERT INTO Lines (line_name, start_station, end_station) VALUES ('${data['lineName']}', '${data['startStation']}','${data['endStation']}')`;
+  db.pool.query(query1, function(error, rows, fields){
+  
+      // Check to see if there was an error
+      if (error) {
+  
+          // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
+          console.log(error)
+          res.sendStatus(400);
+      }
+  
+      // If there was no error, we redirect back to our root route, which automatically runs the SELECT * FROM bsg_people and
+      // presents it on the screen
+      else
+      {
+          res.redirect('/line_edit');
+      }
+  })
+});
+
+
 app.post('/addOperatorForm', function(req, res){
     // Capture the incoming data and parse it back to a JS object
     let data = req.body;
@@ -337,12 +395,49 @@ app.post('/addOperatorForm', function(req, res){
             res.redirect('/operator_edit');
         }
     })
-})
+});
+
+
+
+
 
 // DELETE ROUTES
+
+app.delete('/delete_train-ajax/', function(req,res,next){
+  let data = req.body;
+  let trainID = parseInt(data.id);
+  let lineDel = `DELETE FROM Trains WHERE line_code = ?`;
+  let trainDel= `DELETE FROM Trains WHERE train_id = ?`;
+
+
+        // Run the 1st query
+        db.pool.query(lineDel, [trainID], function(error, rows, fields){
+            if (error) {
+
+            // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
+            console.log(error);
+            res.sendStatus(400);
+            }
+
+            else
+            {
+                // Run the second query
+                db.pool.query(trainDel, [trainID], function(error, rows, fields) {
+
+                    if (error) {
+                        console.log(error);
+                        res.sendStatus(400);
+                    } else {
+                        res.sendStatus(204);
+                    }
+                })
+            }
+})});
+
+
 app.delete('/delete_operator', function(req,res,next){
     let data = req.body;
-    let operatorID = parseInt(data.id);
+    let operatorID = parseInt(data.operator_ID);
     let deleteOp = `DELETE FROM Operators WHERE operator_ID  = ?`;
           // Run query
           db.pool.query(deleteOp, [operatorID], function(error, rows, fields){
@@ -358,7 +453,8 @@ app.delete('/delete_operator', function(req,res,next){
               }
               
         })
-    })
+    });
+
 
 // PUT ROUTES
 app.put('/put_operator', function(req,res,next){                                   
@@ -397,7 +493,8 @@ app.put('/put_operator', function(req,res,next){
                       }
                   })
               }
-  })});
+   })
+});
 
 
 /*
