@@ -29,10 +29,11 @@
     <hr>
     <h1>Edit Station</h1>
     <form id="updateStationForm">
-      <select id="stationUpdateDropdown">
-        <option>Select a station to update:</option>
+      <label for="stationUpdateDropdown">Select a station to update:</label><br>
+      <select id="stationUpdateDropdown" name="stationUpdateDropdown">
+        <option></option>
         {{#each stationsAlphabetical}}
-          <option value="{{this.station_ID}},{{this.location_name}},{{this.station_num}},{{this.line_name}}">{{this.location_name}} Station ({{this.line_name}} Line)</option>
+          <option value="{{this.station_ID}},{{this.location_name}},{{this.station_num}},{{this.line_name}},{{this.line_code}}">{{this.location_name}} Station ({{this.line_name}} Line)</option>
         {{/each}}
       </select>
       <br><br>
@@ -45,9 +46,8 @@
       <label for="stationId">Station Number (on line):</label><br>
       <input required type="text" id="updateStationNum" name="stationNum" value="{{stationEdit.stationNum}}"><br><br>
       <label for="stationID">Current Line:</label><br>
-      <input required readonly="readonly" type="text" id="updateLineName" name="lineID" value="{{stationEdit.lineName}}"><br><br>
-      <select id="updateLineID" name="lineID">
-        <option value="{{stationEdit.lineID}}">Select line to update:</option>
+      <select id="updateLineIDName" name="lineID">
+        <option value="{{stationEdit.lineID}},{{stationEdit.line_name}}"></option>
         {{#each lines}}
           <option value="{{this.line_ID}},{{this.line_name}}">{{this.line_name}}</option>
         {{/each}}

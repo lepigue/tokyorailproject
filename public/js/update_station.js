@@ -10,8 +10,11 @@ updateOperatorForm.addEventListener("submit", function (e) {
   let stationID = document.getElementById("updateStationID").value;
   let stationName = document.getElementById("updateStationName").value;
   let stationNum = document.getElementById("updateStationNum").value;
-  let lineIdElem = document.getElementById("updateLineID");
-  let lineID = lineIdElem.options[lineIdElem.selectedIndex].value;
+  let lineIdElem = document.getElementById("updateLineIDName");
+  let lineData = lineIdElem.options[lineIdElem.selectedIndex].value.split(",");
+  let lineID = lineData[0];
+  let lineName = lineData[1];
+
   if (isNaN(stationID)) {
     return;
   }
@@ -33,6 +36,7 @@ updateOperatorForm.addEventListener("submit", function (e) {
     if (xhttp.readyState == 4 && xhttp.status == 200) {
       // Add the new data to the table
       updateRow(xhttp.response, stationID);
+      updateDropdown(stationID, stationName, stationNum, lineName, lineID);
     } else if (xhttp.readyState == 4 && xhttp.status != 200) {
       console.log("There was an error with the input.");
     }
@@ -44,9 +48,8 @@ updateOperatorForm.addEventListener("submit", function (e) {
 
 function updateRow(data, stationID) {
   let parsedData = JSON.parse(data);
-  console.log(parsedData);
   let table = document.getElementById("station_table");
-  document.getElementById("updateLineName").value = parsedData[0].line_name;
+  document.getElementById("updateLineIDName").value = parsedData[0].line_name;
 
   for (let i = 0, row; (row = table.rows[i]); i++) {
     //iterate through rows
@@ -62,4 +65,20 @@ function updateRow(data, stationID) {
       updateRowIndex.getElementsByTagName("td")[3].innerHTML = parsedData[0].line_name;
     }
   }
+}
+
+function updateDropdown(stationID, stationName, stationNum, lineName, lineID) {
+  // update station dropdown to show new line
+  let stationDropdown = document.getElementById("stationUpdateDropdown")
+  stationDropdown.options[
+    stationDropdown.selectedIndex
+  ].text = `${stationName} Station (${lineName} Line)`;
+  stationDropdown.options[
+    stationDropdown.selectedIndex
+  ].value = `${stationID},${stationName},${stationNum},${lineName},${lineID}`;
+
+  // populate Current Line dropdown with current line
+  let linesDropdown = document.getElementById("updateLineIDName");
+  linesDropdown.selectedIndex = lineID;
+
 }
