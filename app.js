@@ -140,7 +140,7 @@ app.post("/station_edit", function (req, res) {
 })
 
 app.get("/station_edit", function (req, res)  {
-  let query_lines = `SELECT * FROM \`Lines\` ORDER BY line_ID`;
+  let query_lines = `SELECT * FROM \`Lines\``;
   db.pool.query(query_lines, function (error, rows, fields) {
     let lines = [];
     for (const line of rows) {
