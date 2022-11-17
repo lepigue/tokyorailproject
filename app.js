@@ -107,21 +107,135 @@ app.get("/line_edit", function(req, res)
         })
     });
 
-app.get("/operator_edit", function (req, res) 
-  {
+app.get("/operator_edit", function (req, res)  {
     let query1 = "SELECT * FROM `Operators`;";
     db.pool.query(query1, function (error, rows, fields){
         res.render('operator_edit', { data: rows });
     })
-  }); 
+}); 
 
-app.get("/station_edit", function (req, res) 
-  {
-    let query1 = "SELECT * FROM Stations;";    
-    db.pool.query(query1, function(error, rows, fields){
-        res.render('station_edit', {data: rows});
-    })
+app.put("/station_edit", function (req, res) {
+
+
+  res.redirect("/station_edit");
+})
+
+app.post("/station_edit", function (req, res) {
+  let formData = req.body;
+
+  // Creating a new station
+  if (!req.body.stationNum) {
+    let queryNextStationNum = `SELECT MAX(station_num) AS maxStationNum from Stations WHERE line_code = ${req.body.lineID}`;
+    db.pool.query(queryNextStationNum, function (error, rows, fields) {
+      let newStationNum = rows[0].maxStationNum + 1;
+    
+      let queryNewStation = `INSERT INTO Stations (location_name, station_num, line_code) VALUES (\'${formData.stationName}\', ${newStationNum}, ${formData.lineID})`;
+      db.pool.query(queryNewStation, function (error, rows, fields) {
+        if (error) {
+          console.log(error);
+          res.sendStatus(400);
+        } else {
+          res.redirect("/station_edit");
+        }
+      });
+    });
+  
+  // Updating an existing station
+  } else if (req.body.lineName) {
+      let formData = req.body;
+      let stationID = formData.stationID;
+      let stationNameStr = formData.stationName ? 'location_name = ' : '';
+      let stationNumStr = formData.stationNum ? 'station_num = ' : '';
+      let lineIdStr = formData.lineID ? "line_code = " : "";
+      let stationNameVal = formData.stationName ? (formData.stationNum || formData.lineID ? `'${formData.stationName}',` : `'${formData.stationName}' `) : '';
+      let stationNumVal = formData.stationNum
+        ? formData.lineID
+          ? `${formData.stationNum},`
+          : `${formData.stationNum}`
+        : "";
+      let lineIdVal = formData.lineID ? `${formData.lineID}` : "";
+      let queryUpdateStation = `UPDATE \`Stations\` SET ${stationNameStr}${stationNameVal} ${stationNumStr}${stationNumVal} ${lineIdStr}${lineIdVal} WHERE station_ID = ${stationID}`;
+      db.pool.query(queryUpdateStation, function (error, rows, fields) {
+        if (error) {
+          console.log(error);
+          res.sendStatus(400);
+        }
+        res.redirect("/station_edit");
+      })
+  } else {
+    console.log('NOPE');
+  }
+
+})
+
+app.get("/station_edit", function (req, res)  {
+  let query_lines = `SELECT * FROM \`Lines\``;
+  db.pool.query(query_lines, function (error, rows, fields) {
+    const lines = {};
+    for (const line of rows) {
+      let new_line = {};
+      new_line.line_ID = line.line_ID;
+      new_line.line_name = line.line_name;
+      lines[new_line.line_ID] = new_line;
+    }
+
+    let queryStations = "SELECT * FROM `Stations` ORDER BY location_name;";
+    db.pool.query(queryStations, function (error, rows, fields) {
+      let stations = {};
+      let stationsAlphabetical = [];
+      for (const station of rows) {
+        let new_station = {};
+        for (const key in station) {
+          new_station[key] = station[key];
+        }
+        new_station.line_name =
+          lines[new_station.line_code].line_name;
+        stationsAlphabetical.push(new_station);
+        stations[new_station.station_ID] = new_station;
+      }
+      
+      if (req.query.stationName && req.query.lineName) {
+        let stationEdit = {
+          stationName: req.query.stationName,
+          stationNum: req.query.stationNum,
+          lineName: req.query.lineName,
+          lineID: req.query.lineID,
+          stationID: req.query.stationID,
+        };
+        res.render("station_edit", {
+          stations: stations,
+          stationsAlphabetical: stationsAlphabetical,
+          lines: lines,
+          stationEdit: stationEdit,
+        });
+      } else if (req.query.lineID) {
+        let queryCurrLine = `SELECT * FROM \`Lines\` WHERE line_ID = ${req.query.lineID}`;
+        db.pool.query(queryCurrLine, function (error, rows, fields) {
+          let currLine = {};
+          for (const key in rows[0]) {
+            currLine[key] = rows[0][key];
+          }
+        });
+
+        res.render("station_edit", {
+          stations: stations,
+          stationsAlphabetical: stationsAlphabetical,
+          lines: lines,
+          currLine: currLine,
+          stationEdit: null,
+        });
+      } else {
+        res.render("station_edit", {
+          stations: stations,
+          stationsAlphabetical: stationsAlphabetical,
+          lines: lines,
+          currLine: null,
+          stationEdit: null,
+        });
+      }
+    });
   });
+});
 
 app.get('/train_edit', function(req, res)
     {
@@ -143,7 +257,6 @@ app.get("/schedule_edit", function (req, res)
             res.render('schedule_edit', {data: rows});
         })
     });
-
 
 app.get('/operator_view', function(req, res) {
   let query_trains = `SELECT train_ID, model, line_code FROM Trains`;
@@ -186,12 +299,6 @@ app.get('/operator_view', function(req, res) {
     });
   });
 });
-
-
-app.get('/station_template', function(req, res)
-    {
-        res.render('station_template');                    
-    }); 
     
 app.get("/station_view", function (req, res) {
   const stationID = req.query.stationID;
@@ -267,7 +374,6 @@ app.get("/station_view", function (req, res) {
                     station[key] = rows[0][key];
                   }
                   station.line_name = linesMap[station.line_code].line_name;
-                  console.log(schedules);
                   res.render("station_view", {
                     lines: linesMap,
                     curr_line: linesMap[lineID],
@@ -280,7 +386,6 @@ app.get("/station_view", function (req, res) {
               });
             });
           } else {
-            console.log(linesMap[lineID]);
             res.render("station_view", {
               lines: linesMap,
               curr_line: linesMap[lineID],
@@ -338,7 +443,7 @@ app.get('/train_view', function(req, res) {
             }
             operators.push(new_operator);
           }
-          console.log(operators);
+          
           // Query individual train for display on view page
           let query_train = `SELECT * FROM Trains WHERE train_ID = ${trainID}`;
           db.pool.query(query_train, function (error, rows, fields) {
@@ -631,7 +736,8 @@ app.put('/put_train', function(req,res,next){
  })
 });
 
-app.put('/put_operator', function(req,res,next){                                   
+app.put('/put_operator', function(req,res,next){ 
+    console.log("so...this happened.");                                  
     let data = req.body;
   
     let operator_ID = parseInt(data.operator_ID);
@@ -675,6 +781,53 @@ app.put('/put_operator', function(req,res,next){
    })
 });
 
+app.put("/put_station", function (req, res, next) {
+  let data = req.body;
+
+  let stationID = parseInt(data.stationID);
+  let stationName = data.stationName;
+  let stationNum = data.stationNum;
+  let lineID = parseInt(data.lineID);
+
+  // WORKING ON REQUIRING INPUT FROM FORM TO ENSURE "NOT NULL" IS ACCURATE
+  //if (operator_ID == NaN || first_name == "" || last_name == "" || phone_number == NaN || email ==""){
+  //alert('Please enter all fields');
+  //}
+
+  let queryUpdateStation = `UPDATE Stations SET location_name = ${stationName}, station_num = ${stationNum}, line_code = ${lineID} WHERE station_ID = ${stationID}`;
+  let selectNewStation = `SELECT * FROM Stations WHERE station_id = ${stationID}`;
+
+  // Run the 1st query
+  db.pool.query(
+    queryUpdateStation,
+    [stationName, stationNum, linestationNum_code, stationID],
+    function (error, rows, fields) {
+      if (error) {
+        // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
+        console.log(error);
+        res.sendStatus(400);
+      }
+
+      // If there was no error, we run our second query and return that data so we can use it to update the people's
+      // table on the front-end
+      else {
+        // Run the second query
+        db.pool.query(
+          selectNewStation,
+          [stationID],
+          function (error, rows, fields) {
+            if (error) {
+              console.log(error);
+              res.sendStatus(400);
+            } else {
+              res.send(rows);
+            }
+          }
+        );
+      }
+    }
+  );
+});
 
 /*
     LISTENER
