@@ -3,7 +3,7 @@ let updateOperatorForm = document.getElementById('updateOpForm');
 
 // Modify the objects we need
 updateOperatorForm.addEventListener("submit", function (e) {
-   
+
     // Prevent the form from submitting
     e.preventDefault();
 

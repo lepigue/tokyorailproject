@@ -12,77 +12,77 @@
 <body>
   <main>
     <h1>Create Station</h1>
-    <form>
+    <form action="" method="post">
       <label for="stationName">Station Name:</label><br>
-      <input type="text" id="stationName" name="stationName"><br>
+      <input type="text" id="stationName" name="stationName" value=""><br><br>
       <label for="lineName">Line Name:</label><br>
-      <select id="lineName" name="lineName">
-        <option value="line">Ginza</option>
-        <option value="line">Marunouchi</option>
-        <option value="line">Hibiya</option>
-        <option value="line">Tozai</option>
-        <option value="line">Chiyoda</option>
-        <option value="line">Yurakucho</option>
-        <option value="line">Hanzomon</option>
-        <option value="line">Namboku</option>
-        <option value="line">Fukutoshin</option>
+      <select id="lineID" name="lineID">
+        {{#each lines}}
+          <option value="{{this.line_ID}}">{{this.line_name}}</option>
+        {{/each}}
+      
       </select><br><br>
       <input class="editButton" type="submit">
+
     </form>
     <br>
     <hr>
     <h1>Edit Station</h1>
-    <form>
-      <label for="stationId">Station ID:</label><br>
-      <input type="text" id="stationId" name="stationId"><br>
+    <form id="updateStationForm">
+      <label for="stationUpdateDropdown">Select a station to update:</label><br>
+      <select id="stationUpdateDropdown" name="stationUpdateDropdown">
+        <option></option>
+        {{#each stationsAlphabetical}}
+          <option value="{{this.station_ID}},{{this.location_name}},{{this.station_num}},{{this.line_name}},{{this.line_code}}">{{this.location_name}} Station ({{this.line_name}} Line)</option>
+        {{/each}}
+      </select>
+      <br><br>
+      <script src="./js/populateEditStations.js"></script>
+
+      <label for="stationID">Station ID Number (fixed):</label><br>
+      <input readonly="readonly" type="text" id="updateStationID" name="stationID" value="{{stationEdit.stationID}}"><br><br>
       <label for="stationName">Station Name:</label><br>
-      <input type="text" id="stationName" name="stationName"><br>
-      <label for="lineName">Line Name:</label><br>
-      <select id="lineName" name="lineName">
-        <option value="line">Ginza</option>
-        <option value="line">Marunouchi</option>
-        <option value="line">Hibiya</option>
-        <option value="line">Tozai</option>
-        <option value="line">Chiyoda</option>
-        <option value="line">Yurakucho</option>
-        <option value="line">Hanzomon</option>
-        <option value="line">Namboku</option>
-        <option value="line">Fukutoshin</option>
+      <input required type="text" id="updateStationName" name="stationName" value="{{stationEdit.stationName}}"><br><br>
+      <label for="stationId">Station Number (on line):</label><br>
+      <input required type="text" id="updateStationNum" name="stationNum" value="{{stationEdit.stationNum}}"><br><br>
+      <label for="stationID">Current Line:</label><br>
+      <select id="updateLineIDName" name="lineID">
+        <option value="{{stationEdit.lineID}},{{stationEdit.line_name}}"></option>
+        {{#each lines}}
+          <option value="{{this.line_ID}},{{this.line_name}}">{{this.line_name}}</option>
+        {{/each}}
       </select><br><br>
       <input class="editButton" type="submit">
     </form>
+    <script src="./js/update_station.js"></script>
     <br>
     <hr>
 
    {{!-- The Data from our Database --}}
 {{!-- Create a table --}}
 <table id="station_table" class = "table-style">
-    {{!-- Header section --}}
-    <thead>
-
-        {{!-- For just the first row, we print each key of the row object as a header cell so we
-        know what each column means when the page renders --}}
-        <tr>
-          {{#each data.[0]}}
-            <th>
-                {{@key}}
-            </th>
-            {{/each}}
-        </tr>
-    </thead>
-
-    {{!-- Body section --}}
     <tbody>
 
-        {{!-- For each row, print the station_ID,location_name, line_code--}}
-        {{#each data}}
+        {{!-- For each row, print the line_ID, line_name, start_station, end_station--}}
+        {{#each stations}}
+        {{#if @first}}
+        <tr>
+          <td><u>Station ID</u></td>
+          <td><u>Station Name</u></td>
+          <td><u>Station Number</u></td>
+          <td><u>Line Name</u></td>
+        </tr>
+        {{/if}}
         <tr data-value={{this.station_ID}}>
             <td>{{this.station_ID}}</td>
             <td>{{this.location_name}}</td>
-            <td>{{this.line_code}}</td>
+            <td>{{this.station_num}}</td>
+            <td>{{this.line_name}}</td>
+            <td><button onclick="deleteStation({{this.station_ID}})">Delete</button></td>
         </tr>
         {{/each}}
     </tbody>
+  <script src="./js/delete_station.js"></script>
 </table>
 <br>
 

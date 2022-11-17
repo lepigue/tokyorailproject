@@ -118,13 +118,73 @@ app.get("/operator_edit", function (req, res)
   })
 });
 
-app.get("/station_edit", function (req, res) 
-  {
-    let query1 = "SELECT * FROM Stations;";    
-    db.pool.query(query1, function(error, rows, fields){
-        res.render('station_edit', {data: rows});
+app.put("/station_edit", function (req, res) {
+
+
+  res.redirect("/station_edit");
+})
+
+app.post("/station_edit", function (req, res) {
+  let formData = req.body;
+
+    let queryNextStationNum = `SELECT MAX(station_num) AS maxStationNum from Stations WHERE line_code = ${req.body.lineID}`;
+    db.pool.query(queryNextStationNum, function (error, rows, fields) {
+      let newStationNum = rows[0].maxStationNum + 1;
+    
+      let queryNewStation = `INSERT INTO Stations (location_name, station_num, line_code) VALUES (\'${formData.stationName}\', ${newStationNum}, ${formData.lineID})`;
+      db.pool.query(queryNewStation, function (error, rows, fields) {
+        if (error) {
+          console.log(error);
+          res.sendStatus(400);
+        } else {
+          res.redirect("/station_edit");
+        }
+      })
     })
-  });
+})
+
+app.get("/station_edit", function (req, res)  {
+  let query_lines = `SELECT * FROM \`Lines\``;
+  db.pool.query(query_lines, function (error, rows, fields) {
+    let lines = [];
+    for (const line of rows) {
+      let new_line = {};
+      new_line.line_ID = line.line_ID;
+      new_line.line_name = line.line_name;
+      lines.push(new_line);
+    }
+
+    let queryStations = "SELECT * FROM `Stations` ORDER BY location_name;";
+    db.pool.query(queryStations, function (error, rows, fields) {
+      let stations = {};
+      let stationsAlphabetical = [];
+      for (const station of rows) {
+        let new_station = {};
+        for (const key in station) {
+          new_station[key] = station[key];
+        }
+        new_station.line_name =
+          lines[new_station.line_code - 1].line_name;
+        stationsAlphabetical.push(new_station);
+        stations[new_station.station_ID] = new_station;
+      }
+
+      let stationEdit = {
+        stationName: req.query.stationName,
+        stationNum: req.query.stationNum,
+        lineName: req.query.lineID ? lines[req.query.lineID - 1].line_name : null,
+        lineID: req.query.lineID,
+        stationID: req.query.stationID,
+      }
+      res.render("station_edit", {
+        stations: stations,
+        stationsAlphabetical: stationsAlphabetical,
+        lines: lines,
+        stationEdit: stationEdit,
+      });
+    })
+  })
+});
 
 app.get('/train_edit', function(req, res)
     {
@@ -156,7 +216,6 @@ app.get("/schedule_edit", function (req, res)
       })
     });
       
-
 
 app.get('/operator_view', function(req, res) {
   let query_trains = `SELECT train_ID, model, line_code FROM Trains`;
@@ -199,12 +258,6 @@ app.get('/operator_view', function(req, res) {
     });
   });
 });
-
-
-app.get('/station_template', function(req, res)
-    {
-        res.render('station_template');                    
-    }); 
     
 app.get("/station_view", function (req, res) {
   const stationID = req.query.stationID;
@@ -280,7 +333,6 @@ app.get("/station_view", function (req, res) {
                     station[key] = rows[0][key];
                   }
                   station.line_name = linesMap[station.line_code].line_name;
-                  console.log(schedules);
                   res.render("station_view", {
                     lines: linesMap,
                     curr_line: linesMap[lineID],
@@ -293,7 +345,6 @@ app.get("/station_view", function (req, res) {
               });
             });
           } else {
-            console.log(linesMap[lineID]);
             res.render("station_view", {
               lines: linesMap,
               curr_line: linesMap[lineID],
@@ -351,7 +402,7 @@ app.get('/train_view', function(req, res) {
             }
             operators.push(new_operator);
           }
-          console.log(operators);
+          
           // Query individual train for display on view page
           let query_train = `SELECT * FROM Trains WHERE train_ID = ${trainID}`;
           db.pool.query(query_train, function (error, rows, fields) {
@@ -581,7 +632,23 @@ app.delete('/delete_operator', function(req,res,next){
         })
     });
 
-
+app.delete("/delete_station", function (req, res, next) {
+  let station_ID = parseInt(req.body.station_ID);
+  let queryDeleteStation = `DELETE FROM Stations WHERE station_ID=?`;
+  db.pool.query(
+    queryDeleteStation,
+    [station_ID],
+    function (error, rows, fields) {
+      if (error) {
+        // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
+        console.log(error);
+        res.sendStatus(400);
+      } else {
+        res.sendStatus(204);
+      }
+    }
+  );
+});
 // PUT ROUTES
 
 app.put('/put_line', function(req,res,next){                                   
@@ -656,9 +723,8 @@ app.put('/put_train', function(req,res,next){
  })
 });
 
-app.put('/put_operator', function(req,res,next){                                   
+app.put('/put_operator', function(req,res,next){ 
     let data = req.body;
-  
     let operator_ID = parseInt(data.operator_ID);
     let first_name = data.first_name;
     let last_name = data.last_name;
@@ -701,6 +767,58 @@ app.put('/put_operator', function(req,res,next){
    })
 });
 
+app.put("/put_station", function (req, res, next) {
+  let queryLines = `SELECT * from \`Lines\` ORDER BY line_ID`;
+  db.pool.query(queryLines, function (error, rows, fields) {
+    const lines = rows;
+    let data = req.body;
+    let station_ID = parseInt(data.stationID);
+    let location_name = data.stationName;
+    let station_num = data.stationNum;
+    let line_code = parseInt(data.lineID);
+
+
+    // WORKING ON REQUIRING INPUT FROM FORM TO ENSURE "NOT NULL" IS ACCURATE
+    //if (operator_ID == NaN || first_name == "" || last_name == "" || phone_number == NaN || email ==""){
+    //alert('Please enter all fields');
+    //}
+
+    let queryUpdateStation = `UPDATE Stations SET location_name=?, station_num=?, line_code=? WHERE station_ID=?`;
+    let selectNewStation = `SELECT * FROM Stations WHERE station_ID=?`;
+
+    // Run the 1st query
+    db.pool.query(
+      queryUpdateStation,
+      [location_name, station_num, line_code, station_ID],
+      function (error, rows, fields) {
+        if (error) {
+          // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
+          console.log(error);
+          res.sendStatus(400);
+        }
+
+        // If there was no error, we run our second query and return that data so we can use it to update the people's
+        // table on the front-end
+        else {
+          // Run the second query
+          db.pool.query(
+            selectNewStation,
+            [station_ID],
+            function (error, rows, fields) {
+              if (error) {
+                console.log(error);
+                res.sendStatus(400);
+              } else {
+                rows[0].line_name = lines[rows[0].line_code - 1].line_name;
+                res.send(rows);
+              }
+            }
+          );
+        }
+      }
+    );
+  })
+});
 
 /*
     LISTENER
