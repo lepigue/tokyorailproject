@@ -29,31 +29,32 @@
     <hr>
     <h1>Edit Station</h1>
     <form id="updateStationForm">
-      <select id="station">
+      <select id="stationUpdateDropdown">
         <option>Select a station to update:</option>
         {{#each stationsAlphabetical}}
-          <option>{{this.location_name}} Station ({{this.line_name}} Line)</option>
+          <option value="{{this.station_ID}},{{this.location_name}},{{this.station_num}},{{this.line_name}}">{{this.location_name}} Station ({{this.line_name}} Line)</option>
         {{/each}}
       </select>
       <br><br>
+      <script src="./js/populateEditStations.js"></script>
 
       <label for="stationID">Station ID Number (fixed):</label><br>
-      <input required readonly="readonly" type="text" name="stationID" id="stationID" value="{{stationEdit.stationID}}"><br><br>
+      <input readonly="readonly" type="text" id="updateStationID" name="stationID" value="{{stationEdit.stationID}}"><br><br>
       <label for="stationName">Station Name:</label><br>
       <input required type="text" id="updateStationName" name="stationName" value="{{stationEdit.stationName}}"><br><br>
       <label for="stationId">Station Number (on line):</label><br>
       <input required type="text" id="updateStationNum" name="stationNum" value="{{stationEdit.stationNum}}"><br><br>
       <label for="stationID">Current Line:</label><br>
-      <input required readonly="readonly" type="text" id="lineName" name="lineName" value="{{stationEdit.lineName}}"><br><br>
+      <input required readonly="readonly" type="text" id="updateLineName" name="lineID" value="{{stationEdit.lineName}}"><br><br>
       <select id="updateLineID" name="lineID">
         <option value="{{stationEdit.lineID}}">Select line to update:</option>
         {{#each lines}}
-          <option value="{{this.line_ID}}">{{this.line_name}}</option>
+          <option value="{{this.line_ID}},{{this.line_name}}">{{this.line_name}}</option>
         {{/each}}
       </select><br><br>
       <input class="editButton" type="submit">
     </form>
-    <script src="./js/update_operator.js"></script>
+    <script src="./js/update_station.js"></script>
     <br>
     <hr>
 
@@ -72,14 +73,16 @@
           <td><u>Line Name</u></td>
         </tr>
         {{/if}}
-        <tr>
+        <tr data-value={{this.station_ID}}>
             <td>{{this.station_ID}}</td>
             <td>{{this.location_name}}</td>
             <td>{{this.station_num}}</td>
             <td>{{this.line_name}}</td>
+            <td><button onclick="deleteStation({{this.station_ID}})">Delete</button></td>
         </tr>
         {{/each}}
     </tbody>
+  <script src="./js/delete_station.js"></script>
 </table>
 <br>
 
