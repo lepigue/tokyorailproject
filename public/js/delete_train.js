@@ -1,14 +1,13 @@
 function deleteTrain(trainID) {
     // Put our data we want to send in a javascript object
     let data = {
-        id: trainID
+        train_ID: trainID
     };
 
-    console.log(data)
 
     // Setup our AJAX request
     var xhttp = new XMLHttpRequest();
-    xhttp.open("DELETE", "/delete_train-ajax", true);
+    xhttp.open("DELETE", "/delete_train_ajax", true);
     xhttp.setRequestHeader("Content-type", "application/json");
 
     // Tell our AJAX request how to resolve
@@ -29,7 +28,6 @@ function deleteTrain(trainID) {
 
 
 function deleteRow(trainID){
-
     let table = document.getElementById("train_table");
     for (let i = 0, row; row = table.rows[i]; i++) {
        //iterate through rows

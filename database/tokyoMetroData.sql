@@ -94,28 +94,28 @@ VALUES  ('Ginza'),
         ('Namboku'),
         ('Fukutoshin');
 
-INSERT INTO `Stations` (`location_name`, `station_no`, `line_code`)
-VALUES  ('Shibuya', 1, 1),
-        ('Omote-sando', 2, 1),
-        ('Gaiemmae', 3, 1),
-        ('Aoyama-itchome', 4, 1),
-        ('Akasaka-mitsuke', 5, 1),
-        ('Tameike-sanno', 6, 1),
-        ('Toranomon', 7, 1),
-        ('Shimbashi', 8, 1),
-        ('Ginza', 9, 1),
-        ('Kyobashi', 10, 1),
-        ('Nihombashi', 11, 1),
-        ('Mitsukoshimae', 12, 1),
-        ('Kanda', 13, 1),
-        ('Suehirocho', 14, 1),
-        ('Ueno-hirojoki', 15, 1),
-        ('Ueno', 16, 1),
-        ('Inaricho', 17, 1),
-        ('Tawaramachi', 18, 1),
-        ('Asukasa', 19, 1);
+INSERT INTO `Stations` (`location_name`)
+VALUES  ('Shibuya'),
+        ('Omote-sando'),
+        ('Gaiemmae'),
+        ('Aoyama-itchome'),
+        ('Akasaka-mitsuke'),
+        ('Tameike-sanno'),
+        ('Toranomon'),
+        ('Shimbashi'),
+        ('Ginza'),
+        ('Kyobashi'),
+        ('Nihombashi'),
+        ('Mitsukoshimae'),
+        ('Kanda'),
+        ('Suehirocho'),
+        ('Ueno-hirojoki'),
+        ('Ueno'),
+        ('Inaricho'),
+        ('Tawaramachi'),
+        ('Asukasa');
 
-INSERT INTO `Schedules` (`arrival_time`, `departure_time`, `station_code`, `train_code`)
+INSERT INTO `Schedules` (`arrival_time`, `departure_time`)
 VALUES  ('10:55:00', '11:00:00'),
         ('09:25:00', '09:30:00'),
         ('07:55:00', '08:00:00'),
@@ -207,5 +207,5 @@ WHERE operator_ID=4;
 
 --  RUN SOME SQL TEST COMMANDS
 
-SET FOREIGN_KEY_CHECKS=1;
+SET FOREIGN_KEY_CHECKS=0;
 COMMIT;

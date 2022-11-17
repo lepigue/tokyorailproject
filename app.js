@@ -8,7 +8,8 @@ var app     = express()           // We need to instantiate an express object to
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
 app.use(express.static('public'))
-PORT        = 8451;                 // Set a port number at the top so it's easy to change in the future
+var alert = require('alert');
+PORT        = 4231;                 // Set a port number at the top so it's easy to change in the future
 
 // DATABASE
 var db = require('./database/db-connector');
@@ -52,8 +53,13 @@ app.get('/line_template', function(req, res)
 app.get("/line_edit", function(req, res)
     {
         let query1 = "SELECT * FROM `Lines`;";
+        let query2 = "SELECT * FROM Stations;";
         db.pool.query(query1, function(error, rows, fields){
-            res.render('line_edit', {data: rows});
+          let lines = rows;
+          db.pool.query(query2, (error, rows, fields)=>{
+            let stations = rows;
+            return res.render('line_edit', {data: lines, stations: stations});
+          })
         })
     });
 
@@ -67,7 +73,7 @@ app.get("/operator_edit", function (req, res)
 
 app.get("/station_edit", function (req, res) 
   {
-    let query1 = "SELECT * FROM `Stations`;";
+    let query1 = "SELECT * FROM Stations;";    
     db.pool.query(query1, function(error, rows, fields){
         res.render('station_edit', {data: rows});
     })
@@ -75,7 +81,7 @@ app.get("/station_edit", function (req, res)
 
 app.get('/train_edit', function(req, res)
     {
-        let query1 = "SELECT * FROM `Trains`;";
+        let query1 = "SELECT * FROM Trains;";
         let query2 = "SELECT * FROM `Lines`;";
         db.pool.query(query1, function(error, rows, fields){
           let trains = rows;
@@ -88,9 +94,8 @@ app.get('/train_edit', function(req, res)
 
 app.get("/schedule_edit", function (req, res)
     {
-        let query1 = "SELECT * FROM `Schedules`;";
+        let query1 = "SELECT * FROM `Schedules`;"; 
         db.pool.query(query1, function(error, rows, fields){
-            console.log(rows)
             res.render('schedule_edit', {data: rows});
         })
     });
@@ -265,6 +270,46 @@ app.get('/train_view', function(req, res) {
 
 
 // POST ROUTES
+
+app.post('/add_line_ajax', function(req, res) 
+{
+    // Capture the incoming data and parse it back to a JS object
+    let data = req.body;
+    // Create the query and run it on the database
+    query1 = `INSERT INTO \`Lines\` (line_name, start_station, end_station) VALUES ('${data.line_name}', '${data.start_station}', '${data.end_station}');`;
+    db.pool.query(query1, function(error, rows, fields){
+
+        // Check to see if there was an error
+        if (error) {
+
+            // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
+            console.log(error)
+            res.sendStatus(400);
+        }
+        else
+        {
+            // If there was no error, perform a SELECT * on bsg_people
+            query2 = `SELECT * FROM \`Lines\``;
+            db.pool.query(query2, function(error, rows, fields){
+
+                // If there was an error on the second query, send a 400
+                if (error) {
+                    
+                    // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
+                    console.log(error);
+                    res.sendStatus(400);
+                }
+                // If all went well, send the results of the query back.
+                else
+                {
+                    res.send(rows);
+                }
+            })
+        }
+    })
+});
+
+
 app.post('/add_train_ajax', function(req, res) 
 {
     // Capture the incoming data and parse it back to a JS object
@@ -305,32 +350,6 @@ app.post('/add_train_ajax', function(req, res)
 });
 
 
-app.post('/addLineForm', function(req, res){
-  // Capture the incoming data and parse it back to a JS object
-  let data = req.body;
-  console.log(data)
-  // Create the query and run it on the database
-  query1 = `INSERT INTO Lines (line_name, start_station, end_station) VALUES ('${data['lineName']}', '${data['startStation']}','${data['endStation']}')`;
-  db.pool.query(query1, function(error, rows, fields){
-  
-      // Check to see if there was an error
-      if (error) {
-  
-          // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
-          console.log(error)
-          res.sendStatus(400);
-      }
-  
-      // If there was no error, we redirect back to our root route, which automatically runs the SELECT * FROM bsg_people and
-      // presents it on the screen
-      else
-      {
-          res.redirect('/line_edit');
-      }
-  })
-});
-
-
 app.post('/addOperatorForm', function(req, res){
     // Capture the incoming data and parse it back to a JS object
     let data = req.body;
@@ -361,15 +380,36 @@ app.post('/addOperatorForm', function(req, res){
 
 // DELETE ROUTES
 
-app.delete('/delete_train-ajax/', function(req,res,next){
+
+app.delete('/delete_line_ajax/', function(req,res,next){
   let data = req.body;
-  let trainID = parseInt(data.id);
-  let lineDel = `DELETE FROM Trains WHERE line_code = ?`;
-  let trainDel= `DELETE FROM Trains WHERE train_id = ?`;
+  let lineID = parseInt(data.line_ID);
+  let deleteLine= `DELETE FROM \`Lines\` WHERE line_ID = ?`;
 
 
         // Run the 1st query
-        db.pool.query(lineDel, [trainID], function(error, rows, fields){
+        db.pool.query(deleteLine, [lineID], function(error, rows, fields){
+            if (error) {
+            // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
+            console.log(error);
+            res.sendStatus(400);
+            }
+            else
+            {
+              res.sendStatus(204);    
+            }
+        })
+  });
+
+app.delete('/delete_train_ajax/', function(req,res,next){
+  let data = req.body;
+  let trainID = parseInt(data.train_ID);
+  let deleteSchedule = `DELETE FROM Schedules WHERE train_code = ?`;
+  let deleteTrain= `DELETE FROM Trains WHERE train_ID = ?`;
+
+
+        // Run the 1st query
+        db.pool.query(deleteSchedule, [trainID], function(error, rows, fields){
             if (error) {
 
             // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
@@ -380,7 +420,7 @@ app.delete('/delete_train-ajax/', function(req,res,next){
             else
             {
                 // Run the second query
-                db.pool.query(trainDel, [trainID], function(error, rows, fields) {
+                db.pool.query(deleteTrain, [trainID], function(error, rows, fields) {
 
                     if (error) {
                         console.log(error);
@@ -391,6 +431,7 @@ app.delete('/delete_train-ajax/', function(req,res,next){
                 })
             }
 })});
+
 
 
 app.delete('/delete_operator', function(req,res,next){
@@ -415,6 +456,81 @@ app.delete('/delete_operator', function(req,res,next){
 
 
 // PUT ROUTES
+
+app.put('/put_line', function(req,res,next){                                   
+  let data = req.body;
+  let line_ID = parseInt(data.line_ID);
+  let line_name = data.line_name;
+  let start_station = data.start_station;
+  let end_station = parseInt(data.end_station);
+
+  queryUpdateLine = `UPDATE \`Lines\` SET line_name=?, start_station=?, end_station=? WHERE \`Lines\`.line_ID = ?` ;
+  selectLine = `SELECT * FROM \`Lines\` WHERE line_ID = ?`
+
+        // Run the 1st query
+        db.pool.query(queryUpdateLine, [line_name, start_station, end_station, line_ID], function(error, rows, fields){
+            if (error) {
+
+            // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
+            console.log(error);
+            res.sendStatus(400);
+            }
+
+            // If there was no error, we run our second query and return that data so we can use it to update the people's
+            // table on the front-end
+            else
+            {
+                // Run the second query
+                db.pool.query(selectLine, [line_ID], function(error, rows, fields) {
+        
+                    if (error) {
+                        console.log(error);
+                        res.sendStatus(400);
+                    } else {
+                        res.send(rows);
+                    }
+                })
+            }
+ })
+});
+
+app.put('/put_train', function(req,res,next){                                   
+  let data = req.body;
+  let train_ID = parseInt(data.train_ID);
+  let model = data.model;
+  let last_service_date = data.last_service_date;
+  let line_code = parseInt(data.line_code);
+
+  queryUpdateTrain = `UPDATE Trains SET model=?, last_service_date=?, line_code=? WHERE Trains.train_ID = ?` ;
+  selectTrain = `SELECT * FROM Trains WHERE train_ID = ?`
+
+        // Run the 1st query
+        db.pool.query(queryUpdateTrain, [model, last_service_date, line_code, train_ID], function(error, rows, fields){
+            if (error) {
+
+            // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
+            console.log(error);
+            res.sendStatus(400);
+            }
+
+            // If there was no error, we run our second query and return that data so we can use it to update the people's
+            // table on the front-end
+            else
+            {
+                // Run the second query
+                db.pool.query(selectTrain, [train_ID], function(error, rows, fields) {
+        
+                    if (error) {
+                        console.log(error);
+                        res.sendStatus(400);
+                    } else {
+                        res.send(rows);
+                    }
+                })
+            }
+ })
+});
+
 app.put('/put_operator', function(req,res,next){                                   
     let data = req.body;
   
@@ -423,6 +539,11 @@ app.put('/put_operator', function(req,res,next){
     let last_name = data.last_name;
     let phone_number = parseInt(data.phone_number);
     let email = data.email;
+
+    // WORKING ON REQUIRING INPUT FROM FORM TO ENSURE "NOT NULL" IS ACCURATE
+    //if (operator_ID == NaN || first_name == "" || last_name == "" || phone_number == NaN || email ==""){
+      //alert('Please enter all fields');
+    //}
   
     queryUpdateOp = `UPDATE Operators SET first_name=?, last_name=?, phone_number=?, email = ? WHERE Operators.operator_ID = ?`;
     selectOp = `SELECT * FROM Operators WHERE operator_id = ?`

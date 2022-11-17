@@ -7,7 +7,7 @@ function deleteLine(lineID) {
 
     // Setup our AJAX request
     var xhttp = new XMLHttpRequest();
-    xhttp.open("DELETE", "/delete_line", true);
+    xhttp.open("DELETE", "/delete_line_ajax", true);
     xhttp.setRequestHeader("Content-type", "application/json");
 
     // Tell our AJAX request how to resolve
@@ -34,19 +34,7 @@ function deleteRow(lineID){
        //rows would be accessed using the "row" variable assigned in the for loop
        if (table.rows[i].getAttribute("data-value") == lineID) {
             table.deleteRow(i);
-            deleteDropDownMenu(lineID);
             break;
        }
     }
 }
-
-function deleteDropDownMenu(personID){
-    let selectMenu = document.getElementById("del_dropdown");
-    for (let i = 0; i < selectMenu.length; i++){
-      if (Number(selectMenu.options[i].value) === Number(personID)){
-        selectMenu[i].remove();
-        break;
-      } 
-  
-    }
-  }

@@ -74,9 +74,9 @@
     {{!-- Body section --}}
     <tbody>
 
-        {{!-- For each row, print the line_ID, line_name, start_station, end_station--}}
+        {{!-- For each row, print the station_ID,location_name, line_code--}}
         {{#each data}}
-        <tr>
+        <tr data-value={{this.station_ID}}>
             <td>{{this.station_ID}}</td>
             <td>{{this.location_name}}</td>
             <td>{{this.line_code}}</td>

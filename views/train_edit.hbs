@@ -32,36 +32,39 @@
       <input class="editButton" type="submit">
     </form>
     <script src="./js/add_train.js"></script>
-    <br>
+    <br><hr>
     
-    
-    <hr><h1>Edit Train</h1>
-    <form>
-      <label for="trainId">Train ID:</label><br>
-      <input type="text" id="trainId" name="trainId"><br>
-      <label for="model">Model:</label><br>
-      <input type="text" id="model" name="model"><br>
-      <label for="serviceDate">Last Service Date:</label><br>
-      <input type="date" id="serviceDate" name="serviceDate"><br>
-      <label for="lineName">Line Name:</label><br>
-      <select id="lineName" name="lineName">
-        <option value="line">Ginza</option>
-        <option value="line">Marunouchi</option>
-        <option value="line">Hibiya</option>
-        <option value="line">Tozai</option>
-        <option value="line">Chiyoda</option>
-        <option value="line">Yurakucho</option>
-        <option value="line">Hanzomon</option>
-        <option value="line">Namboku</option>
-        <option value="line">Fukutoshin</option>
-      </select><br><br>
+    {{!-- Edit Train Form --}}
+    <h1>Edit Train</h1>
+    <form id="updateTrainForm">
+      <label for="selectTrainID"></label><br>
+      <select name="selectTrainID" id="selectTrainID">
+          <option value=" ">Select Train ID</option>
+          {{#each data}}
+          <option value="{{this.train_ID}}" id="{{this.train_ID}}">{{this.train_ID}}</option>
+          {{/each}}
+        </select> <br>
+        <br>
+      <label for="trainModel-update">Model:</label><br>
+      <input type="text" id="trainModel-update" name="trainModel-update"><br>
+        <br>
+      <label for="serviceDate-update">Last Service Date:</label><br>
+      <input type="date" id="serviceDate-update" name="serviceDate-update"><br>
+        <br>
+      <label for="lineName"></label><br>
+      <select name="lineName" id="lineName">
+          <option value="">Select Line</option>
+          {{#each lines}}
+          <option value="{{this.line_ID}}" id="{{this.line_ID}}">{{this.line_name}}</option>
+          {{/each}}
+        </select> <br>
+        <br>
       <input class="editButton" type="submit">
     </form>
+    <script src="./js/update_train.js"></script>
     <br>
     <hr>
 
-      {{!-- Just some plain text --}}
-{{!-- The Data from our Database --}}
 {{!-- Create a table --}}
 <table id="train_table" class = "table-style">
 

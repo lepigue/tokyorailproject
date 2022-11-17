@@ -15,35 +15,69 @@
 
     {{!-- Create Line Form --}}
     <h1>Create Line</h1>
-    <form id="addLineForm" method="POST" action="/addLineForm">
-      <label for="lineName">Line Name:</label><br>
-      <input type="text" id="lineName" name="lineName"><br>
-      
-      <label for="startStation">Start Station:</label><br>
-      <input type="text" id="startStation" name="startStation"><br>
-      
-      <label for="endStation">End Station:</label><br>
-      <input type="text" id="endStation" name="endStation"><br>
+    <form id="addLineForm-ajax">
+      <label for="lineName-create">Line Name:</label><br>
+      <input type="text" id="lineName-create" name="lineName-create"><br>
+      <br>
+      <label for="startStation-create"></label>
+        <select name="startStation-create" id="startStation-create">
+          <option value="">Start Station</option>
+          {{#each stations}}
+          <option value="{{this.station_ID}}" id="{{this.station_ID}}">{{this.location_name}}</option>
+          {{/each}}
+        </select> <br>
+      <br>
+      <label for="endStation-create"></label><br>
+      <select name="endStation-create" id="endStation-create">
+          <option value="">End Station</option>
+          {{#each stations}}
+          <option value="{{this.station_ID}}" id="{{this.station_ID}}">{{this.location_name}}</option>
+          {{/each}}
+        </select> <br>
+      <br>
       <input class="editButton" type="submit">
     </form>
+    <script src="./js/add_line.js"></script>
     <br>
     <hr>
 
-
+    {{!-- Edit Line Form --}}
     <h1>Edit Line</h1>
-    <form>
-      <label for="lineId">Line ID:</label><br>
-      <input type="text" id="lineId" name="lineId"><br>
-      <label for="lineName">Line Name:</label><br>
-      <input type="text" id="lineName" name="lineName"><br>
-      <label for="startStation">Start Station:</label><br>
-      <input type="text" id="startStation" name="startStation"><br>
-      <label for="endStation">End Station:</label><br>
-      <input type="text" id="endStation" name="endStation"><br><br>
+    <form id="updateLineForm">
+      <label for="lineID-edit"></label>
+        <select name="lineID-edit" id="lineID-edit">
+          <option value="">Line to Edit</option>
+          {{#each data}}
+          <option value="{{this.line_ID}}" id="{{this.line_ID}}">{{this.line_name}}</option>
+          {{/each}}
+        </select> <br>
+      <br>
+      <br>
+      <label for="lineName-edit">Line Name:</label><br>
+      <input type="text" id="lineName-edit" name="lineName-edit"><br>
+      <br>
+      <label for="startStation-edit"></label><br>
+      <select name="startStation-edit" id="startStation-edit">
+          <option value="">Start Station</option>
+          {{#each stations}}
+          <option value="{{this.station_ID}}" id="{{this.station_ID}}">{{this.location_name}}</option>
+          {{/each}}
+        </select> <br>
+      <br>
+      <label for="endStation-edit"></label><br>
+      <select name="endStation-edit" id="endStation-edit">
+          <option value="">End Station</option>
+          {{#each stations}}
+          <option value="{{this.station_ID}}" id="{{this.station_ID}}">{{this.location_name}}</option>
+          {{/each}}
+        </select> <br>
+      <br>
       <input class="editButton" type="submit">
     </form>
+    <script src="./js/update_line.js"></script>
     <br>
     <hr>
+
     {{!-- Create a table --}}
 <table id="line_table" class="table-style">
 
@@ -66,17 +100,16 @@
 
         {{!-- For each row, print the line_ID, line_name, start_station, end_station in order --}}
         {{#each data}}
-        <tr>
+        <tr data-value="{{this.line_ID}}">
             <td>{{this.line_ID}}</td>
             <td>{{this.line_name}}</td>
             <td>{{this.start_station}}</td>
             <td>{{this.end_station}}</td>
+            <td><button onclick="deleteLine({{this.line_ID}})">Delete</button></td>
         </tr>
         {{/each}}
     </tbody>
 </table>
-
-
 <script src="./js/delete_line.js"></script>
 
   </main>
