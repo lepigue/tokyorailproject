@@ -17,7 +17,7 @@
       <button class="dropbtn">Operators</button>
       <div class="dropdown-content">
       {{#each operators}}
-        <a href="/operator_view?operatorID={{this.operator_ID}}" class="dropdown-entry">{{this.first_name}} {{this.last_name}}</a>
+        <a href="/operator_view?operatorID={{this.operator_ID}}" class="dropdown-entry">{{this.last_name}} {{this.first_name}}</a>
       {{/each}}
       </div>
     </div>
@@ -26,14 +26,19 @@
     <br><br><br><br><hr><br>
     <h1>Operator Profile:</h1>
     <div>
-      <h2 class="data-header">First Name:</h2>
-      <p class="data-content">{{operator.first_name}}</p>
       <h2 class="data-header">Last Name:</h2>
       <p class="data-content">{{operator.last_name}}</p>
+      <h2 class="data-header">First Name:</h2>
+      <p class="data-content">{{operator.first_name}}</p>
       <h2 class="data-header">Phone Number:</h2>
       <p class="data-content">{{operator.phone_number}}</p>
       <h2 class="data-header">E-mail address:</h2>
       <p class="data-content">{{operator.email}};</p>
+      <h2 class="data-header">Current Train:</h2>
+      <p class="data-content">
+        <a href="train_view?trainID={{operator.train_code}}">
+          Train {{operator.train_code}} - {{operator.currTrain.model}}
+        </a>
     </div>
     {{/if}}
   </main>
