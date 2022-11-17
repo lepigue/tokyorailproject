@@ -8,8 +8,7 @@ var app     = express()           // We need to instantiate an express object to
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
 app.use(express.static('public'))
-var alert = require('alert');
-PORT        = 4231;                 // Set a port number at the top so it's easy to change in the future
+PORT        = 8451;                 // Set a port number at the top so it's easy to change in the future
 
 // DATABASE
 var db = require('./database/db-connector');
@@ -19,7 +18,6 @@ const { engine } = require('express-handlebars');
 var exphbs = require('express-handlebars');     // Import express-handlebars
 app.engine('.hbs', engine({extname: ".hbs"}));  // Create an instance of the handlebars engine to process templates
 app.set('view engine', '.hbs');                 // Tell express to use the handlebars engine whenever it encounters a *.hbs file.
-
 
 /*
     ROUTES
@@ -108,12 +106,17 @@ app.get("/line_edit", function(req, res)
     });
 
 app.get("/operator_edit", function (req, res) 
-  {
-    let query1 = "SELECT * FROM `Operators`;";
-    db.pool.query(query1, function (error, rows, fields){
-        res.render('operator_edit', { data: rows });
+{
+  let query1 = "SELECT * FROM Operators;";
+  let query2 = "SELECT * FROM Trains;";
+  db.pool.query(query1, function(error, rows, fields){
+    let operators = rows;
+    db.pool.query(query2, (error, rows, fields)=>{
+      let trains = rows;
+      return res.render('operator_edit', {data: operators, trains: trains});
     })
-  }); 
+  })
+});
 
 app.get("/station_edit", function (req, res) 
   {
@@ -138,11 +141,21 @@ app.get('/train_edit', function(req, res)
 
 app.get("/schedule_edit", function (req, res)
     {
-        let query1 = "SELECT * FROM `Schedules`;"; 
+        let query1 = "SELECT * FROM Schedules;";
+        let query2 = "SELECT * FROM Stations;";
+        let query3 = "SELECT * FROM Trains;";
         db.pool.query(query1, function(error, rows, fields){
-            res.render('schedule_edit', {data: rows});
+          let schedules = rows;
+          db.pool.query(query2, (error, rows, fields)=>{
+            let stations = rows;
+            db.pool.query(query3, (error, rows, fields)=>{
+              let trains = rows;
+              return res.render('schedule_edit', {data: schedules, stations: stations, trains: trains});
+          })
         })
+      })
     });
+      
 
 
 app.get('/operator_view', function(req, res) {
@@ -370,13 +383,51 @@ app.get('/train_view', function(req, res) {
 
 
 // POST ROUTES
+app.post('/add_operator_ajax', function(req, res) 
+{
+    // Capture the incoming data and parse it back to a JS object
+    let data = req.body;
+    // Create the query and run it on the database
+    query1 = `INSERT INTO Operators (first_name, last_name, phone_number, email, train_code) VALUES ('${data.first_name}', '${data.last_name}', '${data.phone_number}', '${data.email}', '${data.train_code}');`;
+    db.pool.query(query1, function(error, rows, fields){
+
+        // Check to see if there was an error
+        if (error) {
+
+            // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
+            console.log(error)
+            res.sendStatus(400);
+        }
+        else
+        {
+            // If there was no error, perform a SELECT * on bsg_people
+            query2 = `SELECT * FROM Operators;`;
+            db.pool.query(query2, function(error, rows, fields){
+
+                // If there was an error on the second query, send a 400
+                if (error) {
+                    
+                    // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
+                    console.log(error);
+                    res.sendStatus(400);
+                }
+                // If all went well, send the results of the query back.
+                else
+                {
+                    res.send(rows);
+                }
+            })
+        }
+    })
+});
+
 
 app.post('/add_line_ajax', function(req, res) 
 {
     // Capture the incoming data and parse it back to a JS object
     let data = req.body;
     // Create the query and run it on the database
-    query1 = `INSERT INTO \`Lines\` (line_name, start_station, end_station) VALUES ('${data.line_name}', '${data.start_station}', '${data.end_station}');`;
+    query1 = `INSERT INTO \`Lines\` (line_name) VALUES ('${data.line_name}');`;
     db.pool.query(query1, function(error, rows, fields){
 
         // Check to see if there was an error
@@ -449,30 +500,6 @@ app.post('/add_train_ajax', function(req, res)
     })
 });
 
-
-app.post('/addOperatorForm', function(req, res){
-    // Capture the incoming data and parse it back to a JS object
-    let data = req.body;
-    // Create the query and run it on the database
-    query1 = `INSERT INTO Operators (first_name, last_name, phone_number, email) VALUES ('${data['firstName']}', '${data['lastName']}','${data['phoneNumber']}','${data['email']}')`;
-    db.pool.query(query1, function(error, rows, fields){
-    
-        // Check to see if there was an error
-        if (error) {
-    
-            // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
-            console.log(error)
-            res.sendStatus(400);
-        }
-    
-        // If there was no error, we redirect back to our root route, which automatically runs the SELECT * FROM bsg_people and
-        // presents it on the screen
-        else
-        {
-            res.redirect('/operator_edit');
-        }
-    })
-});
 
 
 
@@ -561,14 +588,12 @@ app.put('/put_line', function(req,res,next){
   let data = req.body;
   let line_ID = parseInt(data.line_ID);
   let line_name = data.line_name;
-  let start_station = data.start_station;
-  let end_station = parseInt(data.end_station);
 
-  queryUpdateLine = `UPDATE \`Lines\` SET line_name=?, start_station=?, end_station=? WHERE \`Lines\`.line_ID = ?` ;
+  queryUpdateLine = `UPDATE \`Lines\` SET line_name=? WHERE \`Lines\`.line_ID = ?` ;
   selectLine = `SELECT * FROM \`Lines\` WHERE line_ID = ?`
 
         // Run the 1st query
-        db.pool.query(queryUpdateLine, [line_name, start_station, end_station, line_ID], function(error, rows, fields){
+        db.pool.query(queryUpdateLine, [line_name, line_ID], function(error, rows, fields){
             if (error) {
 
             // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
@@ -639,17 +664,18 @@ app.put('/put_operator', function(req,res,next){
     let last_name = data.last_name;
     let phone_number = parseInt(data.phone_number);
     let email = data.email;
+    let train_code = data.train_code
 
     // WORKING ON REQUIRING INPUT FROM FORM TO ENSURE "NOT NULL" IS ACCURATE
     //if (operator_ID == NaN || first_name == "" || last_name == "" || phone_number == NaN || email ==""){
       //alert('Please enter all fields');
     //}
   
-    queryUpdateOp = `UPDATE Operators SET first_name=?, last_name=?, phone_number=?, email = ? WHERE Operators.operator_ID = ?`;
+    queryUpdateOp = `UPDATE Operators SET first_name=?, last_name=?, phone_number=?, email = ?, train_code = ? WHERE Operators.operator_ID = ?`;
     selectOp = `SELECT * FROM Operators WHERE operator_id = ?`
   
           // Run the 1st query
-          db.pool.query(queryUpdateOp, [first_name, last_name, phone_number, email, operator_ID], function(error, rows, fields){
+          db.pool.query(queryUpdateOp, [first_name, last_name, phone_number, email, train_code, operator_ID], function(error, rows, fields){
               if (error) {
   
               // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.

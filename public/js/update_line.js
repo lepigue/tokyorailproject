@@ -10,31 +10,23 @@ updateLineForm.addEventListener("submit", function (e) {
     // Get form fields we need to get data from
     let line_ID = document.getElementById("lineID-edit");
     let line_name = document.getElementById("lineName-edit")
-    let start_station = document.getElementById("startStation-edit");
-    let end_station = document.getElementById("endStation-edit");
 
     
     // Get the values from the form fields
     let lineID = line_ID.value;
     let lineName = line_name.value;
-    let startStation = start_station.value;
-    let endStation = end_station.value;
 
-    if (isNaN(lineID)) 
+    // Alert is sent if fields are left blank
+    if (isNaN(lineID) || lineName == "") 
     {
+        alert("Please fill out all fields and select a line to edit")
         return;
     }
-    // IS THIS WHERE WE HANDLE NULL CONSTRAINTS OR IN APP.JS with an ALERT?
-    //if (lineName == ""){
-        //return;
-    //}
 
     // Put our data we want to send in a javascript object
     let data = {
         line_ID: lineID,
         line_name: lineName,
-        start_station: startStation,
-        end_station: endStation
     }
     
     console.log("JS", data)
@@ -75,10 +67,10 @@ function updateRow(data, lineID){
             // Get the location of the row where we found the matching person ID
             let updateRowIndex = table.getElementsByTagName("tr")[i];
 
-            // Get td of homeworld value
+            // Get td of line value
             let td = updateRowIndex.getElementsByTagName("td")[3];
 
-            // Reassign homeworld to our value we updated to
+            // Reassign line to our value we updated to
             td.innerHTML = parsedData[0].name; 
        }
     }

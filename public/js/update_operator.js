@@ -13,6 +13,7 @@ updateOperatorForm.addEventListener("submit", function (e) {
     let last_name = document.getElementById("update-lastName");
     let phone_number = document.getElementById("update-phoneNumber");
     let email = document.getElementById("update-email");
+    let train_code = document.getElementById("trainCode-edit");
 
 
     // Get the values from the form fields
@@ -21,9 +22,11 @@ updateOperatorForm.addEventListener("submit", function (e) {
     let lastNameValue = last_name.value;
     let phoneNumberValue = phone_number.value;
     let emailValue = email.value;
+    let trainCodeEdit = train_code.value;
 
     if (isNaN(opIDValue)) 
     {
+        alert("Please fill out all fields and select an operator to edit")
         return;
     }
 
@@ -33,9 +36,9 @@ updateOperatorForm.addEventListener("submit", function (e) {
         first_name: firstNameValue,
         last_name: lastNameValue,
         phone_number: phoneNumberValue,
-        email: emailValue
+        email: emailValue,
+        train_code: trainCodeEdit
     }
-    //console.log(data)
     
     // Setup our AJAX request
     var xhttp = new XMLHttpRequest();

@@ -1,17 +1,21 @@
 // Get the objects we need to modify
-let addLineForm = document.getElementById('addLineForm-ajax');
+let addScheduleForm = document.getElementById('addScheduleForm-ajax');
 
 // Modify the objects we need
-addLineForm.addEventListener("submit", function (e) {
+addScheduleForm.addEventListener("submit", function (e) {
     
     // Prevent the form from submitting
     e.preventDefault();
 
     // Get form fields we need to get data from
-    let line_name = document.getElementById("lineName-create");
+    let arrival_time = document.getElementById("arrivalTime-create");
+    let departure_time = document.getElementById("departureTime-create");
+    let station_code = document.getElementById("stationName-create");
+    let train_code = document.getElementById("trainId-create");
 
     // Get the values from the form fields
-    let lineName = line_name.value;
+    let arrivalTime = arrival_time.value;
+    let departureTime = departure_time.value;
 
     // Put our data we want to send in a javascript object
     let data = {

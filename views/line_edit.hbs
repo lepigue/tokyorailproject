@@ -19,22 +19,6 @@
       <label for="lineName-create">Line Name:</label><br>
       <input type="text" id="lineName-create" name="lineName-create"><br>
       <br>
-      <label for="startStation-create"></label>
-        <select name="startStation-create" id="startStation-create">
-          <option value="">Start Station</option>
-          {{#each stations}}
-          <option value="{{this.station_ID}}" id="{{this.station_ID}}">{{this.location_name}}</option>
-          {{/each}}
-        </select> <br>
-      <br>
-      <label for="endStation-create"></label><br>
-      <select name="endStation-create" id="endStation-create">
-          <option value="">End Station</option>
-          {{#each stations}}
-          <option value="{{this.station_ID}}" id="{{this.station_ID}}">{{this.location_name}}</option>
-          {{/each}}
-        </select> <br>
-      <br>
       <input class="editButton" type="submit">
     </form>
     <script src="./js/add_line.js"></script>
@@ -55,22 +39,6 @@
       <br>
       <label for="lineName-edit">Line Name:</label><br>
       <input type="text" id="lineName-edit" name="lineName-edit"><br>
-      <br>
-      <label for="startStation-edit"></label><br>
-      <select name="startStation-edit" id="startStation-edit">
-          <option value="">Start Station</option>
-          {{#each stations}}
-          <option value="{{this.station_ID}}" id="{{this.station_ID}}">{{this.location_name}}</option>
-          {{/each}}
-        </select> <br>
-      <br>
-      <label for="endStation-edit"></label><br>
-      <select name="endStation-edit" id="endStation-edit">
-          <option value="">End Station</option>
-          {{#each stations}}
-          <option value="{{this.station_ID}}" id="{{this.station_ID}}">{{this.location_name}}</option>
-          {{/each}}
-        </select> <br>
       <br>
       <input class="editButton" type="submit">
     </form>
@@ -103,19 +71,15 @@
         <tr data-value="{{this.line_ID}}">
             <td>{{this.line_ID}}</td>
             <td>{{this.line_name}}</td>
-            <td>{{this.start_station}}</td>
-            <td>{{this.end_station}}</td>
             <td><button onclick="deleteLine({{this.line_ID}})">Delete</button></td>
         </tr>
         {{/each}}
     </tbody>
 </table>
 <script src="./js/delete_line.js"></script>
-
   </main>
   <footer>
     <a href="/index" id="footer">Back to home</a>
   </footer>
 </body>
-
 </html>

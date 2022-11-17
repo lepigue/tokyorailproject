@@ -22,6 +22,7 @@ updateTrainForm.addEventListener("submit", function (e) {
 
     if (isNaN(trainID)) 
     {
+        alert("Please fill out all fields and select an train to edit")
         return;
     }
 
