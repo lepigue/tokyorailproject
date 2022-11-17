@@ -4,7 +4,6 @@ function populateForm() {
   document.getElementById("updateStationForm");
   let stationData = document.getElementById("stationUpdateDropdown").value;
   let dataArray = stationData.split(",");
-  console.log(dataArray);
   let stationID = dataArray[0];
   let stationName = dataArray[1];
   let stationNum = dataArray[2];
