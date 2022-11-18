@@ -83,13 +83,6 @@ app.get('/line_view', function(req, res) {
   })
 });
 
-app.get('/line_template', function(req, res)
-    {
-        res.render('line_template');
-    });
-
-
-
 // GETS ROUTES, RENDERS DATA IN TABLES AND PAGES
 
 app.get("/line_edit", function(req, res)
@@ -146,6 +139,7 @@ app.post("/station_edit", function (req, res) {
 app.get("/station_edit", function (req, res)  {
   let query_lines = `SELECT * FROM \`Lines\``;
   db.pool.query(query_lines, function (error, rows, fields) {
+    console.log(rows);
     let lines = [];
     for (const line of rows) {
       let new_line = {};
@@ -156,6 +150,7 @@ app.get("/station_edit", function (req, res)  {
 
     let queryStations = "SELECT * FROM `Stations` ORDER BY location_name;";
     db.pool.query(queryStations, function (error, rows, fields) {
+      
       let stations = {};
       let stationsAlphabetical = [];
       for (const station of rows) {
