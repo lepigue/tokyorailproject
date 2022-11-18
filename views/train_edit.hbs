@@ -19,13 +19,13 @@
     <h1>Create Train</h1>
     <form id="addTrainForm-ajax">
       <label for="trainModel">Model:</label><br>
-      <input type="text" id="trainModel" name="trainModel"><br>
+      <input required type="text" id="trainModel" name="trainModel"><br>
       <br>
       <label for="serviceDate">Last Service Date:</label><br>
-      <input type="date" id="serviceDate" name="serviceDate"><br>
+      <input required type="date" id="serviceDate" name="serviceDate"><br>
       <br>
       <label for="line_code"></label>
-        <select name="line_code" id="line_code">
+        <select required name="line_code" id="line_code">
           <option value="">Select Line</option>
           {{#each lines}}
           <option value="{{this.line_ID}}" id="{{this.line_ID}}">{{this.line_name}}</option>
@@ -41,21 +41,21 @@
     <h1>Edit Train</h1>
     <form id="updateTrainForm">
       <label for="selectTrainID"></label><br>
-      <select name="selectTrainID" id="selectTrainID">
-          <option value=" ">Select Train ID</option>
+      <select required name="selectTrainID" id="selectTrainID">
+          <option value="">Select Train ID</option>
           {{#each data}}
           <option value="{{this.train_ID}}" id="{{this.train_ID}}">{{this.train_ID}}</option>
           {{/each}}
         </select> <br>
         <br>
       <label for="trainModel-update">Model:</label><br>
-      <input type="text" id="trainModel-update" name="trainModel-update"><br>
+      <input required type="text" id="trainModel-update" name="trainModel-update"><br>
         <br>
       <label for="serviceDate-update">Last Service Date:</label><br>
-      <input type="date" id="serviceDate-update" name="serviceDate-update"><br>
+      <input required type="date" id="serviceDate-update" name="serviceDate-update"><br>
         <br>
       <label for="lineName"></label><br>
-      <select name="lineName" id="lineName">
+      <select required name="lineName" id="lineName">
           <option value="">Select Line</option>
           {{#each lines}}
           <option value="{{this.line_ID}}" id="{{this.line_ID}}">{{this.line_name}}</option>

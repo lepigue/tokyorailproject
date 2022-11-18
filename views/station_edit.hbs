@@ -18,9 +18,9 @@
     <h1>Create Station</h1>
     <form action="" method="post">
       <label for="stationName">Station Name:</label><br>
-      <input type="text" id="stationName" name="stationName" value=""><br><br>
+      <input required type="text" id="stationName" name="stationName" value=""><br><br>
       <label for="lineName">Line Name:</label><br>
-      <select id="lineID" name="lineID">
+      <select required id="lineID" name="lineID">
         {{#each lines}}
           <option value="{{this.line_ID}}">{{this.line_name}}</option>
         {{/each}}
@@ -34,7 +34,7 @@
     <h1>Edit Station</h1>
     <form id="updateStationForm">
       <label for="stationUpdateDropdown">Select a station to update:</label><br>
-      <select id="stationUpdateDropdown" name="stationUpdateDropdown">
+      <select required id="stationUpdateDropdown" name="stationUpdateDropdown">
         <option></option>
         {{#each stationsAlphabetical}}
           <option value="{{this.station_ID}},{{this.location_name}},{{this.station_num}},{{this.line_name}},{{this.line_code}}">{{this.location_name}} Station ({{this.line_name}} Line)</option>
@@ -44,13 +44,13 @@
       <script src="./js/populateEditStations.js"></script>
 
       <label for="stationID">Station ID Number (fixed):</label><br>
-      <input readonly="readonly" type="text" id="updateStationID" name="stationID" value="{{stationEdit.stationID}}"><br><br>
+      <input required readonly="readonly" type="text" id="updateStationID" name="stationID" value="{{stationEdit.stationID}}"><br><br>
       <label for="stationName">Station Name:</label><br>
       <input required type="text" id="updateStationName" name="stationName" value="{{stationEdit.stationName}}"><br><br>
       <label for="stationId">Station Number (on line):</label><br>
       <input required type="text" id="updateStationNum" name="stationNum" value="{{stationEdit.stationNum}}"><br><br>
       <label for="stationID">Current Line:</label><br>
-      <select id="updateLineIDName" name="lineID">
+      <select required id="updateLineIDName" name="lineID">
         <option value="{{stationEdit.lineID}},{{stationEdit.line_name}}"></option>
         {{#each lines}}
           <option value="{{this.line_ID}},{{this.line_name}}">{{this.line_name}}</option>

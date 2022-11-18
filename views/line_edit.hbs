@@ -19,7 +19,7 @@
     <h1>Create Line</h1>
     <form id="addLineForm-ajax">
       <label for="lineName-create">Line Name:</label><br>
-      <input type="text" id="lineName-create" name="lineName-create"><br>
+      <input required type="text" id="lineName-create" name="lineName-create"><br>
       <br>
       <input class="editButton" type="submit">
     </form>
@@ -31,7 +31,7 @@
     <h1>Edit Line</h1>
     <form id="updateLineForm">
       <label for="lineID-edit"></label>
-        <select name="lineID-edit" id="lineID-edit">
+        <select required name="lineID-edit" id="lineID-edit">
           <option value="">Line to Edit</option>
           {{#each data}}
           <option value="{{this.line_ID}}" id="{{this.line_ID}}">{{this.line_name}}</option>
@@ -40,7 +40,7 @@
       <br>
       <br>
       <label for="lineName-edit">Line Name:</label><br>
-      <input type="text" id="lineName-edit" name="lineName-edit"><br>
+      <input required type="text" id="lineName-edit" name="lineName-edit"><br>
       <br>
       <input class="editButton" type="submit">
     </form>

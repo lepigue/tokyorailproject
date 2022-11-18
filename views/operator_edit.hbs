@@ -20,19 +20,19 @@
     <h1>Create Operator</h1>
     <form id="addOperatorForm-ajax">
       <label for="operatorFname-create">First Name:</label><br>
-      <input type="text" id="operatorFname-create" name="operatorFname-create"><br>
+      <input required type="text" id="operatorFname-create" name="operatorFname-create"><br>
       <br>
       <label for="operatorLname-create">Last Name:</label><br>
-      <input type="text" id="operatorLname-create" name="operatorLname-create"><br>
+      <input required type="text" id="operatorLname-create" name="operatorLname-create"><br>
       <br>
       <label for="phone-create">Phone Number:</label><br>
-      <input type="text" id="phone-create" name="phone-create"><br>
+      <input required type="text" id="phone-create" name="phone-create"><br>
       <br>
       <label for="email-create">E-mail:</label><br>
-      <input type="text" id="email-create" name="email-create"><br>
+      <input required type="text" id="email-create" name="email-create"><br>
       <br>
       <label for="trainCode-create"></label>
-        <select name="trainCode-create" id="trainCode-create">
+        <select required name="trainCode-create" id="trainCode-create">
           <option value="">Train Code</option>
           {{#each trains}}
           <option value="{{this.train_ID}}" id="{{this.train_ID}}">{{this.train_ID}}</option>
@@ -58,20 +58,20 @@
       <br>
       <br>
       <label for="firstName">First Name:</label><br>
-      <input type="text" id="update-firstName" name="update-firstName"><br>
+      <input required type="text" id="update-firstName" name="update-firstName"><br>
       
       <label for="lastName">Last Name:</label><br>
-      <input type="text" id="update-lastName" name="update-lastName"><br>
+      <input required type="text" id="update-lastName" name="update-lastName"><br>
       
       <label for="phoneNumber">Phone Number:</label><br>
-      <input type="text" id="update-phoneNumber" name="update-phoneNumber"><br>
+      <input required type="text" id="update-phoneNumber" name="update-phoneNumber"><br>
       
       <label for="email">E-mail Address:</label><br>
-      <input type="text" id="update-email" name="update-email"><br>
+      <input required type="text" id="update-email" name="update-email"><br>
       <br>
 
       <label for="trainCode-edit"></label>
-        <select name="trainCode-edit" id="trainCode-edit">
+        <select required name="trainCode-edit" id="trainCode-edit">
           <option value="">Train Code</option>
           {{#each trains}}
           <option value="{{this.train_ID}}" id="{{this.train_ID}}">{{this.train_ID}}</option>
