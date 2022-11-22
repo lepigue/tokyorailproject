@@ -15,6 +15,7 @@ p {
 
 body {
   max-height: 100%vh;
+  zoom: .6;
 }
 
 .dropbtn {
@@ -203,7 +204,6 @@ footer {
 #titleBlock {
   display: flex;
   justify-content: center;
-  align-items: center;
   padding-bottom: 20px;
 }
 
@@ -223,7 +223,10 @@ footer {
 }
 
 #stationsInLine {
-  display: flex;
+  display: inline;
+  text-align: center;
+  padding: 0px
+  50px;
 }
 
 #stationButton:link {
@@ -246,8 +249,7 @@ footer {
   border-radius: 15px;
   height: 80px;
   max-height: 80px;
-  max-width: flex;
-  min-width: 300px;
+  width: 250px;
   cursor: pointer;
   position: relative;
   text-align: center;
@@ -259,26 +261,42 @@ footer {
 
 #stationTitle {
   margin: auto;
-  font-size: 30px;
+  font-size: 25px;
   text-decoration: none;
   display: inline;
   padding: 8px;
 }
 
-#stationsInLine {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  max-width: fit-content;
-  margin: auto;
+#gridContainer {
+  width: 100%;
+  position: absolute;
+  padding: 0px;
 }
 
+#stationsInLine {
+  display: grid;
+  position: fixed;
+  padding: 0px;
+  width: 100%;
+  justify-content: center;
+  right: 30px;
+  grid-template-columns: 366px 366px 366px;
+}
+
+#lineTitle {
+  
+}
+
+#startEndStations {
+  margin: 0px auto;
+}
 #lineName {
   border-style: solid;
   border-width: 10px;
   border-radius: 2000px;
   text-align: center;
   border-width: 10px;
-  font-size: 70px;
+  font-size: 60px;
   font-weight: bold;
   background-color: white;
   color: black;

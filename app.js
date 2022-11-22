@@ -85,6 +85,8 @@ app.get('/line_view', function(req, res) {
                 line_name: line_name,
                 line_code: lineId,
                 line_abbreviation: lines[lineId - 1].lineAbbreviation,
+                firstStation: formattedStations[0],
+                lastStation: formattedStations[formattedStations.length - 1],
               });
             });
           });

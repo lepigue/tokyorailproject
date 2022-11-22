@@ -28,20 +28,21 @@
 
     {{#if stations}}
       <br><br><br><br><hr>
-      <p id="lineTitlePar">
+      <p id="lineTitle">
         <h1 id="lineName" class="line{{line_name}}">{{line_name}} Line</h1>
+        {{!-- <h2>{{firstStation.location_name}} - {{lastStation.location_name}}</h2> --}}
       </p>
       
-      <div class id="stationsInLine">
-      {{#each stations}}
-        <a href='/station_view?stationID={{this.station_ID}}' id="stationButton" class="line{{../line_name}}">
-          <div class="stationCircle line{{../line_name}}">
-            <div class="stationText">{{../line_abbreviation}} {{this.station_num}}</div>
-          </div>
-          <div id="stationTitle">{{this.location_name}}</div>
-        </a>
-      {{/each}}
-      </div>
+        <div id="stationsInLine">
+        {{#each stations}}
+          <a href='/station_view?stationID={{this.station_ID}}' id="stationButton" class="line{{../line_name}}">
+            <div class="stationCircle line{{../line_name}}">
+              <div class="stationText">{{../line_abbreviation}} {{this.station_num}}</div>
+            </div>
+            <div id="stationTitle">{{this.location_name}}</div>
+          </a>
+        {{/each}}
+        </div>
     {{/if}}
   </main>
 </body>
