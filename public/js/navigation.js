@@ -1,9 +1,11 @@
 let div = document.createElement('div');
 div.innerHTML = `
-  <section id="titleBlock">
-    <img id="titleImage" src="./imgs/tokyoMetro.png">
-    <div id="titleText">Tokyo Metro Project</div>
-  </section>
+  <a href="/index" id="titleLink">
+    <section id="titleBlock">
+      <img id="titleImage" src="./imgs/tokyoMetro.png">
+      <div id="titleText">Tokyo Metro Project</div>
+      </section>
+  </a>
   <section id="headerDiv">
     <div class="hoverdropdown">
     <button class="hoverdropbtn">Home</button>
@@ -46,7 +48,6 @@ div.innerHTML = `
         <a href="/schedule_edit">Edit Schedules</a>
       </div>
     </div>
-
   </section>
 `;
 

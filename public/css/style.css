@@ -207,7 +207,6 @@ footer {
   padding-bottom: 20px;
 }
 
-
 #titleMap {
   margin-top: 25px;
   margin-bottom: 25px;
@@ -220,6 +219,20 @@ footer {
   margin-left: auto;
   margin-right: auto;
   border: solid black 3px;
+}
+
+#titleLink {
+  text-decoration: none;
+}
+
+#titleLink:link {
+  color: black;
+  text-decoration: none;
+}
+
+#titleLink:visited {
+  color: black;
+  text-decoration: none;
 }
 
 #stationsInLine {
