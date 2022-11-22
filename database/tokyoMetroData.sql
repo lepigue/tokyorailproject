@@ -125,7 +125,7 @@ VALUES  ('Ginza'),
         ('Tōzai'),
         ('Chiyoda'),
         ('Yūrakuchō'),
-        ('Hanzõmon'),
+        ('Hanzōmon'),
         ('Namboku'),
         ('Fukutoshin');
 
@@ -309,7 +309,7 @@ VALUES  ('Shibuya', 1, 1),
         ('Nishi-waseda', 11, 9),
         ('Higashi-shinjuku', 12, 9),
         ('Shinjuku-sanchome', 13, 9),
-        ('Kita-sandõ', 14, 9),
+        ('Kita-sandō', 14, 9),
         ('Meiji-jingūmae', 15, 9),
         ('Shibuya', 16, 9);
 
