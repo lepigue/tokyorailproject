@@ -20,37 +20,29 @@
     <div class="dropdown">
       <button class="dropbtn">Lines</button>
       <div class="dropdown-content">
-        {{#each lines}}
+        {{#each alphabeticalLines}}
         <a href="/line_view?lineId={{this.line_ID}}" class="dropdown-entry">{{this.line_name}} Line</a>
         {{/each}}
       </div>
     </div>
 
     {{#if stations}}
-      <br><br><br><br><hr><br>
-        <h1>{{line_name}} Line</h1>
+      <br><br><br><br><hr>
+      <p id="lineTitlePar">
+        <h1 id="lineName" class="line{{line_name}}">{{line_name}} Line</h1>
+      </p>
       
-      
-       <! <img src="../imgs/{{line_code}}-{{firstStation.station_num}}.png" alt="{{firstStation.location_name}}" width="50" height="50">
-      
-      <div>
+      <div class id="stationsInLine">
       {{#each stations}}
-        {{#if @first}}
-          <p class="stationName"></p><a href='/station_view?stationID={{this.station_ID}}'></p>
-          <b>{{this.location_name}}</b></a>
-        {{else if @last}}
-          <p class="stationName"><a href='/station_view?stationID={{this.station_ID}}'>
-          <b>{{this.location_name}}</b></a>
-        {{else}}
-          <p class="stationName"><a href='/station_view?stationID={{this.station_ID}}'>
-          {{this.location_name}}</a></p>
-        {{/if}}
+        <a href='/station_view?stationID={{this.station_ID}}' id="stationButton" class="line{{../line_name}}">
+          <div class="stationCircle line{{../line_name}}">
+            <div class="stationText">{{../line_abbreviation}} {{this.station_num}}</div>
+          </div>
+          <div id="stationTitle">{{this.location_name}}</div>
+        </a>
       {{/each}}
       </div>
-      
     {{/if}}
   </main>
-  <script src="../js/index.js"></script>
 </body>
-
 </html>

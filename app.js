@@ -36,51 +36,70 @@ app.get('/index', function(req, res)
     
 app.get('/line_view', function(req, res) {
   const lineId = req.query.lineId;
-  let query_lines = 'SELECT * FROM \`Lines\` ORDER BY line_name';
-  db.pool.query(query_lines, function (error, rows, fields) {
-    let lines = [];
-    for (const line of rows) {
-      let new_line = {};
-      for (const key in line) {
-        new_line[key] = line[key];
+  let queryLines = 'SELECT * FROM \`Lines\` ORDER BY line_ID';
+    db.pool.query(queryLines, function (error, rows, fields) {
+      let lines = [];
+      for (station of rows) {
+        let new_station = {};
+        for (const key in station) {
+          new_station[key] = station[key];
+        }
+        if (new_station.line_name == "Hanzōmon") {
+          new_station.lineAbbreviation = "Z";
+        } else {
+          new_station.lineAbbreviation = new_station.line_name.slice(0, 1);
+        }
+        lines.push(new_station);
       }
-      lines.push(new_line);
-    }
 
-    if (req.query.lineId) {
-      let queryLine = `SELECT line_name FROM \`Lines\` WHERE line_ID = ${lineId}`;
-      db.pool.query(queryLine, function(error, rows, fields) {
-        let line_name = rows[0].line_name;
-
-        let query_stations = `SELECT * FROM Stations WHERE line_code = ${lineId} ORDER BY station_num`;
-        db.pool.query(query_stations, function (error, rows, fields) {
-          let formattedStations = [];
-          for (const [idx, station] of rows.entries()) {
-            let new_station = {};
-            for (const key in station) {
-              new_station[key] = station[key];
-            }
-            formattedStations.push(new_station);
+      let queryAlphabeticalLines = "SELECT * FROM `Lines` ORDER BY line_name";
+      db.pool.query(queryAlphabeticalLines, function (error, rows, fields) {
+        let alphabeticalLines = [];
+        for (const line of rows) {
+          let new_line = {};
+          for (const key in line) {
+            new_line[key] = line[key];
           }
-          res.render("line_view", {
-            stations: formattedStations,
-            lines: lines,
-            line_name: line_name,
-            line_code: lineId,
+          
+          alphabeticalLines.push(new_line);
+        }
+
+        if (req.query.lineId) {
+          let queryLine = `SELECT line_name FROM \`Lines\` WHERE line_ID = ${lineId}`;
+          db.pool.query(queryLine, function (error, rows, fields) {
+            let line_name = rows[0].line_name;
+
+            let query_stations = `SELECT * FROM Stations WHERE line_code = ${lineId} ORDER BY station_num`;
+            db.pool.query(query_stations, function (error, rows, fields) {
+              let formattedStations = [];
+              for (const [idx, station] of rows.entries()) {
+                let new_station = {};
+                for (const key in station) {
+                  new_station[key] = station[key];
+                }
+                formattedStations.push(new_station);
+              }
+              res.render("line_view", {
+                stations: formattedStations,
+                alphabeticalLines: alphabeticalLines,
+                line_name: line_name,
+                line_code: lineId,
+                line_abbreviation: lines[lineId - 1].lineAbbreviation,
+              });
+            });
           });
-        })
-      })
-    } else {
-      res.render("line_view", {
-        stations: null,
-        lines: lines,
-        line_name: null,
-        line_code: null,
-        firstStation: null,
-        lastStation: null,
+        } else {
+          res.render("line_view", {
+            stations: null,
+            alphabeticalLines: alphabeticalLines,
+            line_name: null,
+            line_code: null,
+            firstStation: null,
+            lastStation: null,
+          });
+        }
       });
-    }
-  })
+    });
 });
 
 // GETS ROUTES, RENDERS DATA IN TABLES AND PAGES
@@ -279,7 +298,85 @@ app.get("/station_view", function (req, res) {
         linesMap[new_line.line_ID] = new_line;
       }
 
-      if (lineID) {
+        if (stationID) {
+          // Build map of trains for Schedules
+          let query_trains = `SELECT * FROM Trains WHERE line_code = (SELECT line_code FROM Stations WHERE station_ID = ${stationID})`;
+          db.pool.query(query_trains, function (error, rows, fields) {
+            let trains = {};
+            for (const train of rows) {
+              let new_train = {};
+              for (const key in train) {
+                new_train[key] = train[key];
+              }
+              trains[new_train.train_ID] = new_train;
+            }
+
+              // Create list of all schedules that pass through this station
+            let query_schedules = `SELECT * FROM Schedules WHERE station_code = ${stationID} ORDER BY arrival_time;`;
+            db.pool.query(query_schedules, function (error, rows, fields) {
+              let schedules = [];
+              for (const schedule of rows) {
+                let new_schedule = {};
+                for (const key in schedule) {
+                  new_schedule[key] = schedule[key];
+                }
+                new_schedule.station_name =
+                  stations[new_schedule.station_code].location_name;
+                new_schedule.train_name = `Train ${
+                  new_schedule.train_code
+                } - ${trains[new_schedule.train_code].model}`;
+                schedules.push(new_schedule);
+              }
+
+              //
+              let query_station = `SELECT * FROM Stations WHERE station_ID = ${stationID}`;
+              db.pool.query(query_station, function (error, rows, fields) {
+                let station = {};
+                for (const key in rows[0]) {
+                  station[key] = rows[0][key];
+                }
+                station.line_name = linesMap[station.line_code].line_name;
+
+                if (lineID) {
+                  let query_line_stations = `SELECT station_ID, location_name FROM Stations WHERE line_code = ${lineID} ORDER BY station_num`;
+                  db.pool.query(query_line_stations, function (error, rows, fields) {
+                    let lineStations = {};
+                    for (const station of rows) {
+                      let new_station = {};
+                      for (const key in station) {
+                        new_station[key] = station[key];
+                      }
+                    lineStations[new_station.station_ID] = new_station;
+                    }
+                    res.render("station_view", {
+                      lines: linesMap,
+                      curr_line: linesMap[lineID],
+                      lineStations: lineStations,
+                      station: station,
+                      schedules: schedules
+                    });
+                  });
+                } else {
+                  let query_station = `SELECT * FROM Stations WHERE station_ID = ${stationID}`;
+                  db.pool.query(query_station, function (error, rows, fields) {
+                    let station = {};
+                    for (const key in rows[0]) {
+                      station[key] = rows[0][key];
+                    }
+                    station.line_name = linesMap[station.line_code].line_name;
+                    res.render("station_view", {
+                      lines: linesMap,
+                      curr_line: linesMap[station.line_code],
+                      lineStations: null,
+                      station: station,
+                      schedules: schedules,
+                    });
+                  })
+                }
+              });
+            });
+          });        
+      } else if (lineID) {
         let query_line_stations = `SELECT station_ID, location_name FROM Stations WHERE line_code = ${lineID} ORDER BY station_num`;
         db.pool.query(query_line_stations, function (error, rows, fields) {
           let lineStations = {};
@@ -290,73 +387,20 @@ app.get("/station_view", function (req, res) {
             }
           lineStations[new_station.station_ID] = new_station;
           }
-
-          if (stationID) {
-            // Build map of trains for Schedules
-            let query_trains = `SELECT * FROM Trains WHERE line_code = (SELECT line_code FROM Stations WHERE station_ID = ${stationID})`;
-            db.pool.query(query_trains, function (error, rows, fields) {
-              let trains = {};
-              for (const train of rows) {
-                let new_train = {};
-                for (const key in train) {
-                  new_train[key] = train[key];
-                }
-                trains[new_train.train_ID] = new_train;
-              }
-                // Create list of all schedules that pass through this station
-              let query_schedules = `SELECT * FROM Schedules WHERE station_code = ${stationID} ORDER BY arrival_time;`;
-              db.pool.query(query_schedules, function (error, rows, fields) {
-                let schedules = [];
-                for (const schedule of rows) {
-                  let new_schedule = {};
-                  for (const key in schedule) {
-                    new_schedule[key] = schedule[key];
-                  }
-                  new_schedule.station_name =
-                    stations[new_schedule.station_code].location_name;
-                  new_schedule.train_name = `Train ${
-                    new_schedule.train_code
-                  } - ${trains[new_schedule.train_code].model}`;
-                  schedules.push(new_schedule);
-                }
-
-                //
-                let query_station = `SELECT * FROM Stations WHERE station_ID = ${stationID}`;
-                db.pool.query(query_station, function (error, rows, fields) {
-                  let station = {};
-                  for (const key in rows[0]) {
-                    station[key] = rows[0][key];
-                  }
-                  station.line_name = linesMap[station.line_code].line_name;
-                  res.render("station_view", {
-                    lines: linesMap,
-                    curr_line: linesMap[lineID],
-                    lineStations: lineStations,
-                    station: station,
-                    stations: lineStations,
-                    schedules: schedules
-                  });
-                });
-              });
-            });
-          } else {
-            res.render("station_view", {
-              lines: linesMap,
-              curr_line: linesMap[lineID],
-              lineStations: lineStations,
-              station: null,
-              stations: lineStations,
-              schedules: null
-            });
-          }
-        });
+          res.render("station_view", {
+            lines: linesMap,
+            curr_line: linesMap[lineID],
+            lineStations: lineStations,
+            station: null,
+            schedules: null,
+          });
+        })
       } else {
         res.render("station_view", {
           lines: linesMap,
           curr_line: null,
           lineStations: null,
           station: null,
-          stations: null,
           schedules: null
         });
       }
