@@ -18,15 +18,15 @@
     {{!-- Create Train Form --}}
     <h1>Create Train</h1>
     <form id="addTrainForm-ajax">
-      <label for="trainModel">Model:</label><br>
-      <input required type="text" id="trainModel" name="trainModel"><br>
+      <label for="addTrainModel">Model:</label><br>
+      <input required type="text" id="addTrainModel" name="addTrainModel"><br>
       <br>
-      <label for="serviceDate">Last Service Date:</label><br>
-      <input required type="date" id="serviceDate" name="serviceDate"><br>
+      <label for="addTrainServiceDate">Last Service Date:</label><br>
+      <input required type="date" id="addTrainServiceDate" name="addTrainServiceDate"><br>
       <br>
-      <label for="line_code"></label>
-        <select required name="line_code" id="line_code">
-          <option value="">Select Line</option>
+      <label for="addTrainLineCode">Line Name:</label><br>
+        <select required name="addTrainLineCode" id="addTrainLineCode">
+          <option></option>
           {{#each lines}}
           <option value="{{this.line_ID}}" id="{{this.line_ID}}">{{this.line_name}}</option>
           {{/each}}
@@ -40,64 +40,61 @@
     {{!-- Edit Train Form --}}
     <h1>Edit Train</h1>
     <form id="updateTrainForm">
-      <label for="selectTrainID"></label><br>
-      <select required name="selectTrainID" id="selectTrainID">
-          <option value="">Select Train ID</option>
-          {{#each data}}
-          <option value="{{this.train_ID}}" id="{{this.train_ID}}">{{this.train_ID}}</option>
-          {{/each}}
-        </select> <br>
-        <br>
-      <label for="trainModel-update">Model:</label><br>
-      <input required type="text" id="trainModel-update" name="trainModel-update"><br>
-        <br>
-      <label for="serviceDate-update">Last Service Date:</label><br>
-      <input required type="date" id="serviceDate-update" name="serviceDate-update"><br>
-        <br>
-      <label for="lineName"></label><br>
-      <select required name="lineName" id="lineName">
-          <option value="">Select Line</option>
-          {{#each lines}}
-          <option value="{{this.line_ID}}" id="{{this.line_ID}}">{{this.line_name}}</option>
-          {{/each}}
-        </select> <br>
-        <br>
+      <label for="updateTrainDropdown">Select train to update:</label><br>
+      <select required name="updateTrainDropdown" id="updateTrainDropdown">
+        <option></option>
+        {{#each trains}}
+        <option value="{{this.train_ID}},{{this.model}},{{this.last_service_date_HTML}},{{this.line_code}}" id="Train{{this.train_ID}}">{{this.train_ID}} - {{this.model}} ({{this.line_name}} Line)</option>
+        {{/each}}
+      </select> 
+      <script src="./js/populateEditTrains.js"></script>
+        
+      <br><br>
+      <label for="updateTrainID">Train ID (fixed):</label><br>
+      <input required readonly type="text" id="updateTrainID" class="idNumForm" name="updateTrainID"><br>
+      <br>
+      <label for="updateTrainModel">Model:</label><br>
+      <input required type="text" id="updateTrainModel" name="updateTrainModel"><br>
+      <br>
+      <label for="updateTrainServiceDate">Last Service Date:</label><br>
+      <input required type="date" id="updateTrainServiceDate" name="updateTrainServiceDate"><br>
+      <br>
+      <label for="updateTrainLineCode">Line Name:</label><br>
+      <select required name="updateTrainLineCode" id="updateTrainLineCode">
+        <option></option>
+        {{#each lines}}
+        <option value="{{this.line_ID}}" id="trainLine{{this.line_ID}}">{{this.line_name}}</option>
+        {{/each}}
+      </select>
+      <br><br>
       <input class="editButton" type="submit">
     </form>
     <script src="./js/update_train.js"></script>
-    <br>
-    <hr>
+    <br><hr>
+    <h1>Delete Train</h1>
+    
 
 {{!-- Create a table --}}
-<table id="train_table" class = "table-style">
-
-    {{!-- Header section --}}
-    <thead>
-
-        {{!-- For just the first row, we print each key of the row object as a header cell so we
-        know what each column means when the page renders --}}
-        <tr>
-            {{#each data.[0]}}
-            <th>
-                {{@key}}
-            </th>
-            {{/each}}
-        </tr>
-    </thead>
-
-    {{!-- Body section --}}
-    <tbody>
-
-        {{!-- For each row, print the train_ID, model, last_service_date, line_code, in order --}}
-        {{#each data}}
-        <tr data-value={{this.train_ID}}>
-            <td>{{this.train_ID}}</td>
-            <td>{{this.model}}</td>
-            <td>{{this.last_service_date}}</td>
-            <td>{{this.line_code}}</td>
-            <td><button onclick="deleteTrain({{this.train_ID}})">Delete</button></td>
-        </tr>
-        {{/each}}
+<table id="train_table" class ="table-style">
+  <thead>
+    <tr>
+      <th class="tableHeaderCell">Train ID</th>
+      <th class="tableHeaderCell">Train Name</th>
+      <th class="tableHeaderCell">Last Service Date</th>
+      <th class="tableHeaderCell">Line Name</th>
+      <th class="tableHeaderCell">Delete Train</th>
+    </tr>
+  </thead>
+  <tbody id="trainTableBody">
+    {{#each trains}}
+    <tr data-value={{this.train_ID}}>
+      <td>{{this.train_ID}}</td>
+      <td>{{this.model}}</td>
+      <td>{{this.last_service_date_readable}}</td>
+      <td>{{this.line_name}}</td>
+      <td><button onclick="deleteTrain({{this.train_ID}})">Delete</button></td>
+    </tr>
+    {{/each}}
     </tbody>
 </table>
 <script src="./js/delete_train.js"></script>

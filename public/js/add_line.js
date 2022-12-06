@@ -1,83 +1,66 @@
 // Get the objects we need to modify
 let addLineForm = document.getElementById('addLineForm-ajax');
 
-// Modify the objects we need
 addLineForm.addEventListener("submit", function (e) {
-    
-    // Prevent the form from submitting
-    e.preventDefault();
+  e.preventDefault();
+  let line_name = document.getElementById("lineName-create");
+  let lineName = line_name.value;
+  let data = {
+    line_name: lineName,
+  }
 
-    // Get form fields we need to get data from
-    let line_name = document.getElementById("lineName-create");
+  if (lineName == "") 
+  {
+    alert("Please fill out the Line Name field")
+    return;
+  }
 
-    // Get the values from the form fields
-    let lineName = line_name.value;
+  var xhttp = new XMLHttpRequest();
+  xhttp.open("POST", "/add_line_ajax", true);
+  xhttp.setRequestHeader("Content-type", "application/json");
 
-    // Put our data we want to send in a javascript object
-    let data = {
-        line_name: lineName,
-    }
-
-    if (lineName == "") 
-    {
-        alert("Please fill out the Line Name field")
-        return;
-    }
-
-    // Setup our AJAX request
-    var xhttp = new XMLHttpRequest();
-    xhttp.open("POST", "/add_line_ajax", true);
-    xhttp.setRequestHeader("Content-type", "application/json");
-
-    // Tell our AJAX request how to resolve
-    xhttp.onreadystatechange = () => {
-        if (xhttp.readyState == 4 && xhttp.status == 200) {
-
-            // Add the new data to the table
-            addRowToTable(xhttp.response);
-
-            // Clear the input fields for another transaction
-            line_name.value = '';
-        }
-        else if (xhttp.readyState == 4 && xhttp.status != 200) {
-            console.log("There was an error with the input.")
-        }
-    }
-
-    // Send the request and wait for the response
-    xhttp.send(JSON.stringify(data));
+  xhttp.onreadystatechange = () => {
+      if (xhttp.readyState == 4 && xhttp.status == 200) {
+        addRowToTable(xhttp.response);
+        line_name.value = '';
+      }
+      else if (xhttp.readyState == 4 && xhttp.status != 200) {
+          console.log("There was an error with the input.")
+      }
+  }
+  // Send the request and wait for the response
+  xhttp.send(JSON.stringify(data));
 
 })
 
-
 // Creates a single row from an Object representing a single record from 
 // bsg_people
-addRowToTable = (data) => {
+addRowToTable = (res) => {
+    let currentTable = document.getElementById("lineTableBody");
+    let lines = JSON.parse(res);
+    let newRow = lines[lines.length - 1];
+    let row = document.createElement("tr");
+    let lineIDCell = document.createElement("td");
+    let lineNameCell = document.createElement("td");
+    let deleteButtonCell = document.createElement("td");
 
-    // Get a reference to the current table on the page and clear it out.
-    let currentTable = document.getElementById("line_table");
-
-    // Get the location where we should insert the new row (end of table)
-    let newRowIndex = currentTable.rows.length;
-
-    // Get a reference to the new row from the database query (last object)
-    let parsedData = JSON.parse(data);
-    let newRow = parsedData[parsedData.length - 1]
-
-    // Create a row and 4 cells
-    let row = document.createElement("TR");
-    let lineIDCell = document.createElement("TD");
-    let lineNameCell = document.createElement("TD");
-
-    // Fill the cells with correct data
     lineIDCell.innerText = newRow.line_ID;
     lineNameCell.innerText = newRow.line_name; 
-
-    // Add the cells to the row 
+    deleteButtonCell.innerHTML = `<button onclick="deleteLine(${newRow.line_ID})">Delete</button>`;
     row.appendChild(lineIDCell);
     row.appendChild(lineNameCell);
-
-    
-    // Add the row to the table
+    row.appendChild(deleteButtonCell);
+    row.setAttribute("data-value", newRow.line_ID)
     currentTable.appendChild(row);
+}
+
+function updateDropdown(lineID, lineName) {
+  // update line dropdown to show new line
+  let lineDropdown = document.getElementById("lineUpdateDropdown");
+  lineDropdown.options[lineDropdown.selectedIndex].text = `${lineName}`;
+  lineDropdown.options[lineDropdown.selectedIndex].value = `${lineID}`;
+
+  // populate current line dropdown with new line name
+  let linesDropdown = document.getElementById("updateLineName");
+  linesDropdown.selectedIndex = lineID;
 }

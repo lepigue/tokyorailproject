@@ -15,7 +15,7 @@
   </div>
 
   <main>
-    <h1>Select below to view schedule:</h1>
+    <h1>Select a station below to view its schedule:</h1>
     <div class="dropdown">
         {{#if curr_line}}
           <button class="dropbtn">
@@ -31,7 +31,7 @@
         {{#if curr_line}}
           <a class="dropdown-entry">Select Line:</a>
         {{/if}}
-        {{#each lines}}
+        {{#each linesAlphabetical}}
           <a href="/station_view?lineID={{this.line_ID}}" class="dropdown-entry">{{this.line_name}}</a>
         {{/each}}
       </div>
@@ -58,8 +58,6 @@
       {{/if}}
       </div>
     </div>
-
-    {{!-- <h3>Or search for a station here:</h3> --}}
 
     {{#if station}}
       <br><br><br><br><hr><br>

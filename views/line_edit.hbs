@@ -30,55 +30,45 @@
     {{!-- Edit Line Form --}}
     <h1>Edit Line</h1>
     <form id="updateLineForm">
-      <label for="lineID-edit"></label>
-        <select required name="lineID-edit" id="lineID-edit">
-          <option value="">Line to Edit</option>
-          {{#each data}}
-          <option value="{{this.line_ID}}" id="{{this.line_ID}}">{{this.line_name}}</option>
+      <label for="lineUpdateDropdown">Select a line to update:</label><br>
+        <select required name="lineUpdateDropdown" id="lineUpdateDropdown">
+          <option ></option>
+          {{#each linesAlphabetical}}
+          <option value="{{this.line_ID}},{{this.line_name}}" id="{{this.line_ID}}">{{this.line_name}}</option>
           {{/each}}
-        </select> <br>
-      <br>
-      <br>
+        </select>
+      <br><br>
+      <script src="./js/populateEditLines.js"></script>
+
+      <label for="lineID">Line ID Number (fixed):</label><br>
+      <input required readonly="readonly" type="text" class="idNumForm" id="updateLineID" name="lineID" value="{{stationEdit.stationID}}"><br><br>
       <label for="lineName-edit">Line Name:</label><br>
-      <input required type="text" id="lineName-edit" name="lineName-edit"><br>
+      <input required type="text" id="updateLineName" name="updateLineName"><br>
       <br>
       <input class="editButton" type="submit">
     </form>
     <script src="./js/update_line.js"></script>
-    <br>
-    <hr>
+    <br><hr>
 
-    {{!-- Create a table --}}
-<table id="line_table" class="table-style">
-
-    {{!-- Header section --}}
-    <thead>
-
-        {{!-- For just the first row, we print each key of the row object as a header cell so we
-        know what each column means when the page renders --}}
+    <h1>Delete Line</h1>
+    <table id="line_table" class="table-style">
+      <thead>
         <tr>
-            {{#each data.[0]}}
-            <th>
-                {{@key}}
-            </th>
-            {{/each}}
-        </tr>
-    </thead>
-
-    {{!-- Body section --}}
-    <tbody>
-
-        {{!-- For each row, print the line_ID, line_name, start_station, end_station in order --}}
-        {{#each data}}
-        <tr data-value="{{this.line_ID}}">
-            <td>{{this.line_ID}}</td>
-            <td>{{this.line_name}}</td>
-            <td><button onclick="deleteLine({{this.line_ID}})">Delete</button></td>
+          <th class="tableHeaderCell">Line ID</th>
+          <th class="tableHeaderCell">Line Name</th>
+        <th class="tableHeaderCell">Delete Line</th>
+      </thead>
+      <tbody id="lineTableBody">
+        {{#each lines}}
+        <tr id="deleteLine{{this.line_ID}}" data-name="{{this.line_name}}" data-value="{{this.line_ID}}">
+          <td>{{this.line_ID}}</td>
+          <td>{{this.line_name}}</td>
+          <td><button onclick="deleteLine({{this.line_ID}})">Delete</button></td>
         </tr>
         {{/each}}
-    </tbody>
-</table>
-<script src="./js/delete_line.js"></script>
-  </main>
-</body>
+      </tbody>
+      <script src="./js/delete_line.js"></script>
+    </table>
+    </main>
+  </body>
 </html>

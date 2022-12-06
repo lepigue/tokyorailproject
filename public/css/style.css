@@ -57,7 +57,7 @@ p {
   color: #ffffff;
 }
 
-input[type=text] {
+input, select {
   border: 2px solid rgb(18, 19, 96);
   border-radius: 4px;
   padding: 12px 20px;
@@ -106,9 +106,7 @@ body {
   background-color: #f3f3f3;
 }
 
-.table-style tbody tr:last-of-type {
-  border-bottom: 2px solid #6c6e6d;
-}
+
 
 
 footer {
@@ -189,6 +187,9 @@ footer {
 
 #titleImage {
   padding-right: 10px;
+  display: absolute;
+  height: fit-content;
+  width: fit-content;
 }
 
 #titleText {
@@ -266,6 +267,21 @@ footer {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  padding: 20px 30px;
+}
+
+#emptyStationButton {
+  display: absolute;
+  border-style: solid;
+  border-width: 8px;
+  margin: auto;
+  border-radius: 15px;
+  height: 80px;
+  max-height: 80px;
+  width: 500px;
+  height: auto;
+  position: relative;
+  text-align: center;
   padding: 20px 30px;
 }
 
@@ -375,4 +391,13 @@ footer {
   transform: translate(-50%, -50%);
   font-weight: 900;
   text-align: center;
+}
+
+.idNumForm {
+  cursor: not-allowed;
+}
+
+.tableHeaderCell {
+  text-align: center;
+  text-decoration: underline;
 }

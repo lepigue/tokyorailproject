@@ -16,82 +16,79 @@
 
   <main>
     <h1>Create Station</h1>
-    <form action="" method="post">
-      <label for="stationName">Station Name:</label><br>
-      <input required type="text" id="stationName" name="stationName" value=""><br><br>
-      <label for="lineName">Line Name:</label><br>
-      <select required id="lineID" name="lineID">
-        {{#each lines}}
+    <form id="addStationForm-ajax">
+      <label for="stationName-create">Station Name:</label><br>
+      <input required type="text" id="stationName-create" name="stationName-create"><br><br>
+      <label for="lineID-create">Line Name:</label><br>
+      <select required id="lineID-stationCreate" name="lineID-stationCreate">
+        <option></option>
+        {{#each linesAlphabetical}}
           <option value="{{this.line_ID}}">{{this.line_name}}</option>
         {{/each}}
       
       </select><br><br>
       <input class="editButton" type="submit">
-
     </form>
-    <br>
-    <hr>
+    <script src="./js/add_station.js"></script>
+    <br><hr>
+
     <h1>Edit Station</h1>
     <form id="updateStationForm">
       <label for="stationUpdateDropdown">Select a station to update:</label><br>
       <select required id="stationUpdateDropdown" name="stationUpdateDropdown">
         <option></option>
         {{#each stationsAlphabetical}}
-          <option value="{{this.station_ID}},{{this.location_name}},{{this.station_num}},{{this.line_name}},{{this.line_code}}">{{this.location_name}} Station ({{this.line_name}} Line)</option>
-        {{/each}}
+          <option data-value="{{this.station_ID}}" id="Station{{this.station_ID}}" value="{{this.station_ID}},{{this.location_name}},{{this.station_num}},{{this.line_name}},{{this.line_code}},{{this.row_num}}">{{this.location_name}} Station ({{this.line_name}} Line)</option>
+        {{/each}}stationUpdateDropdown
       </select>
       <br><br>
       <script src="./js/populateEditStations.js"></script>
 
       <label for="stationID">Station ID Number (fixed):</label><br>
-      <input required readonly="readonly" type="text" id="updateStationID" name="stationID" value="{{stationEdit.stationID}}"><br><br>
+      <input required readonly="readonly" type="text" id="updateStationID" class="idNumForm" name="stationID" value="{{stationEdit.stationID}}"><br><br>
       <label for="stationName">Station Name:</label><br>
       <input required type="text" id="updateStationName" name="stationName" value="{{stationEdit.stationName}}"><br><br>
       <label for="stationId">Station Number (on line):</label><br>
-      <input required type="text" id="updateStationNum" name="stationNum" value="{{stationEdit.stationNum}}"><br><br>
-      <label for="stationID">Current Line:</label><br>
-      <select required id="updateLineIDName" name="lineID">
+      <input required type="number" id="updateStationNum" name="stationNum" value="{{stationEdit.stationNum}}"><br><br>
+      <label for="updateLineIDName">Line Name:</label><br>
+      <select required id="updateLineIDName" name="updateLineIDName">
         <option value="{{stationEdit.lineID}},{{stationEdit.line_name}}"></option>
-        {{#each lines}}
+        {{#each linesAlphabetical}}
           <option value="{{this.line_ID}},{{this.line_name}}">{{this.line_name}}</option>
         {{/each}}
       </select><br><br>
       <input class="editButton" type="submit">
     </form>
     <script src="./js/update_station.js"></script>
-    <br>
-    <hr>
+    <br><hr>
+    <h1>Delete Station</h1>
 
-   {{!-- The Data from our Database --}}
-{{!-- Create a table --}}
 <table id="station_table" class = "table-style">
-    <tbody>
-
-        {{!-- For each row, print the line_ID, line_name, start_station, end_station--}}
-        {{#each stations}}
-        {{#if @first}}
-        <tr>
-          <td><u>Station ID</u></td>
-          <td><u>Station Name</u></td>
-          <td><u>Station Number</u></td>
-          <td><u>Line Name</u></td>
-        </tr>
-        {{/if}}
-        <tr data-value={{this.station_ID}}>
-            <td>{{this.station_ID}}</td>
-            <td>{{this.location_name}}</td>
-            <td>{{this.station_num}}</td>
-            <td>{{this.line_name}}</td>
-            <td><button onclick="deleteStation({{this.station_ID}})">Delete</button></td>
-        </tr>
-        {{/each}}
-    </tbody>
+  <thead>
+    <tr>
+      <th class="tableHeaderCell">Station ID</th>
+      <th class="tableHeaderCell">Station Name</th>
+      <th class="tableHeaderCell">Station Number</th>
+      <th class="tableHeaderCell">Line Name</th>
+      <th class="tableHeaderCell">Delete Station</th>
+    </tr>
+  </thead>
+  <tbody id="stationTableBody">
+    {{#each stations}}
+    <tr data-value={{this.station_ID}}>
+      <td>{{this.station_ID}}</td>
+      <td>{{this.location_name}}</td>
+      <td>{{this.station_num}}</td>
+      <td>{{this.line_name}}</td>
+      <td><button onclick="deleteStation({{this.station_ID}})">Delete</button></td>
+    </tr>
+    {{/each}}
+  </tbody>
   <script src="./js/delete_station.js"></script>
 </table>
 <br>
 
 
-  </main>
+</main>
 </body>
-
 </html>
