@@ -10,7 +10,6 @@ SET AUTOCOMMIT = 0;
 DROP TABLE IF EXISTS `Operators`;
 DROP TABLE IF EXISTS `Schedules`;
 DROP TABLE IF EXISTS `Trains`;
-DROP TABLE IF EXISTS `Lines_has_Stations`;
 DROP TABLE IF EXISTS `Stations`;
 DROP TABLE IF EXISTS `Lines`;
 
@@ -49,17 +48,10 @@ CREATE TABLE `Operators` (
     `operator_ID` int(8) NOT NULL UNIQUE AUTO_INCREMENT,
     `first_name` varchar(30) NOT NULL,
     `last_name` varchar(30)NOT NULL,
-    `phone_number` int(11) NOT NULL, 
-    `email` varchar(40) NOT NULL,
+    `phone_number` varchar(11),
+    `email` varchar(40),
     `train_code` int,
     PRIMARY KEY (`operator_ID`)
-);
-
-CREATE TABLE `Lines_has_Stations` (
-    `lines_stations_id` int(8) NOT NULL UNIQUE AUTO_INCREMENT,
-    `lines_line_id` int,
-    `stations_station_id` int,
-    PRIMARY KEY (`lines_stations_id`)
 );
 
 -- UPDATE FOREIGN KEYS

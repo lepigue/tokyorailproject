@@ -15,10 +15,11 @@ updateOperatorForm.addEventListener("submit", function (e) {
   let emailValue = email.value;
   let trainCodeEdit = train_code.value;
 
-  if (isNaN(opIDValue)) {
-      alert("Please fill out all fields and select an operator to edit")
-      return;
-  }
+    if (isNaN(opIDValue) || firstNameValue==""|| lastNameValue==""||isNaN(trainCodeEdit)) 
+    {
+        alert("All fields required except phone number or email")
+        return;
+    }
 
   let data = {
       operator_ID: opIDValue,
