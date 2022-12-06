@@ -15,8 +15,6 @@
   </div>
   <main>
 
-
-    {{!-- Create Line Form --}}
     <h1>Create Operator</h1>
     <form id="addOperatorForm-ajax">
       <label for="addOperatorFName">First Name:</label><br>
@@ -57,23 +55,20 @@
       <script src="./js/populateEditOperator.js"></script>
 
       <label for="updateOperatorID">Operator ID Number (fixed):</label><br>
-      <input required readonly="readonly" type="text" id="updateOperatorID" class="idNumForm" name="stationID"><br><br>
+      <input required readonly="readonly" type="text" id="updateOperatorID" class="idNumForm" name="stationID"><br>
+      <br>
       <label for="firstName">First Name:</label><br>
       <input required type="text" id="update-firstName" name="update-firstName"><br>
       <br>
-      
       <label for="lastName">Last Name:</label><br>
       <input required type="text" id="update-lastName" name="update-lastName"><br>
       <br>
-      
       <label for="phoneNumber">Phone Number:</label><br>
       <input required type="text" id="update-phoneNumber" name="update-phoneNumber"><br>
       <br>
-      
       <label for="email">E-mail Address:</label><br>
-      <input type="text" id="update-email" name="update-email">
-      <br><br>
-
+      <input type="text" id="update-email" name="update-email"><br>
+      <br>
       <label for="trainCode-edit">Current train:</label><br>
         <select required name="trainCode-edit" id="trainCode-edit">
           <option value=""></option>
@@ -82,42 +77,40 @@
           {{/each}}
         </select> <br>
         <br>
-
       <input class="editButton" type="submit">
     </form>
-    <script src="./js/update_operator.js"></script>
-    <br><hr>
-    <h1>Delete Operator</h1>
+    <script src="./js/update_operator.js"></script><br>
+    <hr>
 
-<table id="operator_table" class="table-style" >
-    <thead>
-    <tr>
-      <th class="tableHeaderCell">Operator ID</th>
-      <th class="tableHeaderCell">First Name</th>
-      <th class="tableHeaderCell">Last Name</th>
-      <th class="tableHeaderCell">Phone Number</th>
-      <th class="tableHeaderCell">E-mail Address</th>
-      <th class="tableHeaderCell">Current Train</th>
-      <th class="tableHeaderCell">Delete Operator</th>
-    </tr>
-  </thead>
-  <tbody id="operatorTableBody">
-      {{#each data}}
-      <tr data-value={{this.operator_ID}} id="operatorRow{{this.operator_ID}}">
-          <td>{{this.operator_ID}}</td>
-          <td>{{this.first_name}}</td>
-          <td>{{this.last_name}}</td>
-          <td>{{this.phone_number}}</td>
-          <td>{{this.email}}</td>
-          <td>{{this.train_name}}</td>
-          <td><button onclick="deleteOperator({{this.operator_ID}})">Delete</button></td>
-      </tr>
-      {{/each}}
-  </tbody>
-  <script src="./js/delete_operator.js"></script>
-</table>
+    <h1>Delete Operator</h1>
+    <table id="operator_table" class="table-style" >
+        <thead>
+        <tr>
+          <th class="tableHeaderCell">Operator ID</th>
+          <th class="tableHeaderCell">First Name</th>
+          <th class="tableHeaderCell">Last Name</th>
+          <th class="tableHeaderCell">Phone Number</th>
+          <th class="tableHeaderCell">E-mail Address</th>
+          <th class="tableHeaderCell">Current Train</th>
+          <th class="tableHeaderCell">Delete Operator</th>
+        </tr>
+      </thead>
+      <tbody id="operatorTableBody">
+          {{#each data}}
+          <tr data-value={{this.operator_ID}} id="operatorRow{{this.operator_ID}}">
+              <td>{{this.operator_ID}}</td>
+              <td>{{this.first_name}}</td>
+              <td>{{this.last_name}}</td>
+              <td>{{this.phone_number}}</td>
+              <td>{{this.email}}</td>
+              <td>{{this.train_name}}</td>
+              <td><button onclick="deleteOperator({{this.operator_ID}})">Delete</button></td>
+          </tr>
+          {{/each}}
+      </tbody>
+      <script src="./js/delete_operator.js"></script>
+    </table>
   </main>
-  <br>
-  <hr>
+  <br><hr>
 </body>
 </html>

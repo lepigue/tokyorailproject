@@ -1,3 +1,8 @@
+// Citation for this file
+// Date: Dec 5, 2022
+// Based on/inspired by: NodeJS starter app add_person.js
+// https://github.com/osu-cs340-ecampus/nodejs-starter-app/blob/main/Step%208%20-%20Dynamically%20Updating%20Data/public/js/add_person.js
+
 let addStationForm = document.getElementById("addStationForm-ajax");
 addStationForm.addEventListener("submit", function (e) {
   e.preventDefault();
@@ -47,7 +52,7 @@ function addStationRow(station) {
   stationNumCell.innerText = station.stationNum;
   lineNameCell.innerText = station.lineName;
   deleteButtonCell.innerHTML = `<button onclick="deleteStation(${station.stationID})">Delete</button>`;
-  
+
   row.appendChild(stationIDCell);
   row.appendChild(stationNameCell);
   row.appendChild(stationNumCell);

@@ -1,3 +1,8 @@
+// Citation for this file
+// Date: Dec 5, 2022
+// Based on/inspired by: NodeJS starter app update_person.js
+// https://github.com/osu-cs340-ecampus/nodejs-starter-app/blob/main/Step%208%20-%20Dynamically%20Updating%20Data/public/js/update_person.js
+
 let updateLineForm = document.getElementById('updateLineForm');
 updateLineForm.addEventListener("submit", function (e) {
   e.preventDefault();
@@ -5,13 +10,13 @@ updateLineForm.addEventListener("submit", function (e) {
   let lineName = document.getElementById("updateLineName").value;
 
   if (isNaN(lineID) || lineName == "") {
-    alert("Please fill out all fields and select a line to edit")
+    alert("Please fill out all fields and select a line to edit");
     return;
   }
   let data = {
     line_ID: lineID,
     line_name: lineName,
-  }
+  };
   var xhttp = new XMLHttpRequest();
   xhttp.open("PUT", "/put_line", true);
   xhttp.setRequestHeader("Content-type", "application/json");
@@ -21,15 +26,13 @@ updateLineForm.addEventListener("submit", function (e) {
       updateLineRow(parsedLine);
       updateLineDropdown(parsedLine);
       clearUpdateLineForm();
-      alert("Line successfully updated!")
+      alert("Line successfully updated!");
+    } else if (xhttp.readyState == 4 && xhttp.status != 200) {
+      console.log("There was an error with the input.");
     }
-    else if (xhttp.readyState == 4 && xhttp.status != 200) {
-      console.log("There was an error with the input.")
-    }
-  }
+  };
   xhttp.send(JSON.stringify(data));
-})
-
+});
 
 function updateLineRow(line) {
   let table = document.getElementById("line_table");
@@ -44,10 +47,10 @@ function updateLineRow(line) {
 
 function updateLineDropdown(line) {
   let lineDropdown = document.getElementById("lineUpdateDropdown");
-  lineDropdown.options[lineDropdown.selectedIndex].value = `${line.line_ID},${line.line_name}`;
   lineDropdown.options[
     lineDropdown.selectedIndex
-  ].text = `${line.line_name}`;
+  ].value = `${line.line_ID},${line.line_name}`;
+  lineDropdown.options[lineDropdown.selectedIndex].text = `${line.line_name}`;
 }
 
 function clearUpdateLineForm() {

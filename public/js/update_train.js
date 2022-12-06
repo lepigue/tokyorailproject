@@ -1,3 +1,8 @@
+// Citation for this file
+// Date: Dec 5, 2022
+// Based on/inspired by: NodeJS starter app update_person.js
+// https://github.com/osu-cs340-ecampus/nodejs-starter-app/blob/main/Step%208%20-%20Dynamically%20Updating%20Data/public/js/update_person.js
+
 let updateTrainForm = document.getElementById('updateTrainForm');
 updateTrainForm.addEventListener("submit", function (e) {
   e.preventDefault();
@@ -11,9 +16,8 @@ updateTrainForm.addEventListener("submit", function (e) {
   let serviceDate = last_service_date.value;
   let lineID = line_code.value;
 
-  if (isNaN(trainID)) 
-  {
-    alert("Please fill out all fields and select an train to edit")
+  if (isNaN(trainID)) {
+    alert("Please fill out all fields and select an train to edit");
     return;
   }
 
@@ -21,9 +25,9 @@ updateTrainForm.addEventListener("submit", function (e) {
     train_ID: trainID,
     model: trainModel,
     last_service_date: serviceDate,
-    line_code: lineID
-  }
-  
+    line_code: lineID,
+  };
+
   var xhttp = new XMLHttpRequest();
   xhttp.open("PUT", "/put_train", true);
   xhttp.setRequestHeader("Content-type", "application/json");
@@ -33,13 +37,12 @@ updateTrainForm.addEventListener("submit", function (e) {
       updateTrainRow(train);
       updateTrainDropdown(train);
       clearTrainUpdateForm();
+    } else if (xhttp.readyState == 4 && xhttp.status != 200) {
+      console.log("There was an error with the input.");
     }
-    else if (xhttp.readyState == 4 && xhttp.status != 200) {
-        console.log("There was an error with the input.")
-    }
-  }
+  };
   xhttp.send(JSON.stringify(data));
-})
+});
 
 function updateTrainRow(train) {
   let table = document.getElementById("trainTableBody");
@@ -59,18 +62,18 @@ function updateTrainRow(train) {
 }
 
 function updateTrainDropdown() {
-let trainDropdown = document.getElementById("updateTrainDropdown");
-trainDropdown.innerHTML = "";
-let blankOption = new Option();
-trainDropdown.add(blankOption);
-for (const train of trains) {
-  let newOption = new Option(
-    `${train.train_ID} - ${train.model} (${train.line_name} Line)`,
-    `${this.train_ID},${this.model},${this.last_service_date_HTML},${this.line_code}`
-  );
-  newOption.id = `train${train.train_ID}`;
-  trainDropdown.add(newOption);
-}
+  let trainDropdown = document.getElementById("updateTrainDropdown");
+  trainDropdown.innerHTML = "";
+  let blankOption = new Option();
+  trainDropdown.add(blankOption);
+  for (const train of trains) {
+    let newOption = new Option(
+      `${train.train_ID} - ${train.model} (${train.line_name} Line)`,
+      `${this.train_ID},${this.model},${this.last_service_date_HTML},${this.line_code}`
+    );
+    newOption.id = `train${train.train_ID}`;
+    trainDropdown.add(newOption);
+  }
 }
 
 function clearTrainUpdateForm() {
@@ -79,5 +82,4 @@ function clearTrainUpdateForm() {
   document.getElementById("updateTrainModel").value = null;
   document.getElementById("updateTrainServiceDate").value = null;
   document.getElementById("updateTrainLineCode").selectedIndex = null;
-
 }

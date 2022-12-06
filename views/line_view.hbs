@@ -26,13 +26,9 @@
       </div>
     </div>
     
-
     {{#if line_code}}
       <br><br><br><br><hr>
-      <p id="lineTitle">
-        <h1 id="lineName" class="line{{line_name}}">{{line_name}} Line</h1>
-        {{!-- <h2>{{firstStation.location_name}} - {{lastStation.location_name}}</h2> --}}
-      </p>
+      <p id="lineTitle"><h1 id="lineName" class="line{{line_name}}">{{line_name}} Line</h1></p>
       {{#if stations}}
           <div id="stationsInLine">
           {{#each stations}}

@@ -1,3 +1,8 @@
+// Citation for this file
+// Date: Dec 5, 2022
+// Based on/inspired by: NodeJS starter app update_person.js
+// https://github.com/osu-cs340-ecampus/nodejs-starter-app/blob/main/Step%208%20-%20Dynamically%20Updating%20Data/public/js/update_person.js
+
 let updateOperatorForm = document.getElementById('updateOpForm');
 updateOperatorForm.addEventListener("submit", function (e) {
   e.preventDefault();
@@ -15,20 +20,24 @@ updateOperatorForm.addEventListener("submit", function (e) {
   let emailValue = email.value;
   let trainCodeEdit = train_code.value;
 
-    if (isNaN(opIDValue) || firstNameValue==""|| lastNameValue==""||isNaN(trainCodeEdit)) 
-    {
-        alert("All fields required except phone number or email")
-        return;
-    }
+  if (
+    isNaN(opIDValue) ||
+    firstNameValue == "" ||
+    lastNameValue == "" ||
+    isNaN(trainCodeEdit)
+  ) {
+    alert("All fields required except phone number or email");
+    return;
+  }
 
   let data = {
-      operator_ID: opIDValue,
-      first_name: firstNameValue,
-      last_name: lastNameValue,
-      phone_number: phoneNumberValue,
-      email: emailValue,
-      train_code: trainCodeEdit
-  }
+    operator_ID: opIDValue,
+    first_name: firstNameValue,
+    last_name: lastNameValue,
+    phone_number: phoneNumberValue,
+    email: emailValue,
+    train_code: trainCodeEdit,
+  };
   var xhttp = new XMLHttpRequest();
   xhttp.open("PUT", "/put_operator", true);
   xhttp.setRequestHeader("Content-type", "application/json");
@@ -38,18 +47,19 @@ updateOperatorForm.addEventListener("submit", function (e) {
       updateOperatorRow(res.operator);
       updateOperatorDropdown(res.operators);
       clearOperatorStationForm();
+    } else if (xhttp.readyState == 4 && xhttp.status != 200) {
+      console.log("There was an error with the input.");
     }
-    else if (xhttp.readyState == 4 && xhttp.status != 200) {
-      console.log("There was an error with the input.")
-    }
-  }
+  };
   xhttp.send(JSON.stringify(data));
-})
+});
 
-function updateOperatorRow(operator){
+function updateOperatorRow(operator) {
   let table = document.getElementById("operatorTableBody");
   for (let i = 0, row; (row = table.rows[i]); i++) {
-    if (table.rows[i].getAttribute("id") == `operatorRow${operator.operator_ID}`) {
+    if (
+      table.rows[i].getAttribute("id") == `operatorRow${operator.operator_ID}`
+    ) {
       let updateRowIndex = table.getElementsByTagName("tr")[i];
       updateRowIndex.getElementsByTagName("td")[0].innerHTML =
         operator.operator_ID;
@@ -59,8 +69,7 @@ function updateOperatorRow(operator){
         operator.last_name;
       updateRowIndex.getElementsByTagName("td")[3].innerHTML =
         operator.phone_number;
-      updateRowIndex.getElementsByTagName("td")[4].innerHTML =
-        operator.email;
+      updateRowIndex.getElementsByTagName("td")[4].innerHTML = operator.email;
       updateRowIndex.getElementsByTagName("td")[5].innerHTML =
         operator.train_name;
     }

@@ -1,46 +1,45 @@
 // Citation for this file
 // Date: Dec 5, 2022
-// Based on: NodeJS starter app
-// https://github.com/osu-cs340-ecampus/nodejs-starter-app/tree/main/Step%208%20-%20Dynamically%20Updating%20Data
+// Based on/inspired by: NodeJS starter app add_person.js
+// https://github.com/osu-cs340-ecampus/nodejs-starter-app/blob/main/Step%208%20-%20Dynamically%20Updating%20Data/public/js/add_person.js
 
-let addOperatorForm = document.getElementById('addOperatorForm-ajax');
+let addOperatorForm = document.getElementById("addOperatorForm-ajax");
 addOperatorForm.addEventListener("submit", function (e) {
-    e.preventDefault();
-    let firstName = document.getElementById("addOperatorFName").value;
-    let lastName = document.getElementById("addOperatorLName").value;
-    let phoneNum = document.getElementById("addOperatorPhone").value;
-    let email = document.getElementById("addOperatorEmail").value;
-    let trainCode = document.getElementById("addOperatorTrain").value;
+  e.preventDefault();
+  let firstName = document.getElementById("addOperatorFName").value;
+  let lastName = document.getElementById("addOperatorLName").value;
+  let phoneNum = document.getElementById("addOperatorPhone").value;
+  let email = document.getElementById("addOperatorEmail").value;
+  let trainCode = document.getElementById("addOperatorTrain").value;
 
-    let data = {
-      first_name: firstName,
-      last_name: lastName,
-      phone_number: phoneNum,
-      email: email,
-      train_code: trainCode,
-    };
-    if (firstName == "" || lastName == "" || trainCode == "") {
-        alert("Please fill out the all fields. Only email can be left blank")
-        return;
+  let data = {
+    first_name: firstName,
+    last_name: lastName,
+    phone_number: phoneNum,
+    email: email,
+    train_code: trainCode,
+  };
+  if (firstName == "" || lastName == "" || trainCode == "") {
+    alert("Please fill out the all fields. Only email can be left blank");
+    return;
+  }
+  var xhttp = new XMLHttpRequest();
+  xhttp.open("POST", "/add_operator_ajax", true);
+  xhttp.setRequestHeader("Content-type", "application/json");
+  xhttp.onreadystatechange = () => {
+    if (xhttp.readyState == 4 && xhttp.status == 200) {
+      let res = JSON.parse(xhttp.response);
+      addRowToTable(res.operator);
+      addOperatorDropdown(res.operators);
+      clearAddOperatorForm();
+    } else if (xhttp.readyState == 4 && xhttp.status != 200) {
+      console.log("There was an error with the input.");
     }
-    var xhttp = new XMLHttpRequest();
-    xhttp.open("POST", "/add_operator_ajax", true);
-    xhttp.setRequestHeader("Content-type", "application/json");
-    xhttp.onreadystatechange = () => {
-        if (xhttp.readyState == 4 && xhttp.status == 200) {
-            let res = JSON.parse(xhttp.response);
-            addRowToTable(res.operator);
-            addOperatorDropdown(res.operators);
-            clearAddOperatorForm();
-        }
-        else if (xhttp.readyState == 4 && xhttp.status != 200) {
-            console.log("There was an error with the input.")
-        }
-    }
-    xhttp.send(JSON.stringify(data));
-})
+  };
+  xhttp.send(JSON.stringify(data));
+});
 
-function addRowToTable (operator) {
+function addRowToTable(operator) {
   let currentTable = document.getElementById("operatorTableBody");
   let row = document.createElement("tr");
   let operatorIDCell = document.createElement("td");
@@ -69,7 +68,7 @@ function addRowToTable (operator) {
   row.setAttribute("data-value", operator.operator_ID);
   row.id = `operatorRow${operator.operator_ID}`;
   currentTable.appendChild(row);
-};
+}
 
 function addOperatorDropdown(operators) {
   let operatorDropdown = document.getElementById("operatorUpdateDropdown");
