@@ -14,21 +14,27 @@
   <div class="titleNav">
     <script type="text/javascript" src="./js/navigation.js"></script>
   </div>
+  
   <main>
+    {{!-- Create Schedule Form --}}
     <h1>Create Schedule</h1>
     <form id="addScheduleForm-ajax">
+      
       <label for="arrivalTime-create">Arrival Time:</label><br>
       <input required type="time" id="arrivalTime-create" name="arrivalTime-create"><br>
       <br>
+      
       <label for="departureTime-create">Departure Time:</label><br>
       <input required type="time" id="departureTime-create" name="departureTime-create"><br>
+      
       <label for="stationName-create"></label><br>
       <select required name="stationName-create" id="stationName-create">
           <option value="">Station Name</option>
           {{#each stations}}
-          <option value="{{this.station_ID}}" id="{{this.station_ID}}">{{this.station_ID}}</option>
+          <option value="{{this.station_ID}}" id="{{this.station_ID}}">{{this.location_name}}</option>
           {{/each}}
         </select> <br>
+      
       <label for="trainId-create"></label><br>
       <select required name="trainId-create" id="trainId-create">
           <option value="">Train ID</option>
@@ -45,45 +51,49 @@
     
     
     
-    
+    {{!-- Edit Schedule Form --}}
     <h1>Edit Schedule</h1>
-    <form>
-      <label for="scheduleId">Schedule ID:</label><br>
-      <input required type="text" id="scheduleId" name="scheduleId"><br>
-      <label for="arrivalTime">Arrival Time:</label><br>
-      <input required type="time" id="arrivalTime" name="arrivalTime"><br>
-      <label for="departureTime">Arrival Time:</label><br>
-      <input required type="time" id="departureTime" name="departureTime"><br>
-      <label for="stationName">Station Name:</label><br>
-      <select required id="stationName" name="stationName">
-        <option value="station">&lt;Station 1 &gt;</option>
-        <option value="station">&lt;Station 2 &gt;</option>
-        <option value="station">&lt;Station 3 &gt;</option>
-        <option value="station">&lt;Station 4 &gt;</option>
-        <option value="station">&lt;Station 5 &gt;</option>
-        <option value="station">&lt;Station 6 &gt;</option>
-        <option value="station">&lt;Station 7 &gt;</option>
-        <option value="station">&lt;Station 8 &gt;</option>
-        <option value="station">&lt;Station 9 &gt;</option>
-        <option value="station">&lt;Station 10 &gt;</option>
-      </select><br>
-      <label for="trainId">Train Number:</label><br>
-      <select required id="trainId" name="trainId">
-        <option value="train">&lt;Train 1 &gt;</option>
-        <option value="train">&lt;Train 2 &gt;</option>
-        <option value="train">&lt;Train 3 &gt;</option>
-        <option value="train">&lt;Train 4 &gt;</option>
-        <option value="train">&lt;Train 5 &gt;</option>
-        <option value="train">&lt;Train 6 &gt;</option>
-        <option value="train">&lt;Train 7 &gt;</option>
-        <option value="train">&lt;Train 8 &gt;</option>
-        <option value="train">&lt;Train 9 &gt;</option>
-        <option value="train">&lt;Train 10 &gt;</option>
-      </select><br><br>
+    <form id="updateScheduleForm">
+  
+    <label for="schedule_ID-update"></label><br>
+      <select required name="schedule_ID-update" id="schedule_ID-update">
+          <option value="">Schedule ID</option>
+          {{#each data}}
+          <option value="{{this.schedule_ID}}" id="{{this.schedule_ID}}">{{this.schedule_ID}}</option>
+          {{/each}}
+        </select> <br>
+        <br>
+      
+      <label for="arrivalTime-update">Arrival Time:</label><br>
+      <input required type="time" id="arrivalTime-update" name="arrivalTime-update"><br>
+      <br>
+      
+      <label for="departureTime-update">Arrival Time:</label><br>
+      <input required type="time" id="departureTime-update" name="departureTime-update"><br>
+      <br>
+      
+      <label for="stationName-update">Station Name:</label><br>
+      <select required name="stationName-update" id="stationName-update">
+          <option value="">Station Name</option>
+          {{#each stations}}
+          <option value="{{this.station_ID}}" id="{{this.station_ID}}">{{this.location_name}}</option>
+          {{/each}}
+        </select> <br>
+      
+      <label for="trainId-update"></label><br>
+      <select required name="trainId-update" id="trainId-update">
+          <option value="">Train ID</option>
+          {{#each trains}}
+          <option value="{{this.train_ID}}" id="{{this.train_ID}}">{{this.train_ID}}</option>
+          {{/each}}
+        </select> <br>
+        <br>
       <input class="editButton" type="submit">
     </form>
+    <script src="./js/update_schedule.js"></script>
     <br>
     <hr>
+
 
 {{!-- The Data from our Database --}}
 {{!-- Create a table for Schedule's Data --}}

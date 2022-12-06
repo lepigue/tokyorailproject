@@ -1,42 +1,45 @@
 // Get the objects we need to modify
-let updateTrainForm = document.getElementById('updateTrainForm');
+let updateOperatorForm = document.getElementById('updateScheduleForm');
 
 // Modify the objects we need
-updateTrainForm.addEventListener("submit", function (e) {
-   
+updateOperatorForm.addEventListener("submit", function (e) {
+
     // Prevent the form from submitting
     e.preventDefault();
 
     // Get form fields we need to get data from
-    let train_ID = document.getElementById("selectTrainID");
-    let model = document.getElementById("trainModel-update");
-    let last_service_date = document.getElementById("serviceDate-update");
-    let line_code = document.getElementById("lineName");
+    let schedule_ID = document.getElementById("schedule_ID-update");
+    let arrival_time = document.getElementById("arrivalTime-update");
+    let departure_time = document.getElementById("departureTime-update");
+    let station_code = document.getElementById("stationName-update");
+    let train_code = document.getElementById("trainId-update");
 
-    
     // Get the values from the form fields
-    let trainID = train_ID.value;
-    let trainModel = model.value;
-    let serviceDate = last_service_date.value;
-    let lineID = line_code.value;
+    let scheduleID = schedule_ID.value;
+    let arrivalTime = arrival_time.value;
+    let departureTime = departure_time.value;
+    let stationCode = station_code.value;
+    let trainCode = train_code.value;
 
-    if (isNaN(trainID)) 
+    // Sends window alert if form fields are left empty
+    if (isNaN(scheduleID) || arrivalTime == "" || departureTime == "" || isNaN(stationCode) || isNaN(trainCode))
     {
-        alert("Please fill out all fields and select an train to edit")
+        alert("Please fill out all form fields")
         return;
     }
 
     // Put our data we want to send in a javascript object
     let data = {
-        train_ID: trainID,
-        model: trainModel,
-        last_service_date: serviceDate,
-        line_code: lineID
+        schedule_ID: scheduleID,
+        arrival_time: arrivalTime,
+        departure_time: departureTime,
+        station_code: stationCode,
+        train_code: trainCode
     }
     
     // Setup our AJAX request
     var xhttp = new XMLHttpRequest();
-    xhttp.open("PUT", "/put_train", true);
+    xhttp.open("PUT", "/put_schedule", true);
     xhttp.setRequestHeader("Content-type", "application/json");
 
     // Tell our AJAX request how to resolve
@@ -44,7 +47,7 @@ updateTrainForm.addEventListener("submit", function (e) {
         if (xhttp.readyState == 4 && xhttp.status == 200) {
 
             // Add the new data to the table
-            updateRow(xhttp.response, trainID);
+            updateRow(xhttp.response, scheduleID);
 
         }
         else if (xhttp.readyState == 4 && xhttp.status != 200) {
@@ -58,15 +61,15 @@ updateTrainForm.addEventListener("submit", function (e) {
 })
 
 
-function updateRow(data, trainID){
+function updateRow(data, scheduleID){
     let parsedData = JSON.parse(data);
     
-    let table = document.getElementById("train_table");
+    let table = document.getElementById("schedule_table");
 
     for (let i = 0, row; row = table.rows[i]; i++) {
        //iterate through rows
        //rows would be accessed using the "row" variable assigned in the for loop
-       if (table.rows[i].getAttribute("data-value") == trainID) {
+       if (table.rows[i].getAttribute("data-value") == scheduleID) {
 
             // Get the location of the row where we found the matching person ID
             let updateRowIndex = table.getElementsByTagName("tr")[i];

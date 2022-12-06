@@ -16,21 +16,26 @@ addScheduleForm.addEventListener("submit", function (e) {
     // Get the values from the form fields
     let arrivalTime = arrival_time.value;
     let departureTime = departure_time.value;
+    let stationCode = station_code.value;
+    let trainCode = train_code.value;
 
     // Put our data we want to send in a javascript object
     let data = {
-        line_name: lineName,
+        arrival_time: arrivalTime,
+        departure_time: departureTime,
+        station_code: stationCode,
+        train_code: trainCode
     }
 
-    if (lineName == "") 
+    if ( arrivalTime == "" || departureTime == "" || stationCode == "" || trainCode == "") 
     {
-        alert("Please fill out the Line Name field")
+        alert("Please fill out all fields")
         return;
     }
 
     // Setup our AJAX request
     var xhttp = new XMLHttpRequest();
-    xhttp.open("POST", "/add_line_ajax", true);
+    xhttp.open("POST", "/add_schedule_ajax", true);
     xhttp.setRequestHeader("Content-type", "application/json");
 
     // Tell our AJAX request how to resolve
@@ -41,7 +46,10 @@ addScheduleForm.addEventListener("submit", function (e) {
             addRowToTable(xhttp.response);
 
             // Clear the input fields for another transaction
-            line_name.value = '';
+            arrival_time.value = '';
+            departure_time.value='';
+            station_code.value='';
+            train_code.value='';
         }
         else if (xhttp.readyState == 4 && xhttp.status != 200) {
             console.log("There was an error with the input.")
@@ -59,7 +67,7 @@ addScheduleForm.addEventListener("submit", function (e) {
 addRowToTable = (data) => {
 
     // Get a reference to the current table on the page and clear it out.
-    let currentTable = document.getElementById("line_table");
+    let currentTable = document.getElementById("schedule_table");
 
     // Get the location where we should insert the new row (end of table)
     let newRowIndex = currentTable.rows.length;
@@ -70,18 +78,29 @@ addRowToTable = (data) => {
 
     // Create a row and 4 cells
     let row = document.createElement("TR");
-    let lineIDCell = document.createElement("TD");
-    let lineNameCell = document.createElement("TD");
+    let scheduleIDcell = document.createElement("TD");
+    let arrivalTimeIDcell = document.createElement("TD");
+    let departureTimeIDcell = document.createElement("TD");
+    let stationNameIDcell = document.createElement("TD");
+    let trainCodeIDcell = document.createElement("TD");
 
     // Fill the cells with correct data
-    lineIDCell.innerText = newRow.line_ID;
-    lineNameCell.innerText = newRow.line_name; 
+    scheduleIDcell.innerText = newRow.schedule_ID;
+    arrivalTimeIDcell.innerText = newRow.arrival_time; 
+    departureTimeIDcell.innerText = newRow.departure_time; 
+    stationNameIDcell.innerText = newRow.station_code;
+    trainCodeIDcell.innerText = newRow.train_code; 
 
     // Add the cells to the row 
-    row.appendChild(lineIDCell);
-    row.appendChild(lineNameCell);
-
+    row.appendChild(scheduleIDcell);
+    row.appendChild(arrivalTimeIDcell);
+    row.appendChild(departureTimeIDcell);
+    row.appendChild(stationNameIDcell);
+    row.appendChild(trainCodeIDcell);
+    
     
     // Add the row to the table
     currentTable.appendChild(row);
+
+    document.location.reload(true);  
 }

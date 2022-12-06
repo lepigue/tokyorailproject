@@ -30,6 +30,13 @@ addOperatorForm.addEventListener("submit", function (e) {
         train_code: trainCode
     }
 
+
+    if (firstName == "" || lastName == "" || trainCode == "") 
+    {
+        alert("Please fill out the all fields. Only email can be left blank")
+        return;
+    }
+
     // Setup our AJAX request
     var xhttp = new XMLHttpRequest();
     xhttp.open("POST", "/add_operator_ajax", true);
@@ -101,4 +108,6 @@ addRowToTable = (data) => {
     
     // Add the row to the table
     currentTable.appendChild(row);
+
+    document.location.reload(true); 
 }

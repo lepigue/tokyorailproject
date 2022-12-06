@@ -9,7 +9,7 @@ updateLineForm.addEventListener("submit", function (e) {
 
     // Get form fields we need to get data from
     let line_ID = document.getElementById("lineID-edit");
-    let line_name = document.getElementById("lineName-edit")
+    let line_name = document.getElementById("lineName-edit");
 
     
     // Get the values from the form fields
@@ -28,8 +28,7 @@ updateLineForm.addEventListener("submit", function (e) {
         line_ID: lineID,
         line_name: lineName,
     }
-    
-    console.log("JS", data)
+
     // Setup our AJAX request
     var xhttp = new XMLHttpRequest();
     xhttp.open("PUT", "/put_line", true);
@@ -58,7 +57,6 @@ function updateRow(data, lineID){
     let parsedData = JSON.parse(data);
     
     let table = document.getElementById("line_table");
-
     for (let i = 0, row; row = table.rows[i]; i++) {
        //iterate through rows
        //rows would be accessed using the "row" variable assigned in the for loop
@@ -66,12 +64,15 @@ function updateRow(data, lineID){
 
             // Get the location of the row where we found the matching person ID
             let updateRowIndex = table.getElementsByTagName("tr")[i];
+            console.log(updateRowIndex)
 
             // Get td of line value
-            let td = updateRowIndex.getElementsByTagName("td")[3];
+            let td = updateRowIndex.getElementsByTagName("td")[2];
+            console.log(td)
 
             // Reassign line to our value we updated to
             td.innerHTML = parsedData[0].name; 
        }
     }
+    document.location.reload(true); 
 }
