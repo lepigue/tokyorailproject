@@ -99,21 +99,18 @@
 
     {{!-- Header section --}}
     <thead>
-
-        {{!-- For just the first row, we print each key of the row object as a header cell so we
-        know what each column means when the page renders --}}
-        <tr>
-            {{#each data.[0]}}
-            <th>
-                {{@key}}
-            </th>
-            {{/each}}
-        </tr>
+      <tr>
+        <th class="tableHeaderCell">Schedule ID</th>
+        <th class="tableHeaderCell">Arrival Time</th>
+        <th class="tableHeaderCell">Departure Time</th>
+        <th class="tableHeaderCell">Station</th>
+        <th class="tableHeaderCell">Train</th>
+        <th class="tableHeaderCell">Delete Schedule</th>
+      </tr>
     </thead>
 
     {{!-- Body section --}}
-    <tbody>
-        {{!-- For each row, print the schedule_ID, arrival_time, departure_time, station_code (FK), train_code (FK) in order --}}
+    <tbody id="scheduleTableBody">
         {{#each data}}
         <tr data-value={{this.schedule_ID}}>
             <td>{{this.schedule_ID}}</td>

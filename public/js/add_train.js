@@ -62,10 +62,11 @@ function addTrainDropdown(train) {
   let trainDropdown = document.getElementById("updateTrainDropdown");
   let newOption = new Option(
     `${train.train_ID} - ${train.model} (${train.line_name} Line)`,
-    `${this.train_ID},${this.model},${this.last_service_date_HTML},${this.line_code}`
+    `${train.train_ID},${train.model},${train.last_service_date_HTML},${train.line_code}`
   );
   newOption.id = `train${train.train_ID}`;
   trainDropdown.add(newOption);
+  console.log(newOption);
 }
 
 function clearAddTrainForm() {

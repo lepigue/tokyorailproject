@@ -26,7 +26,7 @@
       <input required type="text" id="addOperatorLName" name="addOperatorLName"><br>
       <br>
       <label for="addOperatorPhone">Phone Number:</label><br>
-      <input type="text" id="addOperatorPhone" name="addOperatorPhone"><br>
+      <input type="number" id="addOperatorPhone" name="addOperatorPhone"><br>
       <br>
       <label for="addOperatorEmail">E-mail:</label><br>
       <input type="text" id="addOperatorEmail" name="addOperatorEmail"><br>
@@ -35,7 +35,7 @@
         <select required name="addOperatorTrain" id="addOperatorTrain">
           <option value=""></option>
           {{#each trains}}
-          <option value="{{this.train_ID}}" id="{{this.train_ID}}">{{this.train_ID}}</option>
+          <option value="{{this.train_ID}}" id="{{this.train_ID}}">{{this.train_ID}} - {{this.model}} ({{this.line_name}} Line)</option>
           {{/each}}
         </select> <br>
       <br>

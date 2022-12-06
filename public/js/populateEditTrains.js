@@ -1,6 +1,7 @@
 function populateForm() {
   document.getElementById("updateTrainForm");
   let trainData = document.getElementById("updateTrainDropdown").value;
+  console.log(trainData);
   let dataArray = trainData.split(",");
   let trainID = dataArray[0];
   let trainModel = dataArray[1];

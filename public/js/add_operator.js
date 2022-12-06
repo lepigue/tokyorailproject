@@ -1,3 +1,8 @@
+// Citation for this file
+// Date: Dec 5, 2022
+// Based on: NodeJS starter app
+// https://github.com/osu-cs340-ecampus/nodejs-starter-app/tree/main/Step%208%20-%20Dynamically%20Updating%20Data
+
 let addOperatorForm = document.getElementById('addOperatorForm-ajax');
 addOperatorForm.addEventListener("submit", function (e) {
     e.preventDefault();
@@ -14,22 +19,10 @@ addOperatorForm.addEventListener("submit", function (e) {
       email: email,
       train_code: trainCode,
     };
-
-
-    if (firstName == "" || lastName == "" || trainCode == "") 
-    {
+    if (firstName == "" || lastName == "" || trainCode == "") {
         alert("Please fill out the all fields. Only email can be left blank")
         return;
     }
-
-
-    if (firstName == "" || lastName == "" || trainCode == "") 
-    {
-        alert("Please fill out the all fields. Only email can be left blank")
-        return;
-    }
-
-    // Setup our AJAX request
     var xhttp = new XMLHttpRequest();
     xhttp.open("POST", "/add_operator_ajax", true);
     xhttp.setRequestHeader("Content-type", "application/json");

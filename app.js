@@ -128,29 +128,41 @@ app.get("/line_edit", function(req, res) {
 
 app.get("/operator_edit", function (req, res) 
 {
-  let queryTrains = "SELECT * FROM Trains;";
-  db.pool.query(queryTrains, (error, trainRows, fields) => {
-    let trainMap = {};
-    for (train of trainRows) {
-      let newTrain = {};
-      for (key in train) {
-        newTrain.key = train[key];
+  let queryLines = `SELECT * FROM \`Lines\``;
+  db.pool.query(queryLines, function (error, rows, fields) {
+    let lines = {};
+    for (line of rows) {
+      let new_line = {};
+      for (key in line) {
+        new_line[key] = line[key];
       }
-      trainMap[train.train_ID] = train;
+      lines[new_line.line_ID] = new_line;
     }
+      let queryTrains = "SELECT * FROM Trains";
+    db.pool.query(queryTrains, (error, trainRows, fields) => {
+      let trainMap = {};
+      for (train of trainRows) {
+        let newTrain = {};
+        for (key in train) {
+          newTrain[key] = train[key];
+        }
+        newTrain.line_name = lines[newTrain.line_code].line_name;
+        trainMap[train.train_ID] = newTrain;
+      }
 
-    let queryOperators = "SELECT * FROM Operators";
-    db.pool.query(queryOperators, function (error, operatorRows, fields) {
-    for (operator of operatorRows) {
-      let currTrain = trainMap[operator.train_code];
-      operator.train_name = `${currTrain.train_ID} - ${currTrain.model}`;
-    }
-      return res.render("operator_edit", {
-        data: operatorRows,
-        trains: trainRows,
+      let queryOperators = "SELECT * FROM Operators";
+      db.pool.query(queryOperators, function (error, operatorRows, fields) {
+      for (operator of operatorRows) {
+        let currTrain = trainMap[operator.train_code];
+        operator.train_name = `${currTrain.train_ID} - ${currTrain.model}`;
+      }
+        return res.render("operator_edit", {
+          data: operatorRows,
+          trains: trainMap,
+        });
       });
     });
-  });
+  })
 });
 
 app.post("/station_edit", function (req, res) {
@@ -245,8 +257,7 @@ app.get('/train_edit', function(req, res)
             train.last_service_date_readable = convertDatetime.convertDatetime(last_service_date);
             train.last_service_date_HTML = convertDatetime.convertDatetimeHTML(last_service_date);
           }
-        }
-        
+        }        
         return res.render("train_edit", { trains: trains, lines: linesMap });
       });
     });
@@ -521,7 +532,6 @@ app.get('/train_view', function(req, res) {
 // POST ROUTES
 app.post('/add_operator_ajax', function(req, res) 
 {
-    // Capture the incoming data and parse it back to a JS object
     let data = req.body;
     if (data.email == "") {
       data.email = "NULL";
@@ -530,11 +540,10 @@ app.post('/add_operator_ajax', function(req, res)
     if (isNaN(parseInt(data.phone_number))) {
       data.phone_number = "NULL";
     }
-    // Create the query and run it on the database
     query1 = `INSERT INTO Operators (first_name, last_name, phone_number, email, train_code) VALUES ('${data.first_name}', '${data.last_name}', '${data.phone_number}', '${data.email}', '${data.train_code}');`;
     db.pool.query(query1, function(error, rows, fields){
 
-    const queryAddOperator = `INSERT INTO Operators (first_name, last_name, phone_number, email, train_code) VALUES ('${newOperator.first_name}', '${newOperator.last_name}', '${newOperator.phone_number}', '${newOperator.email}', '${newOperator.train_code}');`;
+    const queryAddOperator = `INSERT INTO Operators (first_name, last_name, phone_number, email, train_code) VALUES ('${data.first_name}', '${data.last_name}', '${data.phone_number}', '${data.email}', '${data.train_code}');`;
     db.pool.query(queryAddOperator, function (error, rows, fields) {
       if (error) {
         console.log(error);
