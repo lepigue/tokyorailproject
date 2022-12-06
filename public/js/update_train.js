@@ -37,6 +37,7 @@ updateTrainForm.addEventListener("submit", function (e) {
       updateTrainRow(train);
       updateTrainDropdown(train);
       clearTrainUpdateForm();
+      alert("Train successfully updated!");
     } else if (xhttp.readyState == 4 && xhttp.status != 200) {
       console.log("There was an error with the input.");
     }

@@ -44,6 +44,7 @@ updateOperatorForm.addEventListener("submit", function (e) {
     if (xhttp.readyState == 4 && xhttp.status == 200) {
       let res = JSON.parse(xhttp.response);
       updateRow(res, scheduleID);
+      alert("Schedule successfully updated!");
     } else if (xhttp.readyState == 4 && xhttp.status != 200) {
       console.log("There was an error with the input.");
     }

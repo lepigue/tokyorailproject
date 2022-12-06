@@ -38,10 +38,7 @@ addScheduleForm.addEventListener("submit", function (e) {
     if (xhttp.readyState == 4 && xhttp.status == 200) {
       let res = JSON.parse(xhttp.response);
       addRowToTable(res);
-      arrival_time.value = "";
-      departure_time.value = "";
-      station_code.value = "";
-      train_code.value = "";
+      alert("Schedule successfully added!");
     } else if (xhttp.readyState == 4 && xhttp.status != 200) {
       console.log("There was an error with the input.");
     }
@@ -73,4 +70,11 @@ function addRowToTable(parsedData) {
   row.appendChild(trainCodeIDcell);
   currentTable.appendChild(row);
   document.location.reload(true);
+}
+
+function clearAddScheduleForm() {
+  document.getElementById("arrivalTime-create").value = null;
+  document.getElementById("departureTime-create").value = null;
+  document.getElementById("stationName-create").value = null;
+  document.getElementById("trainId-create").value = null;
 }

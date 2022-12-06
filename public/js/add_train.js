@@ -28,6 +28,7 @@ addTrainForm.addEventListener("submit", function (e) {
       addRowToTable(parsedData.train);
       addTrainDropdown(parsedData.train);
       clearAddTrainForm();
+      alert("Train successfully added!");
     } else if (xhttp.readyState == 4 && xhttp.status != 200) {
       console.log("There was an error with the input.");
     }

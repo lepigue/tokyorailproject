@@ -19,14 +19,13 @@ addLineForm.addEventListener("submit", function (e) {
   var xhttp = new XMLHttpRequest();
   xhttp.open("POST", "/add_line_ajax", true);
   xhttp.setRequestHeader("Content-type", "application/json");
-
   xhttp.onreadystatechange = () => {
     if (xhttp.readyState == 4 && xhttp.status == 200) {
       let lines = JSON.parse(xhttp.response);
       addRowToTable(lines);
       addLineDropdown(lines);
       clearAddLineForm();
-      line_name.value = "";
+      alert("Line successfully added!");
     } else if (xhttp.readyState == 4 && xhttp.status != 200) {
       console.log("There was an error with the input.");
     }

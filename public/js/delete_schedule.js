@@ -16,6 +16,7 @@ function deleteSchedule(scheduleID) {
       console.log(xhttp.readyState, xhttp.status);
       if (xhttp.readyState == 4 && xhttp.status == 204) {
         deleteRow(scheduleID);
+        alert("Schedule successfully deleted!");
       } else if (xhttp.readyState == 4 && xhttp.status != 204) {
         console.log("There was an error with the input.");
       }

@@ -14,7 +14,7 @@ var db = require("./database/db-connector");
 
 const { engine } = require("express-handlebars");
 var exphbs = require("express-handlebars"); // Import express-handlebars
-const { convertDatetimeHTML } = require("./public/js/convertDatetime.js");
+const convertDatetime = require("./public/js/convertDatetime.js");
 app.engine(".hbs", engine({ extname: ".hbs" })); // Create an instance of the handlebars engine to process templates
 app.set("view engine", ".hbs"); // Tell express to use the handlebars engine whenever it encounters a *.hbs file.
 
@@ -545,14 +545,16 @@ app.post("/add_operator_ajax", function (req, res) {
   if (isNaN(parseInt(data.phone_number))) {
     data.phone_number = "NULL";
   }
-  query1 = `INSERT INTO Operators (first_name, last_name, phone_number, email, train_code) VALUES ('${data.first_name}', '${data.last_name}', '${data.phone_number}', '${data.email}', '${data.train_code}');`;
-  db.pool.query(query1, function (error, rows, fields) {
-    const queryAddOperator = `INSERT INTO Operators (first_name, last_name, phone_number, email, train_code) VALUES ('${data.first_name}', '${data.last_name}', '${data.phone_number}', '${data.email}', '${data.train_code}');`;
-    db.pool.query(queryAddOperator, function (error, rows, fields) {
-      if (error) {
-        console.log(error);
-        res.sendStatus(400);
-      } else {
+  const queryAddOperator = `INSERT INTO Operators (first_name, last_name, phone_number, email, train_code) VALUES ('${data.first_name}', '${data.last_name}', '${data.phone_number}', '${data.email}', '${data.train_code}');`;
+  db.pool.query(queryAddOperator, function (error, rows, fields) {
+    if (error) {
+      console.log(error);
+      res.sendStatus(400);
+    } else {
+      const queryTrains = `SELECT * FROM Trains WHERE train_ID = ${data.train_code}`;
+      db.pool.query(queryTrains, function (error, rows, fields) {
+        let train = rows[0];
+
         const queryAddedOperator = `SELECT * FROM Operators WHERE operator_ID = (SELECT MAX(operator_ID) FROM Operators) `;
         db.pool.query(queryAddedOperator, function (error, rows, fields) {
           let addedOperator = rows[0];
@@ -567,8 +569,8 @@ app.post("/add_operator_ajax", function (req, res) {
             }
           });
         });
-      }
-    });
+      })
+    }
   });
 });
 

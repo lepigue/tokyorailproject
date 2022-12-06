@@ -15,8 +15,8 @@ function deleteTrain(trainID) {
     if (xhttp.readyState == 4 && xhttp.status == 204) {
       deleteRow(trainID);
       deleteTrainDropdown(trainID);
-    }
-    else if (xhttp.readyState == 4 && xhttp.status != 204) {
+      alert("Train successfully deleted!");
+    } else if (xhttp.readyState == 4 && xhttp.status != 204) {
         console.log("There was an error with the input.")
     }
   }

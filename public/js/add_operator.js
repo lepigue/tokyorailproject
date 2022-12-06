@@ -32,6 +32,7 @@ addOperatorForm.addEventListener("submit", function (e) {
       addRowToTable(res.operator);
       addOperatorDropdown(res.operators);
       clearAddOperatorForm();
+      alert("Operator successfully added!");
     } else if (xhttp.readyState == 4 && xhttp.status != 200) {
       console.log("There was an error with the input.");
     }

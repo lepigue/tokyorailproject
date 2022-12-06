@@ -39,7 +39,7 @@ module.exports = {
   },
 
   // Convert datetime object into HTML date format (YYYY-MM-DD)
-    convertDatetimeHTML: function (datetime) {
+  convertDatetimeHTML: function (datetime) {
     let convertedDate =
       datetime.getFullYear().toString().padStart(4, "0") +
       "-" +
