@@ -32,7 +32,6 @@ function deleteOperatorDropdown(operatorID) {
   for (let i = 0, row; (row = operatorDropdown.options[i]); i++) {
     console.log(operatorDropdown.options[i].id);
     if (operatorDropdown.options[i].id == `operator${operatorID}`) {
-      console.log("HI");
       operatorDropdown.remove(i);
       break;
     }

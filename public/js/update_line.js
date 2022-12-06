@@ -4,8 +4,7 @@ updateLineForm.addEventListener("submit", function (e) {
   let lineID = parseInt(document.getElementById("updateLineID").value);
   let lineName = document.getElementById("updateLineName").value;
 
-  if (isNaN(lineID) || lineName == "") 
-  {
+  if (isNaN(lineID) || lineName == "") {
     alert("Please fill out all fields and select a line to edit")
     return;
   }
@@ -20,7 +19,7 @@ updateLineForm.addEventListener("submit", function (e) {
     if (xhttp.readyState == 4 && xhttp.status == 200) {
       let parsedLine = JSON.parse(xhttp.response)[0];
       updateLineRow(parsedLine);
-      updateLineDropdown(lineName);
+      updateLineDropdown(parsedLine);
       clearUpdateLineForm();
       alert("Line successfully updated!")
     }
@@ -35,7 +34,7 @@ updateLineForm.addEventListener("submit", function (e) {
 function updateLineRow(line) {
   let table = document.getElementById("line_table");
   for (let i = 0, row; (row = table.rows[i]); i++) {
-    if (table.rows[i].getAttribute("data-value") == line.line_ID) {
+    if (table.rows[i].id == `deleteLine${line.line_ID}`) {
       let updateRowIndex = table.getElementsByTagName("tr")[i];
       updateRowIndex.getElementsByTagName("td")[0].innerHTML = line.line_ID;
       updateRowIndex.getElementsByTagName("td")[1].innerHTML = line.line_name;
@@ -43,9 +42,12 @@ function updateLineRow(line) {
   }
 }
 
-function updateLineDropdown(lineName) {
+function updateLineDropdown(line) {
   let lineDropdown = document.getElementById("lineUpdateDropdown");
-  lineDropdown.options[lineDropdown.selectedIndex].text = `${lineName}`;
+  lineDropdown.options[lineDropdown.selectedIndex].value = `${line.line_ID},${line.line_name}`;
+  lineDropdown.options[
+    lineDropdown.selectedIndex
+  ].text = `${line.line_name}`;
 }
 
 function clearUpdateLineForm() {

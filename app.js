@@ -562,8 +562,7 @@ app.post('/add_line_ajax', function(req, res)
         console.log(error)
         res.sendStatus(400);
     }
-    else
-    {
+    else {
       query2 = `SELECT * FROM \`Lines\``;
       db.pool.query(query2, function(error, rows, fields){
         if (error) {

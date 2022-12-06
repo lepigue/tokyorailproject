@@ -71,7 +71,7 @@ function addOperatorDropdown(operators) {
   for (const operator of operators) {
     let newOption = new Option(
       `${operator.first_name} ${operator.last_name}`,
-      `${operator.operator_ID},${operator.first_name},${operator.last_name},${operator.phone_number},${operator.email},${operator.train_name}`
+      `${operator.operator_ID},${operator.first_name},${operator.last_name},${operator.phone_number},${operator.email},${operator.train_name},${operator.train_code}`
     );
     newOption.id = `operator${operator.operator_ID}`;
     operatorDropdown.add(newOption);

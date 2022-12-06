@@ -74,15 +74,16 @@ function updateOperatorDropdown(operators) {
   for (const operator of operators) {
     let newOption = new Option(
       `${operator.first_name} ${operator.last_name}`,
-      `${operator.operator_ID},${operator.first_name},${operator.last_name},${operator.phone_number},${operator.email},${operator.train_name}`
+      `${operator.operator_ID},${operator.first_name},${operator.last_name},${operator.phone_number},${operator.email},${operator.train_name},${operator.train_code}`
     );
-    newOption.id = `operatorRow${operator.operatorID}`;
+    newOption.id = `operator${operator.operator_ID}`;
     operatorDropdown.add(newOption);
   }
 }
 
 function clearOperatorStationForm() {
-  document.getElementById("updateOperatorID").selectedIndex = 0;
+  document.getElementById("operatorUpdateDropdown").selectedIndex = 0;
+  document.getElementById("updateOperatorID").value = null;
   document.getElementById("update-firstName").value = null;
   document.getElementById("update-lastName").value = null;
   document.getElementById("update-phoneNumber").value = null;

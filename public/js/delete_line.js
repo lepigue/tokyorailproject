@@ -1,39 +1,41 @@
 function deleteLine(lineID) {
-    // Put our data we want to send in a javascript object
-    let data = {
-        line_ID: lineID
-    };
-    //console.log(data)
+  let data = {
+      line_ID: lineID
+  };
 
-    // Setup our AJAX request
-    var xhttp = new XMLHttpRequest();
-    xhttp.open("DELETE", "/delete_line_ajax", true);
-    xhttp.setRequestHeader("Content-type", "application/json");
+  var xhttp = new XMLHttpRequest();
+  xhttp.open("DELETE", "/delete_line_ajax", true);
+  xhttp.setRequestHeader("Content-type", "application/json");
 
-    // Tell our AJAX request how to resolve
-    xhttp.onreadystatechange = () => {
-        if (xhttp.readyState == 4 && xhttp.status == 204) {
-            // Add the new data to the table
-            deleteRow(lineID);
-        }
-        else if (xhttp.readyState == 4 && xhttp.status != 204) {
-            console.log("There was an error with the input.")
-        }
+  xhttp.onreadystatechange = () => {
+    if (xhttp.readyState == 4 && xhttp.status == 204) {
+      deleteRow(lineID);
+      deleteLineDropdown(lineID);
     }
-    // Send the request and wait for the response
+    else if (xhttp.readyState == 4 && xhttp.status != 204) {
+      console.log("There was an error with the input.")
+    }
+  }
     xhttp.send(JSON.stringify(data));
 }
 
 
 function deleteRow(lineID){
-    let table = document.getElementById("line_table");
-    for (let i = 0, row; row = table.rows[i]; i++) {
-       //iterate through rows
-       //rows would be accessed using the "row" variable assigned in the for loop
-       if (table.rows[i].getAttribute("data-value") == lineID) {
-            table.deleteRow(i);
-            break;
-       }
+  let table = document.getElementById("lineTableBody");
+  for (let i = 0, row; row = table.rows[i]; i++) {
+    if (table.rows[i].id == `deleteLine${lineID}`) {
+      table.deleteRow(i);
+      break;
     }
-    console.log(table);
+  }
+}
+
+function deleteLineDropdown(lineID) {
+  let lineDropdown = document.getElementById("lineUpdateDropdown");
+  for (let i = 0, row; (row = lineDropdown.options[i]); i++) {
+    if (lineDropdown.options[i].id == `line${lineID}`) {
+      lineDropdown.remove(i);
+      break;
+    }
+  }
 }

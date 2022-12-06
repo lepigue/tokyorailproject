@@ -6,7 +6,8 @@ function populateOperator() {
   let operatorLastName = dataArray[2];
   let operatorPhone = dataArray[3];
   let operatorEmail = dataArray[4];
-  let operatorTrainCode = dataArray[5];
+  let operatorTrainName = dataArray[5];
+  let operatorTrainCode = dataArray[6];
 
   document.getElementById("updateOperatorID").value = operatorID;
   document.getElementById("update-firstName").value = operatorFirstName;
