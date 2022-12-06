@@ -44,7 +44,7 @@
       <select required name="updateTrainDropdown" id="updateTrainDropdown">
         <option></option>
         {{#each trains}}
-        <option value="{{this.train_ID}},{{this.model}},{{this.last_service_date_HTML}},{{this.line_code}}" id="Train{{this.train_ID}}">{{this.train_ID}} - {{this.model}} ({{this.line_name}} Line)</option>
+        <option value="{{this.train_ID}},{{this.model}},{{this.last_service_date_HTML}},{{this.line_code}}" id="train{{this.train_ID}}">{{this.train_ID}} - {{this.model}} ({{this.line_name}} Line)</option>
         {{/each}}
       </select> 
       <script src="./js/populateEditTrains.js"></script>

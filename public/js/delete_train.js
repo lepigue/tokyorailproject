@@ -9,6 +9,7 @@ function deleteTrain(trainID) {
   xhttp.onreadystatechange = () => {
     if (xhttp.readyState == 4 && xhttp.status == 204) {
       deleteRow(trainID);
+      deleteTrainDropdown(trainID);
     }
     else if (xhttp.readyState == 4 && xhttp.status != 204) {
         console.log("There was an error with the input.")
@@ -30,7 +31,7 @@ function deleteRow(trainID){
 function deleteTrainDropdown(trainID) {
   let trainDropdown = document.getElementById("updateTrainDropdown");
   for (let i = 0, row; (row = trainDropdown.options[i]); i++) {
-    if (trainDropdown.options[i].id == `Train${trainID}`) {
+    if (trainDropdown.options[i].id == `train${trainID}`) {
       trainDropdown.remove(i);
       break;
     }

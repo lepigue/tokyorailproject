@@ -38,7 +38,7 @@
       <select required id="stationUpdateDropdown" name="stationUpdateDropdown">
         <option></option>
         {{#each stationsAlphabetical}}
-          <option data-value="{{this.station_ID}}" id="Station{{this.station_ID}}" value="{{this.station_ID}},{{this.location_name}},{{this.station_num}},{{this.line_name}},{{this.line_code}},{{this.row_num}}">{{this.location_name}} Station ({{this.line_name}} Line)</option>
+          <option data-value="{{this.station_ID}}" id="station{{this.station_ID}}" value="{{this.station_ID}},{{this.location_name}},{{this.station_num}},{{this.line_name}},{{this.line_code}},{{this.row_num}}">{{this.location_name}} Station ({{this.line_name}} Line)</option>
         {{/each}}stationUpdateDropdown
       </select>
       <br><br>
